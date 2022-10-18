@@ -1,0 +1,164 @@
+{% assign collection_group = products | map: 'id' %}
+{% assign collection_group_thumb = collection_group | append : 'thumb' %}
+{% assign collection_group_mobile = collection_group | append : 'mobile' %}
+
+{% if related_products == true %}
+  {% assign hover_enabled = block.settings.show_related_products_title_on_hover %}
+{% else %}
+  {% assign hover_enabled = settings.thumbnail_hover_enabled %}
+{% endif %}
+
+{% if related_products == true %}
+  {% assign related_items = true %}
+{% else %}
+  {% assign related_items = false %}
+{% endif %}
+
+{% assign for_limit = limit %}
+
+{% comment %} loop through product list {% endcomment %}
+{% for product in products limit: limit %}
+
+  {% comment %} if product display is in the loop of products increase limit by one {% endcomment %}
+  {% if product.id == skip_product.id  %}
+    {% assign for_limit = limit | plus: 1 %}
+  {% endif %}
+{% endfor %}
+
+{% assign mobile_products_per_row_int = mobile_products_per_row | times: 1 %}
+{% style %}
+
+  @media only screen and (min-width: 798px) {
+    #shopify-section-{{section.id}} .product__grid-item {
+      border-bottom: 1px solid #e6e6e6;
+    }
+    #shopify-section-{{section.id}} .product__grid-item:nth-last-of-type(-n + {{ products_per_row | plus: 1 }}):nth-of-type({{ products_per_row }}n) ~ .product__grid-item {
+      border-bottom: none;
+    }
+    #shopify-section-{{section.id}} .product__grid-item:not(:nth-of-type({{ products_per_row }}n + 1)) {
+      border-left: 1px solid #e6e6e6;
+    }
+  }
+  @media only screen and (max-width: 798px) and (min-width: 480px) {
+    #shopify-section-{{section.id}} .product__grid-item {
+      border-bottom: 1px solid #e6e6e6;
+    }
+    #shopify-section-{{section.id}} .product__grid-item:nth-last-of-type(-n + 3):nth-of-type(2n) ~ .product__grid-item {
+      border-bottom: none;
+    }
+    #shopify-section-{{section.id}} .product__grid-item:not(:nth-of-type(2n + 1)) {
+      border-left: 1px solid #e6e6e6;
+    }
+  }
+  @media only screen and (max-width: 480px) {
+    #shopify-section-{{section.id}} .product__grid-item {
+      border-bottom: 1px solid #e6e6e6;
+    }
+    #shopify-section-{{section.id}} .product__grid-item:nth-last-of-type(-n + {{ mobile_products_per_row_int | plus: 1 }}):nth-of-type({{ mobile_products_per_row_int }}n) ~ .product__grid-item {
+      border-bottom: none;
+    }
+    {% unless mobile_products_per_row_int == 1 %}
+      #shopify-section-{{section.id}} .product__grid-item:not(:nth-of-type({{mobile_products_per_row_int}}n + 1)) {
+        border-left: 1px solid #e6e6e6;
+      }
+    {% endunless %}
+  }
+
+  {% if align_height == true %}
+    .image__container img,
+    .product-thumbnail__video .plyr {
+      max-width: 100%;
+      height: {{ height }}px;
+      margin: 0 auto;
+    }
+
+    .shopify-model-viewer-ui model-viewer {
+      --progress-bar-height: 2px;
+      --progress-bar-color: {{ settings.regular_color }};
+    }
+  {% endif %}
+
+{% endstyle %}
+
+{% for product in products limit: for_limit %}
+  {% comment %} Skip product if we're on its product page {% endcomment %}
+  {% if product.id != skip_product.id %}
+    {% render 'product-thumbnail',
+            product: product,
+            limit: limit,
+            products_per_row: products_per_row,
+            mobile_products_per_row: mobile_products_per_row,
+            align_height: align_height,
+            height: height,
+            collection_group_thumb: collection_group_thumb,
+            collection_group_mobile: collection_group_mobile,
+            related_products: related_items,
+            forloop_index: forloop.index
+    %}
+  {% endif %}
+{% endfor %}
+
+{% comment %} JSON-LD Structured data - https://developers.google.com/search/docs/guides/intro-structured-data {% endcomment %}
+{% unless context == 'product_recommendations' %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "OfferCatalog",
+      "itemListElement": [
+        {% for product in products limit: for_limit %}
+          {
+            "@type": "ListItem",
+            "position": {{ forloop.index | json }},
+            "url": "{{ shop.url }}{{ product.url }}",
+            "name": {{ product.title | json }}
+          } {%- unless forloop.last -%},{%- endunless -%}
+        {% endfor %}
+      ]
+    }
+  </script>
+{% endunless %}
+
+<style media="screen">
+  .product-thumbnail-hr {
+    height: 1px;
+    margin: 10px 0 3px;
+    background-color: #eaeaea;
+  }
+
+  .product-thumbnail__review-stars-number {
+    font-size: 9px;
+  }
+
+  #shopify-section-collection__main .product__grid-item {
+    border-bottom: none!important;
+    border-left: none!important;
+  }
+
+  .product-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+  }
+
+  .product-card-wrapper a,
+  .product-card-wrapper div {
+    height: 100%;
+  }
+
+  .product-card-wrapper h3 {
+    font-size: 30px;
+    line-height: 30px;
+    text-align: center;
+  }
+
+  .product-card {
+    height: 100%;
+    border-radius: 20px;
+  }
+
+  .product-card img {
+    border-radius: 20px;
+  }
+</style>

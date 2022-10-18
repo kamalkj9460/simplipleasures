@@ -1,0 +1,155 @@
+{% assign brands = collection.metafields.portal_sections.brands %}
+{% assign blocks = brands.blocks %}
+{% assign section_title = brands.section_title %}
+
+
+{% assign id = section.id %}
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+{% assign title_spacing_top = section.settings.title_spacing_top %}
+{% assign title_spacing_bottom = section.settings.title_spacing_bottom %}
+{% assign items_per_row = section.settings.items_per_row %}
+{% assign column_gap = section.settings.column_gap %}
+{% assign row_gap = section.settings.row_gap %}
+{% assign items_per_row_mobile = section.settings.items_per_row_mobile %}
+{% assign column_gap_mobile = section.settings.column_gap_mobile %}
+{% assign row_gap_mobile = section.settings.row_gap_mobile %}
+
+
+{% style %}
+
+  #shopify-section-{{ id }} .brands-grid {
+    grid-template-columns: repeat( {{items_per_row}}, auto);
+    column-gap: {{ column_gap }}px;
+    row-gap: {{ row_gap }}px;
+  }
+
+  #shopify-section-{{ id }} .section {
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+  }
+  #shopify-section-{{ id }} .section_title {
+    padding-top: {{ title_spacing_top }}px;
+    padding-bottom: {{ title_spacing_bottom }}px;
+  }
+
+
+  @media only screen and (max-width: 480px) {
+    #shopify-section-{{ id }} .brands-grid {
+      grid-template-columns: repeat( {{items_per_row_mobile}}, auto);
+      column-gap: {{ column_gap_mobile }}px;
+      row-gap: {{ row_gap_mobile }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="section is-width-standard">
+  {% if section_title != blank %}
+    <h2 class="section_title text-align-center fw-bold">{{ section_title }}</h2>
+  {% endif %}
+  
+  <div class="brands-grid has-no-side-gutter">
+    
+    {% for block in blocks %}
+      <div class="brand-image one-whole is-flex is-align-center is-justify-center">
+        {% assign image = images[block.image_name] %}
+        {% assign link = block.link %}
+
+        {% if link != blank %}
+          <a class="one-whole" href="{{link}}">
+        {% endif %}
+
+        {% render 'image-element',
+          image: image,
+          alt: image.alt,
+          stretch_width: true
+        %}
+
+        {% if link != blank %}
+          </a>
+        {% endif %}
+      </div>
+    {% endfor %}
+  
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Brands",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Title Spacing"
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_top",
+      "label": "Spacing top",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_bottom",
+      "label": "Spacing bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Grid"
+    },
+    {
+      "type": "number",
+      "id": "items_per_row",
+      "label": "Items per row",
+      "default": 6
+    },
+    {
+      "type": "number",
+      "id": "items_per_row_mobile",
+      "label": "Items per row (mobile)",
+      "default": 3
+    },
+    {
+      "type": "number",
+      "id": "column_gap",
+      "label": "Column gap",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "column_gap_mobile",
+      "label": "Column gap (mobile)",
+      "default": 15
+    },
+    {
+      "type": "number",
+      "id": "row_gap",
+      "label": "Row gap",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "row_gap_mobile",
+      "label": "Row gap (mobile)",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "number",
+      "id": "padding_top",
+      "label": "Section Top spacing",
+      "default": 0
+    },
+    {
+      "type": "number",
+      "id": "padding_bottom",
+      "label": "Section Bottom spacing",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,177 @@
+{% assign feature_product_boxes = collection.metafields.portal_sections.feature_product_boxes %}
+{% assign background_color = feature_product_boxes.background_color %}
+{% assign background_image = feature_product_boxes.background_image %}
+{% assign background_image_mobile = feature_product_boxes.background_image_mobile %}
+{% assign section_title = feature_product_boxes.section_title %}
+{% assign blocks = feature_product_boxes.blocks %}
+
+{% assign id = section.id %}
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+{% assign title_spacing_top = section.settings.title_spacing_top %}
+{% assign title_spacing_bottom = section.settings.title_spacing_bottom %}
+{% assign show_description = section.settings.show_description %}
+
+{% style %}  
+  #shopify-section-{{ id }} {
+    {% if background_color != blank %}
+      background-color: {{ background_color }};
+    {% endif %}
+    
+    {% if background_image != blank %}
+      background-image: url('{{ background_image | img_url: 'original' }}');
+    {% endif %}
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hiddden;
+  }
+
+  #shopify-section-{{ id }} .section {
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+  }
+
+  #shopify-section-{{ id }} .section_title {
+    padding-top: {{ title_spacing_top }}px;
+    padding-bottom: {{ title_spacing_bottom }}px;
+  }
+
+  {% if background_image_mobile != blank %}
+    @media only screen and (max-width: 480px) {
+      #shopify-section-{{ id }} .section {
+        background-image: url('{{ background_image_mobile | img_url: 'original' }}');
+      }
+    }
+  {% endif %}
+{% endstyle %}
+
+
+<div class="section is-width-wide has-padding-top has-padding-bottom">
+  <div class="container is-justify-center has-no-side-gutter">
+    {% if section_title != blank %}
+      <h2 class="section_title text-align-center fw-bold">{{ section_title }}</h2>
+    {% endif %}
+
+    <div class="products-container is-flex is-justify-center is-align-stretch one-whole">
+      {% for block in blocks %}
+        {% if forloop.index <= 4 and block.product_handle != blank %}
+          {% assign block_product = all_products[block.product_handle] %}
+          {% assign product_image = block_product.featured_image %}
+          {% assign product_url = block_product.url %}
+
+          {% if block_product != empty and block_product.available %}
+            <div class="product-box is-flex is-flex-column is-align-center text-align-center one-fourth small-down--one-whole">
+              <div class="product-image">
+                <a href="{{ product_url }}">
+                  {% render 'image-element',
+                    image: product_image,
+                    alt: product_image.alt,
+                    stretch_width: true
+                  %}
+                </a>
+              </div>
+              <div class="product-price">
+                {% if block_product.available %}
+
+                  {% if block_product.price_varies and block_product.price_min > 0 %}
+                    <small><em>{{ 'products.general.from' | t }}</em></small>
+                  {% endif %}
+
+                  {%- assign variant = block_product.first_available_variant -%}
+                  {%- assign was_price = false -%}
+                  {% if variant.price < variant.compare_at_price %}
+                    {%- assign was_price = true -%}
+                    <span class="was-price">
+                      <span>
+                        {% render 'price-element', price: variant.compare_at_price %}
+                      </span>
+                    </span>
+                  {% endif %}
+
+                  {% if block_product.price_min > 0 %}
+                    <span class="money fw-bold {% if was_price %}fc-highlight{% endif %}">
+                      {% render 'price-element', price: block_product.price_min %}
+                    </span>
+                  {% else %}
+                    {{ settings.free_price_text }}
+                  {% endif %}
+        
+                {% else %}
+                  <span class="sold-out">{{ 'products.product.sold_out' | t }}</span>
+                {% endif %}
+              </div>
+              <div class="product-name">
+                <a href="{{ product_url }}">
+                  {{ block_product.title }}
+                </a>
+              </div>
+
+              {% if show_description %}  
+                <div class="product-description">
+                  {{ block_product.description | truncate: 160, '...' }}
+                </div>
+              {% endif %}
+              
+              <div class="product-button is-flex is-justify-center">
+                {% render 'button',
+                  label: 'Shop Now',
+                  href: product_url,
+                  type: "link",
+                  style: "button--add-to-cart"
+                %}
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Feature Product Boxes",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show product description",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Section Title Spacing"
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_top",
+      "label": "Spacing top",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_bottom",
+      "label": "Spacing bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "number",
+      "id": "padding_top",
+      "label": "Section Top spacing",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "padding_bottom",
+      "label": "Section Bottom spacing",
+      "default": 40
+    }
+  ]
+}
+{% endschema %}

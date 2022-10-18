@@ -1,0 +1,15 @@
+
+{% if theme.role == "main" or use_production == true %}
+  {% assign section_id = 8775749 %}
+
+{% else %}
+  {% assign section_id = 8775750 %}
+
+{% endif %}
+
+<link rel="preload" as="script" href="//cdn.dynamicyield.com/api/{{ section_id }}/api_dynamic.js">
+<link rel="preload" as="script" href="//cdn.dynamicyield.com/api/{{ section_id }}/api_static.js">
+{% include 'dynamic_yield-page_context' %}
+
+<script src="//cdn.dynamicyield.com/api/{{ section_id }}/api_dynamic.js"></script>
+<script src="//cdn.dynamicyield.com/api/{{ section_id }}/api_static.js"></script>

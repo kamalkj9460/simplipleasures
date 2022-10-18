@@ -1,0 +1,73 @@
+{% assign portal_sections = collection.metafields.portal_sections %}
+{% assign banner = portal_sections.banner %}
+{% assign education = portal_sections.education %}
+{% assign feature_product_boxes = portal_sections.feature_product_boxes %}
+{% assign drill_matrix_buttons = portal_sections.drill_matrix_buttons %}
+{% assign ad_box = portal_sections.ad_box %}
+{% assign category_nav = portal_sections.category_nav %}
+{% assign comparison = portal_sections.comparison %}
+{% assign category_metas = portal_sections.category_metas %}
+{% assign category_reviews = portal_sections.review_highlights %}
+{% assign category__brands = portal_sections.brands %}
+
+<div id="template-{{ template | replace: '.', '-' | handle }}" class="shopify-section collection-page" data-check-for-order="true">
+  
+  {% if banner.show == true %}  
+    {% comment %} Category Review highlights {% endcomment %}
+    {% section 'portal__banner' %}
+  {% endif %}
+
+  {% if education.show == true %}
+    {% section 'portal__education' %}
+  {% endif %}
+
+  {% if feature_product_boxes.show == true %}  
+    {% section 'portal__feature-product-boxes' %}
+  {% endif %}
+
+  {% if drill_matrix_buttons.show == true %}  
+    {% section 'portal__drill-matrix-buttons' %}
+  {% endif %}
+
+  {% if ad_box.show == true %}  
+    {% comment %} Category Ad Box {% endcomment %}
+    {% section 'portal__ad-box' %}
+  {% endif %}
+
+
+  {% if category_nav.show == true %}  
+    {% comment %} Collection sidebar and main content area {% endcomment %}
+    {% section 'portal__sub-collections' %}
+  {% endif %}
+  
+  {% comment %} Category Usps {% endcomment %}
+  {% section 'portal__usps' %}
+
+  {% if comparison.show == true %}
+    {% section 'portal__comparison-chart' %}
+
+  {% elsif comparison.preview == true and theme.role != "main" %}
+    {% section 'portal__comparison-chart' %}
+  
+  {% endif %}
+
+  {% if category_metas.show == true %}
+    {% section 'portal__category-metas' %}
+  {% endif %}
+  
+  
+  {% if category_reviews.show == true %}
+    {% comment %} Category Review highlights {% endcomment %}
+    {% section 'portal__review-highlights' %}
+  {% endif %}
+  
+  {% if category__brands.show == true %}
+    {% comment %} Category Review highlights {% endcomment %}
+    {% section 'portal__brands' %}
+  {% endif %}
+
+  {% section 'portal__featured-products' %}
+  
+  {% section 'portal__more-portals' %}
+
+</div>

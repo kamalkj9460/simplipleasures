@@ -1,0 +1,178 @@
+{% comment %} JSON-LD Structured data - https://developers.google.com/search/docs/guides/intro-structured-data {% endcomment %}
+{% assign organizationId = shop.url | append: "#organization" %}
+
+{% capture structured_data %}
+  {
+    "@context": "http://schema.org/",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "description": {{ product.description | strip_html | escape | json }},
+    "mpn": "{{- product.id -}}",
+    "url": "{{ shop.url }}{{ product.url }}",
+    {%- if product.featured_image -%}
+      {%- assign image_size = product.featured_image.width | append: 'x' -%}
+      "image": [
+        "https:{{ product.featured_image.src | img_url: image_size }}"
+      ],
+    {%- endif -%}
+    {%- if product.selected_or_first_available_variant.sku != blank -%}
+      "sku": "{{ product.selected_or_first_available_variant.sku }}",
+    {%- endif -%}
+    "brand": {
+      "@type": "Thing",
+      "name": "{{ product.vendor | escape }}"
+    },
+    
+    {%- if product.variants.size > 1 -%}
+      {%- assign variantsByPrice = product.variants | sort: 'price' -%}
+      {%- assign numAvailableVariants = product.variants | where: "available" | size %}
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "{{- shop.currency -}}",
+        "lowPrice": {{- variantsByPrice.first.price | divided_by: 100.0 -}},
+        "highPrice": {{- variantsByPrice.last.price | divided_by: 100.0 -}},
+        "availability": "{%- if numAvailableVariants > 0 -%}InStock{%- else -%}OutOfStock{%- endif -%}",
+        "offerCount": {%- if numAvailableVariants > 0 -%}{{- numAvailableVariants -}}{%- else -%}1{%- endif -%},
+        "seller": {
+          "@type": "Organization",
+          "@id": "{{ organizationId }}"
+        }
+      },
+      "model": [
+        {%- for variant in product.variants -%}
+          {%- if variant.featured_image -%}
+            {%- assign image = variant.featured_image -%}
+          {%- else -%}
+            {%- assign image = product.featured_image -%}
+          {%- endif -%}
+          {
+              "@type": "ProductModel",
+              "@id": "{{- canonical_url | append: '#productModel=' | append: variant.id -}}",
+              "url": "{{- shop.url -}}{{- variant.url -}}",
+              "name": "{{- productTitle | append: " " | append: variant.title | escape -}}",
+              "description": {{ product.description | strip_html | escape | json }},
+              "mpn": "{{- variant.id -}}",
+              "brand": {
+                "@type": "Thing",
+                "name": "{{ product.vendor | escape }}"
+              },
+              {% if product.metafields.stamped.reviews_count and product.metafields.stamped.reviews_count != "0" %} 
+                "aggregateRating": {
+                  "@type": "AggregateRating",
+                  "ratingValue": {{ product.metafields.stamped.reviews_average | round:2 }},
+                  "ratingCount": {{ product.metafields.stamped.reviews_count }},
+                  "reviewCount": {{ product.metafields.stamped.reviews_count }},
+                  "bestRating": 5,
+                  "worstRating": 1
+                },
+              {% endif %}
+
+
+              {%- if variant.sku -%}
+                "sku": "{{- variant.sku -}}",
+              {%- endif -%}
+
+              {%- if variant.barcode -%}
+                {%- assign barcode = variant.barcode -%}
+                "gtin": "{{ variant.barcode }}",
+              {%- endif -%}
+
+              {%- if variant.requires_shipping and variant.weight > 0 -%}
+                "weight": {
+                  "@type": "QuantitativeValue",
+                  "value": {{ variant.weight }}
+                },
+              {%- endif -%}
+
+              {%- assign additionalProperties = "" -%}
+              {%- assign colorVariations = "color,colour,kleur,farbe,couleur,colore" | split:"," -%}
+              {%- assign colorFound = false -%}
+
+              {%- for productOption in product.options_with_values -%}
+                {%- assign optionName = productOption.name -%}
+                {%- assign optionNameDowncased = optionName | downcase %}
+                {%- assign optionKey = "option%1" |  replace: "%1", productOption.position -%}
+                {%- assign value = variant[optionKey] -%}
+
+                {%- if colorFound != true and colorVariations contains optionNameDowncased -%}
+                  {%- assign colorFound = true -%}
+                  "color": "{{- value -}}",
+                {%- else -%}
+                  {%- capture additional_property -%}
+                    {
+                      "@type": "PropertyValue",
+                      "name": "{{- optionName -}}",
+                      "value": {{- value | json -}}
+                    }
+                  {%- endcapture -%}
+                  {%- unless additionalProperties == blank -%}
+                    {%- assign additionalProperties = additionalProperties | append: "," -%}
+                  {%- endunless -%}
+                  {%- assign additionalProperties = additionalProperties | append: additional_property -%}
+                {% endif %}
+              {%- endfor -%}
+
+              {%- unless additionalProperties == blank -%}
+                "additionalProperty": [{{ additionalProperties }}],
+              {%- endunless -%}
+
+              "image": "https:{{- image | img_url: '450x450' -}}",
+              "offers": {
+                "@type": "Offer",
+                "priceCurrency": "{{- shop.currency -}}",
+                "price": {{- variant.price | divided_by: 100.0 -}},
+                "availability": "{%- if variant.available -%}InStock{%- else -%}OutOfStock{%- endif -%}",
+                "url": "{{- shop.url -}}{{- variant.url -}}",
+                "seller": {
+                  "@type": "Organization",
+                  "@id": "{{ organizationId }}"
+                }
+              }
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ],
+    {%- else -%}
+      {%- assign product_or_variant = product.selected_or_first_available_variant -%}
+
+      {%- if product_or_variant.barcode -%}
+        "gtin": "{{ product_or_variant.barcode }}",
+      {%- endif -%}
+
+      {%- if product_or_variant.requires_shipping and product_or_variant.weight > 0 -%}
+          "weight": {
+            "@type": "QuantitativeValue",
+            "value": {{ product_or_variant.weight }},
+            "unitCode": "GRM"
+          },
+      {%- endif -%}
+
+      "offers": {
+        "@type": "Offer",
+        "url": "{{-canonical_url -}}",
+        "priceCurrency": "{{- shop.currency -}}",
+        "price": "{{- product_or_variant.price | divided_by: 100.00 -}}",
+        "availability": "{%- if product_or_variant.available -%}InStock{%- else -%}OutOfStock{%- endif -%}",
+        "seller": {
+          "@type": "Organization",
+          "@id": "{{ organizationId }}"
+        }
+      },
+    {%- endif -%}
+
+    {%- comment -%} Stamped.io structured data {%- endcomment -%}
+    {% if product.metafields.stamped.reviews_count and product.metafields.stamped.reviews_count != "0" %} 
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": {{ product.metafields.stamped.reviews_average | round:2 }},
+        "ratingCount": {{ product.metafields.stamped.reviews_count }},
+        "reviewCount": {{ product.metafields.stamped.reviews_count }},
+        "bestRating": 5,
+        "worstRating": 1
+      }
+    {% endif %}
+  }
+{% endcapture %}
+
+<script type="application/ld+json">
+  {{ structured_data }}
+</script>

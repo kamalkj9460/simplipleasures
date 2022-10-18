@@ -1,0 +1,103 @@
+{% for link in main_menu.links %}
+ {% if link.title != 'facebook' and  link.title != 'instagram' and  link.title != 'tiktok' and  link.title != 'twitter' and  link.title != 'linkedin' and  link.title != 'snapchat' and  link.title != 'whatsapp' and  link.title != 'viber' and  link.title != 'telegram' and  link.title != 'youtube' and  link.title != 'pinterest' and  link.title != 'skype' and  link.title != 'reddit' %}
+  <li class="mobile-menu__list-item" style="background-color:#FAF1EC;border-radius:20px;margin:10px;opacity:1 !important;" data-mobile-menu-navlink-handle="{{ link.title | handleize }}">
+    {% if link.links == blank %}
+      <div class="mobile-menu__first-level has-no-submenu" data-mobile-menu-has-toggle="false">
+        <input class="visuallyhidden submenu__input" type="checkbox" id="mobile-submenu-{{ link.title | handleize }}">
+       
+        <label class="submenu__label {% if link.url == 'http://' or link.url == '' or link.url == '/' or link.url == 'https://' or link.url == '#' %}has-no-link{% endif %}" for="mobile-submenu-{{ link.title | handleize }}" style="opacity:1 !important" >
+          <a class="mobile-menu__item {% if link.active %}is-active{% endif %}" href="{{ link.url }}" >
+            {{ link.title }}
+          </a>
+        </label>
+        
+      </div>
+    {% else %}
+      <div class="mobile-menu__first-level has-submenu" data-mobile-menu-has-toggle="true">
+        <input class="visuallyhidden submenu__input" type="checkbox" onChange="this.closest('ul').dataset.subMenuOpen=this.checked" id="mobile-submenu-{{ forloop.index }}">
+        {% if link.title == 'Sale' or link.title == 'Sales'   %}
+ <label class="submenu__label" style="color:black;border-top-left-radius:25px;border-top-right-radius:20px;opacity:1 !important;padding:1.3rem 1.5rem !important;color:#ff0068" for="mobile-submenu-{{ forloop.index }}">
+          <span>
+            {{ link.title }}
+          </span>
+
+          <span class="close-dropdown is-flex is-justify-center is-align-center">
+            {% assign imageSrc = 'parent-' | append:link.title | replace: " ", "-"  | downcase | append: "-mobile-icon.svg" %}
+            {% assign imageSrcPNG = 'parent-' | append:link.title | replace: " ", "-"  | downcase | append: "-mobile-icon.png" %}          
+            <img src="{{ imageSrc | file_url }}" onerror="this.onerror=null;this.src='{{ imageSrcPNG | file_url }}';" loading="lazy" style="max-height:25px;max-width:25px"/>
+          </span>
+
+        </label>
+         {% else %}
+         <label class="submenu__label" style="color:black;border-top-left-radius:25px;border-top-right-radius:20px;opacity:1 !important;padding:1.3rem 1.5rem !important;" for="mobile-submenu-{{ forloop.index }}">
+          <span>
+            {{ link.title }}
+          </span>
+
+          <span class="close-dropdown is-flex is-justify-center is-align-center">
+            {% assign imageSrc = 'parent-' | append:link.title | replace: " ", "-"  | downcase | append: "-mobile-icon.svg" %}             
+            {% assign imageSrcPNG = 'parent-' | append:link.title | replace: " ", "-"  | downcase | append: "-mobile-icon.png" %} 
+            <img src="{{ imageSrc | file_url }}" onerror="this.onerror=null;this.src='{{ imageSrcPNG | file_url }}';" loading="lazy" style="max-height:25px;max-width:25px"/>
+          </span>
+
+        </label>
+             {% endif %}
+        <ul class="mobile-submenu__list mobile-menu__submenu has-dropdown" data-mobile-submenu-first-level-list style="border-bottom-left-radius:25px;border-bottom-right-radius:25px;display:block;transition: all 0.2s ease !important;">
+          {% assign currentIndex = forloop.index %}
+          {% for sub_link in link.links %}
+            <li class="mobile-menu__submenu-list-item" style="border-top:1px solid #EEEFEE">
+              {% if sub_link.links == blank %}
+                <a class="mobile-menu__item" href="{{ sub_link.url }}">
+                  <span class="sub-close-dropdown is-flex is-justify-center is-align-center">
+                    {% assign imageSrc = link.title | append:"-" | append:sub_link.title | replace: " ", "-"  | downcase | append: "-mobile-icon.png" %}             
+                    <img src="{{ imageSrc | file_url }}" loading="lazy" style="max-height:25px;max-width:25px"/>
+                  </span>
+                  {{ sub_link.title }}
+                   <img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-arrow-right-256.png" style="width:20px;height:20px;margin-left:auto;opacity:0.2">
+              	</a>
+               
+              {% else %}
+                <div class="mobile-menu__second-level">
+                  <input class="visuallyhidden submenu__input" type="checkbox" id="mobile-sub-submenu-{{ forloop.index }}-{{ currentIndex }}">
+                  <label class="submenu__label" for="mobile-sub-submenu-{{ forloop.index }}-{{ currentIndex }}">
+                    <a {% unless sub_link.url == 'http://' or sub_link.url == '' or sub_link.url == '/' or sub_link.url == 'https://' or sub_link.url == '#' %}href="{{ sub_link.url }}"{% endunless %} class="mobile-menu-link {% if sub_link.active %}is-active{% endif %}">
+                      {{ sub_link.title }}
+                      
+                       <img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-arrow-right-256.png" style="width:20px;height:20px;margin-left:auto;opacity:0.2">
+                    </a>
+                     
+                  <span class="close-sub-dropdown"></span>
+                  </label>
+                  <ul class="mobile-sub-submenu__list mobile-menu__submenu" data-mobile-submenu-second-level-list>
+                    {% for sub-sub_link in sub_link.links %}
+                      <li class="mobile-menu__submenu-list-item" >
+                        <a class="mobile-menu__item" href="{{ sub-sub_link.url }}">
+                          <span class="sub-close-dropdown is-flex is-justify-center is-align-center">
+                            {% assign imageSrc = link.title | append:"-" | append:sub_link.title | append:"-" | append:sub-sub_link.title | replace: " ", "-"  | downcase | append: "-mobile-icon.svg" %}             
+                            <img src="{{ imageSrc | file_url }}" loading="lazy" style="max-height:25px;max-width:25px"/>
+                          </span>
+                          {{ sub-sub_link.title }}
+                           <img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-arrow-right-256.png" style="width:20px;height:20px;margin-left:auto;opacity:0.2">
+                        </a>
+                         
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </li>
+    {% endif %}
+{% endfor %}
+
+<script>
+$(document).ready(function(){
+    $('input:checkbox').click(function() {
+        $('input:checkbox').not(this).prop('checked', false);
+    });
+});
+</script>

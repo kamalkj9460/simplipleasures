@@ -1,0 +1,182 @@
+{% assign color_background = settings.shop_bg_color %}
+{% assign border_color = settings.border_color %}
+{% liquid
+    assign text = settings.regular_color
+    assign text_invert = '#ffffff'
+
+    assign lightness = text | color_extract: 'lightness'
+
+    if lightness > 50
+      assign text_invert = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign link = settings.link_color
+    assign link_invert = '#ffffff'
+
+    assign lightness = link | color_extract: 'lightness'
+
+    if lightness > 50
+      assign link_invert = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign sale_sticker_color = settings.banner_sale
+    assign sale_sticker_color_text = '#ffffff'
+
+    assign lightness = sale_sticker_color | color_extract: 'lightness'
+
+    if lightness > 50
+      assign sale_sticker_color_text = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign new_sticker_color = settings.banner_new
+    assign new_sticker_color_text = '#ffffff'
+
+    assign lightness = new_sticker_color | color_extract: 'lightness'
+
+    if lightness > 50
+      assign new_sticker_color_text = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign bestseller_sticker_color = settings.banner_bestseller
+    assign bestseller_sticker_color_text = '#ffffff'
+
+    assign lightness = bestseller_sticker_color | color_extract: 'lightness'
+
+    if lightness > 50
+      assign bestseller_sticker_color_text = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign comingsoon_sticker_color = settings.banner_comingsoon
+    assign comingsoon_sticker_color_text = '#ffffff'
+
+    assign lightness = comingsoon_sticker_color | color_extract: 'lightness'
+
+    if lightness > 50
+      assign comingsoon_sticker_color_text = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign staffpick_sticker_color = settings.banner_staffpick
+    assign staffpick_sticker_color_text = '#ffffff'
+
+    assign lightness = staffpick_sticker_color | color_extract: 'lightness'
+
+    if lightness > 50
+      assign staffpick_sticker_color_text = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign preorder_sticker_color = settings.banner_preorder
+    assign preorder_sticker_color_text = '#ffffff'
+
+    assign lightness = preorder_sticker_color | color_extract: 'lightness'
+
+    if lightness > 50
+      assign preorder_sticker_color_text = settings.regular_color
+    endif
+  %}
+{% assign drop_down_menu_active_color = settings.dropdown_link_color %}
+{% assign btn_primary_alpha = settings.button_primary_bg_color_transparency | divided_by: 100.00 %}
+  {% assign btn_primary_hover_alpha = settings.button_primary_bg_color_transparency--highlight | divided_by: 100.00 %}
+  {% assign btn_secondary_alpha = settings.button_secondary_bg_color_transparency | divided_by: 100.00 %}
+  {% assign btn_secondary_hover_alpha = settings.button_secondary_bg_color_transparency--highlight | divided_by: 100.00 %}
+{% liquid
+    if settings.button_primary_padding == 'small'
+      assign btn_primary_font_size = '0.75rem'
+      assign btn_primary_line_height = 'inherit'
+      assign btn_primary_width = 'auto'
+    elsif settings.button_primary_padding == 'regular'
+      assign btn_primary_font_size = '1rem'
+      assign btn_primary_line_height = 'inherit'
+      assign btn_primary_width = 'auto'
+    else
+      assign btn_primary_font_size = '1.25rem'
+      assign btn_primary_line_height = '1.25'
+      assign btn_primary_width = '100%'
+    endif
+  %}
+{% liquid
+    if settings.button_secondary_padding == 'small'
+      assign btn_secondary_font_size = '0.75rem'
+      assign btn_secondary_line_height = 'inherit'
+      assign btn_secondary_width = 'auto'
+    elsif settings.button_secondary_padding == 'regular'
+      assign btn_secondary_font_size = '1rem'
+      assign btn_secondary_line_height = 'inherit'
+      assign btn_secondary_width = 'auto'
+    else
+      assign btn_secondary_font_size = '1.25rem'
+      assign btn_secondary_line_height = '1.25'
+      assign btn_secondary_width = '100%'
+    endif
+  %}
+{% liquid
+    if settings.button_link_padding == 'small'
+      assign btn_link_style_font_size = '0.75rem'
+      assign btn_link_style_line_height = 'inherit'
+    elsif settings.button_link_padding == 'regular'
+      assign btn_link_style_font_size = '1rem'
+      assign btn_link_style_line_height = 'inherit'
+    else
+      assign btn_link_style_font_size = '1.25rem'
+      assign btn_link_style_line_height = '1.25'
+    endif
+  %}
+{% liquid
+    if settings.button_cart_padding == 'small'
+      assign btn_add_to_cart_font_size = '0.75rem'
+      assign btn_add_to_cart_line_height = 'inherit'
+      assign btn_add_to_cart_width = '100%'
+    elsif settings.button_cart_padding == 'regular'
+      assign btn_add_to_cart_font_size = '1rem'
+      assign btn_add_to_cart_line_height = 'inherit'
+      assign btn_add_to_cart_width = '100%'
+    else
+      assign btn_add_to_cart_font_size = '1.25rem'
+      assign btn_add_to_cart_line_height = '1.25'
+      assign btn_add_to_cart_width = '100% !important'
+    endif
+  %}
+{% liquid
+    if settings.button_cart_padding == 'small'
+      assign atc_button_height =  '35px'
+      assign atc_button_width =  'calc(50% - 12px)'
+      assign atc_button_margin =  '0 6px 0 0'
+      assign atc_button_spb_margin =  '0 0 0 6px'
+    elsif settings.button_cart_padding == 'regular'
+      assign atc_button_height =  '44px'
+      assign atc_button_width =  'calc(50% - 12px)'
+      assign atc_button_margin =  '0 6px 0 0'
+      assign atc_button_spb_margin =  '0 0 0 6px'
+    else
+      assign atc_button_height =  '60px'
+      assign atc_button_width =  '100%'
+      assign atc_button_margin =  '0 0 0 0'
+      assign atc_button_spb_margin =  '12px 0 0 0'
+    endif
+  %}
+{% case settings.icon %}
+    {% when 'icon_solid' %}
+      {% assign icon_down_caret = '"\e902"' %}
+      {% assign icon_x = '"\e903"' %}
+    {% when 'icon_outline' %}
+      {% assign icon_down_caret = '"\e904"' %}
+      {% assign icon_x = '"\e905"' %}
+    {% when 'icon_brush' %}
+      {% assign icon_down_caret = '"\e900"' %}
+      {% assign icon_x = '"\e901"' %}
+    {% when 'icon_sp' %}
+      {% assign icon_down_caret = '"\e904"' %}
+      {% assign icon_x = '"\e905"' %}
+  {% endcase %}
+{% liquid
+    assign button_link_underline_thickness = settings.button_link_underline_thickness | append: 'px'
+    if settings.button_link_underline_thickness == 1
+      assign button_link_underline_thickess = 'thin'
+    endif
+  %}.page-faq__column-wrap{width:100%}@media only screen and (max-width:798px){.column-wrapper .faq:first-of-type{margin-bottom:20px}}.column-wrapper .faq-accordion{width:100%}.column-wrapper .faq-accordion .image-element__wrap{padding:0}.column-wrapper .faq-accordion .image-element__wrap:first-child{margin-bottom:20px}.column-wrapper .faq-title{margin-bottom:10px}.column-wrapper .faq-title:not(:first-child){margin-top:40px}.column-wrapper .faq--image{padding-left:36px}@media only screen and (max-width:798px){.column-wrapper .faq--image{padding-left:0;padding-top:20px}}.accordion dt,.faq-accordion dt{border-bottom:1px solid {{ settings.border_color }};position:relative}.accordion dt a,.accordion dt button,.faq-accordion dt a,.faq-accordion dt button{background:none;border:0;color:{{ settings.regular_color }};cursor:pointer;display:block;font-size:1.2rem;padding:20px 20px 20px 40px;text-align:left;width:100%;transition:background-color .2s linear}.accordion dt .accordion-style--carets[aria-expanded=true] .icon,.accordion dt .accordion [aria-expanded=true] small,.faq-accordion dt .accordion-style--carets[aria-expanded=true] .icon,.faq-accordion dt .accordion [aria-expanded=true] small{transform:translateY(-60%) rotate(180deg)}.accordion dt .icon,.accordion dt small,.faq-accordion dt .icon,.faq-accordion dt small{position:absolute;left:10px;top:50%;transform:translateY(-50%);transition:transform .2s linear}.accordion dt .accordion-style--plus_and_minus .icon,.faq-accordion dt .accordion-style--plus_and_minus .icon{display:none}.accordion dt .accordion-style--plus_and_minus .icon.icon--active,.faq-accordion dt .accordion-style--plus_and_minus .icon.icon--active{display:block}.accordion dt a:hover,.accordion dt a[aria-expanded=true],.faq-accordion dt button:hover,.faq-accordion dt button[aria-expanded=true]{background-color:{{ settings.heading_color | color_modify: 'alpha', 0.03 }}}.accordion dd,.faq-accordion dd{display:none;padding:20px 20px 20px 40px}.faq-accordion dt .icon{color:{{ settings.link_color }}}.accordion dt:first-of-type [aria-expanded=true] small,.accordion dt:first-of-type small{transform:translateY(-60%) rotate(270deg)}.accordion dt:first-of-type [aria-expanded=false] small{transform:translateY(-60%) rotate(180deg)}.accordion dd{margin-left:0;display:none}.accordion dd[aria-hidden=false]{display:block}.accordion dt a small.right{font-family:Arial}.accordion dd:not([aria-hidden=true]):first-of-type{display:block}.accordion [aria-expanded=false] small{transform:translateY(-60%) rotate(180deg)}.accordion [aria-expanded=true] small{transform:translateY(-60%) rotate(270deg)}

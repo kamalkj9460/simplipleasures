@@ -1,0 +1,182 @@
+{% assign color_background = settings.shop_bg_color %}
+{% assign border_color = settings.border_color %}
+{% liquid
+    assign text = settings.regular_color
+    assign text_invert = '#ffffff'
+
+    assign lightness = text | color_extract: 'lightness'
+
+    if lightness > 50
+      assign text_invert = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign link = settings.link_color
+    assign link_invert = '#ffffff'
+
+    assign lightness = link | color_extract: 'lightness'
+
+    if lightness > 50
+      assign link_invert = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign sale_sticker_color = settings.banner_sale
+    assign sale_sticker_color_text = '#ffffff'
+
+    assign lightness = sale_sticker_color | color_extract: 'lightness'
+
+    if lightness > 50
+      assign sale_sticker_color_text = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign new_sticker_color = settings.banner_new
+    assign new_sticker_color_text = '#ffffff'
+
+    assign lightness = new_sticker_color | color_extract: 'lightness'
+
+    if lightness > 50
+      assign new_sticker_color_text = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign bestseller_sticker_color = settings.banner_bestseller
+    assign bestseller_sticker_color_text = '#ffffff'
+
+    assign lightness = bestseller_sticker_color | color_extract: 'lightness'
+
+    if lightness > 50
+      assign bestseller_sticker_color_text = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign comingsoon_sticker_color = settings.banner_comingsoon
+    assign comingsoon_sticker_color_text = '#ffffff'
+
+    assign lightness = comingsoon_sticker_color | color_extract: 'lightness'
+
+    if lightness > 50
+      assign comingsoon_sticker_color_text = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign staffpick_sticker_color = settings.banner_staffpick
+    assign staffpick_sticker_color_text = '#ffffff'
+
+    assign lightness = staffpick_sticker_color | color_extract: 'lightness'
+
+    if lightness > 50
+      assign staffpick_sticker_color_text = settings.regular_color
+    endif
+  %}
+{% liquid
+    assign preorder_sticker_color = settings.banner_preorder
+    assign preorder_sticker_color_text = '#ffffff'
+
+    assign lightness = preorder_sticker_color | color_extract: 'lightness'
+
+    if lightness > 50
+      assign preorder_sticker_color_text = settings.regular_color
+    endif
+  %}
+{% assign drop_down_menu_active_color = settings.dropdown_link_color %}
+{% assign btn_primary_alpha = settings.button_primary_bg_color_transparency | divided_by: 100.00 %}
+  {% assign btn_primary_hover_alpha = settings.button_primary_bg_color_transparency--highlight | divided_by: 100.00 %}
+  {% assign btn_secondary_alpha = settings.button_secondary_bg_color_transparency | divided_by: 100.00 %}
+  {% assign btn_secondary_hover_alpha = settings.button_secondary_bg_color_transparency--highlight | divided_by: 100.00 %}
+{% liquid
+    if settings.button_primary_padding == 'small'
+      assign btn_primary_font_size = '0.75rem'
+      assign btn_primary_line_height = 'inherit'
+      assign btn_primary_width = 'auto'
+    elsif settings.button_primary_padding == 'regular'
+      assign btn_primary_font_size = '1rem'
+      assign btn_primary_line_height = 'inherit'
+      assign btn_primary_width = 'auto'
+    else
+      assign btn_primary_font_size = '1.25rem'
+      assign btn_primary_line_height = '1.25'
+      assign btn_primary_width = '100%'
+    endif
+  %}
+{% liquid
+    if settings.button_secondary_padding == 'small'
+      assign btn_secondary_font_size = '0.75rem'
+      assign btn_secondary_line_height = 'inherit'
+      assign btn_secondary_width = 'auto'
+    elsif settings.button_secondary_padding == 'regular'
+      assign btn_secondary_font_size = '1rem'
+      assign btn_secondary_line_height = 'inherit'
+      assign btn_secondary_width = 'auto'
+    else
+      assign btn_secondary_font_size = '1.25rem'
+      assign btn_secondary_line_height = '1.25'
+      assign btn_secondary_width = '100%'
+    endif
+  %}
+{% liquid
+    if settings.button_link_padding == 'small'
+      assign btn_link_style_font_size = '0.75rem'
+      assign btn_link_style_line_height = 'inherit'
+    elsif settings.button_link_padding == 'regular'
+      assign btn_link_style_font_size = '1rem'
+      assign btn_link_style_line_height = 'inherit'
+    else
+      assign btn_link_style_font_size = '1.25rem'
+      assign btn_link_style_line_height = '1.25'
+    endif
+  %}
+{% liquid
+    if settings.button_cart_padding == 'small'
+      assign btn_add_to_cart_font_size = '0.75rem'
+      assign btn_add_to_cart_line_height = 'inherit'
+      assign btn_add_to_cart_width = '100%'
+    elsif settings.button_cart_padding == 'regular'
+      assign btn_add_to_cart_font_size = '1rem'
+      assign btn_add_to_cart_line_height = 'inherit'
+      assign btn_add_to_cart_width = '100%'
+    else
+      assign btn_add_to_cart_font_size = '1.25rem'
+      assign btn_add_to_cart_line_height = '1.25'
+      assign btn_add_to_cart_width = '100% !important'
+    endif
+  %}
+{% liquid
+    if settings.button_cart_padding == 'small'
+      assign atc_button_height =  '35px'
+      assign atc_button_width =  'calc(50% - 12px)'
+      assign atc_button_margin =  '0 6px 0 0'
+      assign atc_button_spb_margin =  '0 0 0 6px'
+    elsif settings.button_cart_padding == 'regular'
+      assign atc_button_height =  '44px'
+      assign atc_button_width =  'calc(50% - 12px)'
+      assign atc_button_margin =  '0 6px 0 0'
+      assign atc_button_spb_margin =  '0 0 0 6px'
+    else
+      assign atc_button_height =  '60px'
+      assign atc_button_width =  '100%'
+      assign atc_button_margin =  '0 0 0 0'
+      assign atc_button_spb_margin =  '12px 0 0 0'
+    endif
+  %}
+{% case settings.icon %}
+    {% when 'icon_solid' %}
+      {% assign icon_down_caret = '"\e902"' %}
+      {% assign icon_x = '"\e903"' %}
+    {% when 'icon_outline' %}
+      {% assign icon_down_caret = '"\e904"' %}
+      {% assign icon_x = '"\e905"' %}
+    {% when 'icon_brush' %}
+      {% assign icon_down_caret = '"\e900"' %}
+      {% assign icon_x = '"\e901"' %}
+    {% when 'icon_sp' %}
+      {% assign icon_down_caret = '"\e904"' %}
+      {% assign icon_x = '"\e905"' %}
+  {% endcase %}
+{% liquid
+    assign button_link_underline_thickness = settings.button_link_underline_thickness | append: 'px'
+    if settings.button_link_underline_thickness == 1
+      assign button_link_underline_thickess = 'thin'
+    endif
+  %}.meta-info-list{font-size:.8em}.meta-info-list .meta-info-list__item{margin-right:5px;display:inline-block}.meta-info-list .meta-info-list__item a,.meta-info-list .meta-info-list__item span{padding-left:5px;color:{{ settings.regular_color }}}.meta-info-list .meta-info-list__item:first-child a,.meta-info-list .meta-info-list__item:first-child span{padding-left:0}.meta-info-list .meta-info-list__item:last-child{margin-right:0}.meta-info-list .meta-info-list__item+li:before{content:"|";color:{{ text | color_modify: 'alpha', 0.3 }}}.blog__filter{margin-bottom:20px}@media only screen and (max-width:480px){.blog__filter .select,.blog__filter select{width:100%}}.blog__filter .is-grouped{justify-content:flex-end}@media only screen and (max-width:798px){.blog__filter .is-grouped{justify-content:flex-start}}.blog-main{display:flex}.blog-main .select{border-color:{{ settings.border_color }}}.blog-card{display:flex;flex-direction:column;justify-content:flex-start;border:thin solid {{ border_color }};box-shadow:0 2px 3px {{ settings.border_color | color_modify: 'alpha', 0.1 }},0 0 0 1px {{ settings.border_color | color_modify: 'alpha', 0.1 }}}@media only screen and (max-width:798px){.blog-card{margin-bottom:20px}}.blog-card.show-border-false{border:none;box-shadow:none}.blog-card.show-border-false .card-content{padding-left:0;padding-right:0}.blog-card.show-border-false .blog-card__read-more{margin-left:0;margin-right:0}.blog-card .blog-card__content>div:not(:last-child),.blog-card .meta-info>ul:not(:last-child){margin-bottom:1rem}@media only screen and (min-width:799px){.blog-card .image-element__wrap{max-height:15rem}}.blog-card .media-content{font-size:{{ settings.heading_size | append: 'px' }}}.blog-card .media-content .title{font-size:.8em}.blog-card .blog-card__read-more{margin:auto 1.5rem 1.5rem}.blog-card .blog-card__read-more .button{height:auto;white-space:normal}@media only screen and (min-width:799px){.blog-card.is-horizontal{flex-direction:row;flex-grow:0;flex-shrink:1;max-height:330px}.blog-card.is-horizontal .blog-card__image{width:33.33%}.blog-card.is-horizontal .blog-card__image .image{position:relative;overflow:hidden;height:100%;width:100%}.blog-card.is-horizontal .blog-card__image .image .image-element__wrap{height:100%;max-height:none}.blog-card.is-horizontal .blog-card__image .image .image-element__wrap img{height:100%;object-fit:cover;object-position:center}.blog-card.is-horizontal .blog-card__content{display:flex;flex:3;flex-direction:column}.blog-card.is-horizontal.show-border-false{box-shadow:none}.blog-card.is-horizontal.show-border-false .blog-card__content{padding:1.5rem}.blog-card.is-horizontal.show-border-false .blog-card__read-more{margin-left:0}.blog-card.is-horizontal .blog-card__read-more{margin:auto 0 0}}@media only screen and (max-width:798px){.blog-card.is-horizontal .blog-card__read-more{margin:0}.blog-card .image-element__wrap{max-height:20rem}}.excerpt{position:relative;max-height:6em;overflow:hidden}.excerpt.excerpt-length-sm .truncation-fade{display:none}.excerpt-length-lg .truncation-fade{position:absolute;bottom:0;left:0;width:100%;text-align:center;margin:0;padding:30px 0;background-image:linear-gradient(180deg,{{ settings.shop_bg_color | color_to_rgb | color_modify: 'alpha', 0 }},{{ settings.shop_bg_color | color_to_rgb | color_modify: 'alpha', 1 }})}.blog-card__link:hover .blog-card__image,.blog-card__link:hover svg{transform:scale(1.1)}.blog-card__image,.blog-card__link svg{transition:transform .3s ease-in-out}

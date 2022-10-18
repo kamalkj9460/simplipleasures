@@ -1,0 +1,97 @@
+{% comment %}
+  The contents of the collection.sub-collections.liquid template can be found in /sections/collection-subcollection__main.liquid
+{% endcomment %}
+
+{% assign banner_blocks = collection.metafields.category_sections.banner_slideshow.blocks %}
+{% assign category_collections = collection.metafields.category_sections.category_collections.collections %}
+{% assign slide_classic = collection.metafields.category_sections.slideshow_classic %}
+{% assign category_reviews = collection.metafields.category_sections.review_highlights.reviews %}
+{% assign sale_banner = collection.metafields.category_sections.sale_banner %}
+{% assign video_section = collection.metafields.category_sections.video %}
+
+<div id="template-{{ template | replace: '.', '-' | handle }}" class="shopify-section collection-page" data-check-for-order="true">
+  
+  {% if banner_blocks.size > 0 %}  
+    {% comment %} Collection banner {% endcomment %}
+    {% section 'category__slideshow-banner' %}
+  {% endif %}
+
+  {% if settings.show_discount_on_category_page %}
+    {% render 'general-discount-stripe' %}
+  {% endif %}
+
+  <section class="subcollection
+                  section__wrapper
+                  section
+                  ">
+    <div class="collection__breadcrumb-title-filter container is-justify-space-between is-flex-wrap has-padding-bottom is-align-center">
+      <div class="one-third column medium-down--one-whole">
+        {% comment %} Collection breadcrumb {% endcomment %}
+        <div class="breadcrumb__container">
+          {% render 'breadcrumb', context: 'collection' %}
+        </div>
+      </div>
+    </div>
+
+    {% comment %} Collection title {% endcomment %}
+    <div class="container hidden">
+      <div class="one-whole column">
+        <div class="collection__title hide-when-banner-enabled has-no-side-gutter">
+          {% render 'heading',
+            title: collection.title,
+            heading_tag: 'h1',
+            context: 'collection',
+            text_alignment: 'left'
+          %}
+        </div>
+      </div>
+    </div>
+
+    {% comment %} Collection description {% endcomment %}
+    {% if collection.description != blank %}
+      <div class="container">
+        <div class="one-whole column">
+          <div class="collection__description content has-padding-bottom">
+            {{ collection.description }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if category_collections.size > 0 %}  
+      {% comment %} Collection sidebar and main content area {% endcomment %}
+      <div class="container collection__content">
+        {% section 'collection-category__main' %}
+      </div>
+    {% endif %}
+    
+  </section>
+
+  {% if slide_classic.show == true %}  
+    {% comment %} Category Slideshow Classic {% endcomment %}
+    {% section 'category__slideshow-classic' %}
+  {% endif %}
+  
+  {% comment %} Category Usps {% endcomment %}
+  {% section 'category__usps' %}
+  
+  
+  {% if category_reviews.size > 0 %}
+    {% comment %} Category Review highlights {% endcomment %}
+    {% section 'category__review-highlights' %}
+  {% endif %}
+  
+  
+  {% if sale_banner.show == true %}  
+    {% comment %} Category Review highlights {% endcomment %}
+    {% section 'category__sale-banner' %}
+  {% endif %}
+
+  {% if video_section.video_desktop != blank %}  
+    {% comment %} Category Review highlights {% endcomment %}
+    {% section 'category__video-section' %}
+  {% endif %}
+
+  {% section 'category__featured-products' %}
+
+</div>

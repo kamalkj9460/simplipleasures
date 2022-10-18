@@ -1,0 +1,22 @@
+{% comment %} Assign object as block or section {% endcomment %}
+{% if type == 'block' %}
+  {%- assign object = block -%}
+{% else %}
+  {%- assign object = section -%}
+{% endif %}
+
+{%- assign id = object.id -%}
+
+{% assign group = object.settings.group %}
+{% assign key = object.settings.key %}
+
+{% comment %} Content Settings {% endcomment %}
+{% if group != blank and key != blank %}
+  {%- assign metafield_video_link = product.metafields[group][key] -%}
+{% endif %}
+
+{% if metafield_video_link != blank %}
+  <div class="has-padding-bottom product__video column has-padding-bottom is-hidden-medium is-hidden-desktop-only">
+    <div class="product__video-frame" data-src="{{ metafield_video_link }}"></div>
+  </div>
+{% endif %}

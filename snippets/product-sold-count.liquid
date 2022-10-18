@@ -1,0 +1,10 @@
+{% comment %}
+  Show current amount sold for a single product (with default variant).
+  This assumes that you have created a metafield
+{% endcomment %}
+
+{% assign productStartCount = product.metafields.stock.initial | times:1 %}
+{% if productStartCount > 0 %}
+  {% assign productInventory = product.variants.first.inventory_quantity %}
+  <p>{{ productStartCount | minus:productInventory }} sold. Only {{ productInventory }} remain.</p>
+{% endif %}

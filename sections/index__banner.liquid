@@ -1,0 +1,319 @@
+{% comment %}
+** Index banner **
+{% endcomment %}
+
+{% comment %}Assign object as block or section{% endcomment %}
+{% if type == 'block' %}
+  {% assign object = block %}
+{% else %}
+  {% assign object = section %}
+{% endif %}
+
+{% assign id = section.id %}
+
+{% assign title_size = object.settings.title_size %}
+{% assign title_size_mobile = object.settings.title_size_mobile %}
+{% comment %}Layout{% endcomment %}
+{% assign heading_alignment = object.settings.heading_alignment %}
+{% assign width = object.settings.width %}
+{% assign padding_top = object.settings.padding_top %}
+{% assign padding_bottom = object.settings.padding_bottom %}
+{% comment %} Advanced {% endcomment %}
+{% assign css_class = object.settings.css_class %}
+{% assign custom_css = object.settings.custom_css %}
+
+{% style %}
+
+  #shopify-section-{{ id }} {
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+    {% if width == 'wide' -%}
+      width: 100%;
+    {%- endif %}
+  }
+
+  #shopify-section-{{ id }} .title {
+    color: {{ section.settings.title_color }} ;
+    font-size: clamp({{ title_size_mobile }}px, calc({{ title_size_mobile }}px + ({{ title_size | minus: title_size_mobile }} * (100vw - {{ 1024 | minus:  480 }}px) / 480)), {{ title_size }}px);
+  }
+  
+  #shopify-section-{{ id }} .title .highlight-text {
+    color: {{ section.settings.title_highlights_color }} ;
+  }
+
+  #shopify-section-{{ id }} .subtitle {
+    color: {{ section.settings.subtitle_color }} ;
+	font-size: {{ section.settings.subtitle_size }}px;
+  }
+  #shopify-section-{{ id }} .subtitle .highlight-text {
+    color: {{ section.settings.subtitle_highlights_color }} ;
+  }
+
+  #shopify-section-{{ id }} .button {
+    flex-basis: {{ section.settings.buttons_width }}px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin: {{ section.settings.buttons_gap | divided_by: 2 }}px;
+  }
+
+  @media only screen and (max-width: 480px) {
+    #shopify-section-{{ id }} .button{
+      flex: 0 0 auto;
+    }
+  }
+  @media only screen and (max-width: 768px) {
+    #shopify-section-{{ id }} .subtitle {
+      font-size: {{ section.settings.subtitle_size_mobile }}px;
+    }
+  }
+  {% render 'css-loop',
+          css: section_css,
+          id: id
+  %}
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+{% endstyle %}
+
+{% render 'index__banner',
+  width: width,
+  section: section
+%}
+
+{% schema %}
+
+{
+  "name": "Index banner",
+  "class": "banner collection-banner overlaid-header-option",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "1800 x 800px recommended"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image",
+      "info": "900 x 1800px recommended"
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_crop",
+      "label": "Mobile Image cropping",
+      "info": "If not using a \"Mobile Image\" you have the option to choose how you want to crop the image when on mobile.",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Title highlighted goes here"
+    },
+    {
+      "type": "number",
+      "id": "title_size",
+      "label": "Title font-size",
+      "default": 100
+    },
+    {
+      "type": "number",
+      "id": "title_size_mobile",
+      "label": "Title font-size (mobile)",
+      "default": 60
+    },
+    {
+      "type": "text",
+      "id": "title_highlights",
+      "label": "Title Highlights",
+      "default": "Title highlighted||here",
+      "info": "Add the text to be highlighted in the subtitle for one or more words. It must be an exact match and separated by || if you want to add more then one group of words."
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_highlights_color",
+      "label": "Title Highlights color",
+      "default": "#e21264"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "<p>Subtitle goes here it can also be highlighted, just like the Title.<\/p>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_highlights",
+      "label": "Subtitle Highlights",
+      "default": "Subtitle goes here||highlighted"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#ffffff"
+    },
+	{
+      "type": "number",
+      "id": "subtitle_size",
+      "label": "Subtitle font-size",
+      "default": 100
+    },
+	{
+      "type": "number",
+      "id": "subtitle_size_mobile",
+      "label": "Subtitle font-size(mobile)",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "subtitle_highlights_color",
+      "label": "Subtitle Highlights color",
+      "default": "#e21264"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "wide",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ]
+    },
+    {
+      "type": "number",
+      "id": "buttons_width",
+      "label": "Buttons width",
+      "info": "Unit = px",
+      "default": 130
+    },
+    {
+      "type": "number",
+      "id": "buttons_gap",
+      "label": "Buttons gap",
+      "info": "Unit = px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 80,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 80,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Advanced",
+      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+      "type": "text",
+      "id": "css_class",
+      "label": "CSS Class"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop now"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button Style",
+          "options": [
+            {
+              "value": "button--primary",
+              "label": "Primary"
+            },
+            {
+              "value": "button--secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "button--link-style",
+              "label": "Link style"
+            }
+          ],
+          "default": "button--primary"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Image",
+      "name":"Index Banner"
+    }
+  ]
+}
+
+{% endschema %}

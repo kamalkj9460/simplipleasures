@@ -1,0 +1,182 @@
+{% assign drill_matrix_buttons = collection.metafields.portal_sections.drill_matrix_buttons %}
+{% assign section_title = drill_matrix_buttons.section_title %}
+{% assign blocks = drill_matrix_buttons.blocks %}
+
+{% assign id = section.id %}
+{% assign bg_color = section.settings.bg_color %}
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+{% assign title_spacing_top = section.settings.title_spacing_top %}
+{% assign title_spacing_bottom = section.settings.title_spacing_bottom %}
+{% assign buttons_min_width = section.settings.buttons_min_width %}
+{% assign buttons_height = section.settings.buttons_height %}
+{% assign button_fs = section.settings.button_fs %}
+{% assign buttons_min_width_mobile = section.settings.buttons_min_width_mobile %}
+{% assign buttons_height_mobile = section.settings.buttons_height_mobile %}
+{% assign button_fs_mobile = section.settings.button_fs_mobile %}
+{% assign button_icon_size = section.settings.button_icon_size %}
+{% assign button_icon_size_mobile = section.settings.button_icon_size_mobile %}
+
+{% style %}
+  #shopify-section-{{ id }} {
+    background: {{ bg_color }};
+  }
+  #shopify-section-{{ id }} .section {
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+  }
+  #shopify-section-{{ id }} .section_title {
+    padding-top: {{ title_spacing_top }}px;
+    padding-bottom: {{ title_spacing_bottom }}px;
+  }
+  #shopify-section-{{ id }} .button {
+    flex-basis: {{ buttons_min_width }}px;
+    height: {{ buttons_height }}px;
+    font-size: {{ button_fs }}px !important;
+  }
+  #shopify-section-{{ id }} .button .icon{
+    height: {{ button_icon_size }}px;
+    width: {{ button_icon_size }}px;
+  }
+
+  @media only screen and (max-width: 480px) {
+    #shopify-section-{{ id }} .button {
+      flex-basis: {{ buttons_min_width_mobile }}px;
+      height: {{ buttons_height_mobile }}px;
+      font-size: {{ button_fs_mobile }}px !important;
+    }
+    #shopify-section-{{ id }} .button .icon{
+      height: {{ button_icon_size_mobile }}px;
+      width: {{ button_icon_size_mobile }}px;
+    }
+  }
+
+{% endstyle %}
+
+<div class="section is-width-standard">
+  <div class="container has-no-side-gutter is-justify-center">
+    {% if section_title != blank %}
+      <h2 class="section_title text-align-center fw-bold">{{ section_title }}</h2>
+    {% endif %}
+
+    {% if blocks.size >= 2 %}
+      <div class="buttons_holder one-whole is-flex is-justify-center is-flex-wrap">
+
+        {% for block in blocks %}
+          <div class="button-container one-half">
+            {% render 'button',
+              label: block.label,
+              href: block.link,
+              type: "link",
+              icon: block.icon,
+              style: "button--primary"
+            %}
+          </div>
+        {% endfor %}
+
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Drill Matrix Buttons",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background",
+      "default": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "type": "header",
+      "content": "Section Title Spacing"
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_top",
+      "label": "Spacing top",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_bottom",
+      "label": "Spacing bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "number",
+      "id": "buttons_min_width",
+      "label": "Min width",
+      "default": 330
+    },
+    {
+      "type": "number",
+      "id": "buttons_min_width_mobile",
+      "label": "Min width (mobile)",
+      "default": 150
+    },
+    {
+      "type": "number",
+      "id": "buttons_height",
+      "label": "Height",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "buttons_height_mobile",
+      "label": "Height (mobile)",
+      "default": 40
+    },
+    {
+      "type": "number",
+      "id": "button_fs",
+      "label": "Font Size",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "button_fs_mobile",
+      "label": "Font Size (mobile)",
+      "default": 13
+    },
+    {
+      "type": "number",
+      "id": "button_icon_size",
+      "label": "Icon Size",
+      "default": 30
+    },
+    {
+      "type": "number",
+      "id": "button_icon_size_mobile",
+      "label": "Icon Size (mobile)",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "number",
+      "id": "padding_top",
+      "label": "Section Top spacing",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "padding_bottom",
+      "label": "Section Bottom spacing",
+      "default": 20
+    }
+  ]
+}
+{% endschema %}

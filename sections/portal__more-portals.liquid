@@ -1,0 +1,155 @@
+{% assign id = section.id %}
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+{% assign title_spacing_top = section.settings.title_spacing_top %}
+{% assign title_spacing_bottom = section.settings.title_spacing_bottom %}
+{% assign bg_color = section.settings.bg_color %}
+{% assign title = section.settings.section_title %}
+{% assign text_color = section.settings.text_color %}
+{% assign button_style = section.settings.button_style %}
+{% assign buttons_per_row = section.settings.buttons_per_row %}
+{% assign navigation = linklists[section.settings.portals_navigation] %}
+
+{% style %}
+  #shopify-section-{{ id }} {
+    background: {{ bg_color }};
+  }
+  #shopify-section-{{ id }} .section {
+    color: {{ text_color }};
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+  }
+  #shopify-section-{{ id }} .section_title {
+    color: {{ text_color }};
+    padding-top: {{ title_spacing_top }}px;
+    padding-bottom: {{ title_spacing_bottom }}px;
+  }
+  #shopify-section-{{ id }} .button-wrapper {
+    flex: 0 0 auto;
+    min-width: {{ 1.00 | divided_by: buttons_per_row | times: 100.00 }}%;
+  }
+{% endstyle %}
+
+<div class="section is-width-standard">
+  <div class="container is-align-center is-justify-center has-no-side-gutter">
+    {% if title != blank %}
+      <h2 class="section_title one-whole text-align-center">
+        {{ title }}
+      </h2>
+    {% endif %}
+
+    {% for link in navigation.links %}
+      {% unless link.current %}  
+        <div class="button-wrapper">
+          {% render 'button',
+            label: link.title,
+            type: 'link',
+            href: link.url,
+            style: button_style
+          %}
+        </div>
+      {% endunless %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "More Portals",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Ooh, there's more..."
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Title Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Section Title Spacing"
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_top",
+      "label": "Spacing top",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_bottom",
+      "label": "Spacing bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "portals_navigation",
+      "label": "Navigation"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "button--primary",
+          "label": "Primary"
+        },
+        {
+          "value": "button--secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "button--link-style",
+          "label": "Link style"
+        }
+      ],
+      "default": "button--primary"
+    },
+    {
+      "type": "number",
+      "id": "buttons_per_row",
+      "label": "Buttons width",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "number",
+      "id": "padding_top",
+      "label": "Section Top spacing",
+      "default": 40
+    },
+    {
+      "type": "number",
+      "id": "padding_bottom",
+      "label": "Section Bottom spacing",
+      "default": 40
+    }
+  ]
+}
+{% endschema %}

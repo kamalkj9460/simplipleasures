@@ -1,0 +1,20 @@
+<!-- snippets/product__order-by-phone -->
+{% assign phone_number = sections.settings.phone_number %}
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+
+<div class="product__order-by-phone--holder is-flex is-align-start has-padding">
+  <a href="tel:1-800-918-6308" class="product__order-by-phone--icon-holder is-flex is-justify-center is-align-center">
+    <div class="product__order-by-phone--icon-image">
+      {% include 'icon', name: 'phone-pink' %}
+    </div>
+  </a>
+  
+  <div class="product__order-by-phone--text">
+    <h4 class="product__order-by-phone--text-heading">
+      Order over the phone
+    </h4>
+    <p>Talk to one of our customer care specialists and take your order over the phone. Just dial <b><a href="tel:1-800-918-6308">1-800-918-6308</a></b> and reference the following product number: <strong class="product__sku sku">{{ current_variant.sku | upcase}}</strong></p>
+  </div>
+</div>
+<!-- END snippets/product__order-by-phone -->

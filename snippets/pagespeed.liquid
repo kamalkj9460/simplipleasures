@@ -1,0 +1,16 @@
+<script>var defUrls =[],afUrls=[],extArr=[],themeArr=[],barArr=[],trkArr=[],defUrls=[],jqUrls=[],defnArr=[],trekLoad=[],slickArr=[];</script>
+{%- assign excl = "","" | split: ',' -%} 
+{%- assign head_content = content_for_header | remove_first: '<' | replace: '<', '-psoc-%3C' | replace: '-psoc-%3Cscript', '<script' | replace: '-psoc-%3Cstyle id', '<style id' | replace: '-psoc-%3Cmeta', '<meta' | replace: '-psoc-%3Clink', '<link' | replace: '-psoc-%3C!--', '<!--' | split: '<' -%} 
+{%- for tag in head_content -%}{%- if tag contains 'script ' and tag contains ' src=' and tag contains 'shopifycloud/shopify/' -%}{%- assign txcont = tag | remove_first: 'script ' | remove: '>-psoc-%3C/script>' | replace: "'", "'" | strip -%} <script>extArr.push('{{ txcont }}');</script>
+    {% elsif tag contains 'BarInjector' %}{%- assign txcont = tag | replace_first: ')', 'pso-)' | split: 'pso-)' | last | split: ');-psoc-%3C/script>' | first -%}<script> function tracker{{ forloop.index }} (){{ txcont | strip }}; barArr.push(tracker{{ forloop.index }});</script>
+    {% elsif tag contains 'asyncLoad' %}{%- assign txcont = tag | replace_first: '["', 'pso-["' | replace: '"]', '"pso-]' | split: 'pso-[' | last | split: 'pso-]' | first -%}{%- assign txfilt = txcont | split: ',' -%}
+    {% for txf in txfilt %}{%- assign exclu = false -%}{% for txexc in excl %}{%- if txf contains txexc -%} {%- assign exclu = true -%}{%- endif -%}{%- endfor -%}{%- if exclu == false %}<script>afUrls.push({{ txf | strip }});</script>{% endif -%}{%- endfor -%}
+{% else %}{{ tag | prepend: '<' | replace: '-psoc-%3C', '<' }}{%- endif -%}{%- endfor -%}
+<script>
+  var afL1=3000; function FN(e){e.forEach(Function.prototype.call,Function.prototype.call)} 
+  function rSt(e){var t=document.createElement("script");t.textContent=e,document.head.appendChild(t)}; function formatTrekkie (a) {var hE=document.getElementById(a).innerText,NeC=hE.replace(/(<link.+?ch">|<\/head>)/g,"").replace(/<meta[^>].+?>/g, "").replace(/(^\s*|\s*$)/g,"").replace(/<\/script>$/,"").trim(),ChArr=NeC.split("<\/script>"); ChArr.forEach(e=>{cHSt(e)})}
+  function cHSt(e){-1<e.indexOf('class="anal')?(b=e.replace(/<scr[^>]+?>/g,"").trim(),trekLoad.push(function(){rSt(b)})):(b=e.replace(/<script>/g,""),rSt(b))}; function UL(e){for(var t=0;t<e.length;t++){var n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=e[t];var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(n,i)}}
+  function EXs(e){for(z=[],a=e.split(" "),i=0;i<a.length;i++)a[i].startsWith("src=")?z[i]="s."+a[i]+", ":a[i].startsWith("defer")?z[i]="":(b=a[i].replace(/=/,'", '),z[i]='s.setAttribute("'+b+"), ");return p=z.join(" "),p.replace(/, $/,"").replace(/crossorigin/g,"crossOrigin")}
+  function EX(e){c="";for(var t=0;t<e.length;t++)b=EXs(e[t]),c+="s=document.createElement('script'), s.type='text/javascript',"+b+", document.head.appendChild(s); \n";var n=document.createElement("script");n.type="text/javascript",n.textContent=c,document.head.appendChild(n)}
+  function speedLoader (){setTimeout(function(){UL(defUrls);FN(trekLoad);EX(extArr);UL(afUrls); FN(trkArr); setTimeout(function(){ FN(barArr) }, afL1);}, afL1);};if(window.attachEvent) {window.attachEvent('onload', speedLoader)} else {window.addEventListener('load', speedLoader, false)};
+</script>

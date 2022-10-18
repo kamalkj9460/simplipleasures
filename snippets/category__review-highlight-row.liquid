@@ -1,0 +1,75 @@
+{% assign title = review.title %}
+{% assign text = review.text %}
+{% assign author = review.author %}
+{% assign link = review.link %}
+{% assign review_image = images[review.image] %}
+
+
+{% if reverse == true %}
+  {% assign container_class = 'is-flex-row-reverse' %}
+  {% assign image_class = 'is-justify-start' %}
+
+{% else %}
+  {% assign image_class = 'is-justify-end' %}
+
+{% endif %}
+
+<div class="container one-whole has-no-side-gutter">
+  <div class="one-whole is-flex is-flex-column-reverse-mobile {{ container_class }}">
+    <div class="one-half small-down--one-whole is-flex is-justify-center is-align-center">
+      
+      <div class="review-text-wrapper">
+        {% if link != blank %}
+          <a href="{{ link }}">
+        {% endif %}
+
+          <div class="review-stars">
+            {% render 'include-stars', rating: 5 %}
+          </div>
+    
+          <div class="review-title">
+            {% render 'heading',
+              title: title,
+              heading_tag: 'h2',
+              context: 'review',
+              text_alignment: 'left',
+              font_class: 'ff-bebas fw-normal',
+              enable_divider: false
+            %}
+          </div>
+    
+          <div class="review-content">
+            {{ text }}
+          </div>
+    
+          <div class="review-author fw-bold">
+            {{ author }}
+          </div>
+
+        {% if link != blank %}
+          </a>
+        {% endif %}
+      </div>
+  
+    </div>
+  
+    <div class="one-half small-down--one-whole is-flex is-align-center {{ image_class }}">
+      <div class="review-image-wrapper">
+        {% if link != blank %}
+          <a href="{{ link }}">
+        {% endif %}
+
+          {% render 'image-element',
+            image: review_image,
+            alt: review_image.alt,
+            stretch_width: true,
+            max_height: 400
+          %}
+          
+        {% if link != blank %}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

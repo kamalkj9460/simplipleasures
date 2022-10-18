@@ -1,0 +1,95 @@
+{% comment %}
+  The contents of the collection.sub-collections.liquid template can be found in /sections/collection-subcollection__main.liquid
+{% endcomment %}
+
+{% assign banner_slideshow = collection.metafields.brand_sections.banner_slideshow %}
+{% assign slide_classic = collection.metafields.brand_sections.slideshow_classic %}
+{% assign review_highlights = collection.metafields.brand_sections.review_highlights %}
+{% assign sale_banner = collection.metafields.brand_sections.sale_banner %}
+{% assign video_section = collection.metafields.brand_sections.video %}
+{% assign recommended_collection = collection.metafields.brand_sections.recommended_collection %}
+
+<div id="template-{{ template | replace: '.', '-' | handle }}" class="shopify-section collection-page" data-check-for-order="true">
+
+  
+  {% comment %} Collection banner {% endcomment %}
+  {% if banner_slideshow.show == true %}
+    {% assign banner_blocks = banner_slideshow.blocks %}
+    {% if banner_blocks.size > 0 %}
+      {% section 'brand__slideshow-banner' %}
+    {% endif %}
+  {% endif %}
+  
+  {% comment %} General Discount Bar {% endcomment %}
+  {% if settings.show_discount_on_brand_page %}
+    {% render 'general-discount-stripe' %}
+  {% endif %}
+
+  {% comment %} Brand Usps {% endcomment %}
+  {% section 'category__usps' %}
+
+  {% section 'brand__featured-products' %}
+
+  {% comment %} Brand Sale Banner {% endcomment %}
+  {% if sale_banner.show == true %}  
+    {% section 'brand__sale-banner' %}
+  {% endif %}
+
+  {% comment %} Brand Slideshow Classic {% endcomment %}
+  {% if slide_classic.show == true %}  
+    {% section 'brand__slideshow-classic' %}
+  {% endif %}
+
+  <section class="subcollection
+                  section__wrapper
+                  section
+                  ">
+
+    {% comment %} Collection breadcrumb {% endcomment %}
+    <div class="collection__breadcrumb-title-filter container is-justify-space-between is-flex-wrap has-padding-bottom is-align-center">
+      <div class="one-third column medium-down--one-whole">
+        <div class="breadcrumb__container">
+          {% render 'breadcrumb', context: 'collection' %}
+        </div>
+      </div>
+    </div>
+
+    {% comment %} Collection description {% endcomment %}
+    {% if collection.description != blank %}
+      <div class="container">
+        <div class="one-whole column">
+          <div class="collection__description content has-padding-bottom">
+            {{ collection.description }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% comment %} Collection sidebar and main content area {% endcomment %}
+    <div class="container collection__content">
+      {% section 'collection__sidebar' %}
+      {% section 'collection__main' %}
+    </div>
+    
+  </section>
+  
+  {% comment %} Brand Review highlights {% endcomment %}
+  {% if review_highlights.show == true %}
+    {% assign brand_reviews = collection.metafields.brand_sections.review_highlights.reviews %}
+    {% if brand_reviews.size > 0 %}
+      {% section 'brand__review-highlights' %}
+    {% endif %}
+  {% endif %}
+
+  {% comment %} Brand Video {% endcomment %}
+  {% if video_section.show == true %}
+    {% if video_section.video_desktop != blank %}  
+      {% section 'brand__video-section' %}
+    {% endif %}
+  {% endif %}
+
+  {% if recommended_collection.show == true and  recommended_collection.collection_handle != blank %}
+    {% section 'brand__recommended-products' %}
+  {% endif %}
+
+</div>

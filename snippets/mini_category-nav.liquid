@@ -1,0 +1,49 @@
+{% liquid
+  if collection
+    assign object = collection
+  elsif page
+    assign object = page
+  endif
+
+  unless object
+    assign object = shop
+  endunless
+
+  assign cat_nav = object.metafields.portal_sections.category_nav
+  assign blocks = cat_nav.blocks | where: 'show_at_the_top'
+%}
+
+{% if blocks.size > 0 %}  
+  <section class="mini_category-nav shopify-section section__wrapper">
+    <div class="section is-width-wide">
+      <nav class="is-flex is-align-stretch is-justify-center">
+        <ul class="is-flex is-align-center">
+          {% for block in blocks %}
+
+            {% liquid
+              assign block_image = images[block.image_name]
+              assign block_link = block.link
+              assign block_title = block.title
+            %}
+
+            <li>
+              <a href="{{ block_link }}">
+                <div class="item_image">
+                  {% render 'image-element',
+                    image: block_image,
+                    alt: block_image.alt
+                  %}
+                </div>
+
+                <div class="item_text text-align-center">
+                  {{ block_title }}
+                </div>
+              </a>
+            </li>
+
+          {% endfor %} 
+        </ul>
+      </nav>
+    </div>
+  </section>
+{% endif %}

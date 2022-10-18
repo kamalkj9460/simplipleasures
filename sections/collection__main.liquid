@@ -1,0 +1,528 @@
+{% comment %}
+** Collections - main view **
+- Collection main area that holds the promotion banner, thumbnails and pagination
+{% endcomment %}
+
+{% comment %}Assign object as block or section{% endcomment %}
+{% if type == 'block' %}
+  {%- assign object = block -%}
+{% else %}
+  {%- assign object = section -%}
+{% endif %}
+
+{%- assign id = object.id -%}
+{% comment %}Layout{% endcomment %}
+{%- assign width = object.settings.width -%}
+{%- assign padding_top = object.settings.padding_top -%}
+{%- assign padding_bottom = object.settings.padding_bottom -%}
+{% comment %} Advanced {% endcomment %}
+{%- assign css_class = object.settings.css_class -%}
+{%- assign custom_css = object.settings.custom_css -%}
+
+{% comment %} CSS {% endcomment %}
+{% style %}
+  .section__wrapper {
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+    {% if width == 'wide' -%}
+      width: 100%;
+      max-width: 95%;
+    {%- endif %}
+  }
+
+  .on-subcollection-page.section__wrapper {
+    {% if width == 'wide' -%}
+      max-width: none;
+    {%- endif %}
+  }
+
+  {% if object.settings.collection_breadcrumb == false %}
+    .breadcrumb__container {
+      display: none;
+    }
+    .collection__breadcrumb {
+      display: none;
+    }
+  {% endif %}
+
+  {% if object.settings.pagination_type != 'basic_pagination' %}
+    .breadcrumb__page-count {
+      display: none;
+    }
+  {% endif %}
+
+  {% if object.settings.collection_tags == false %}
+    .collection__tag-filter {
+      display: none;
+    }
+  {% endif %}
+
+  {% if object.settings.collection_sort == false %}
+    .collection__sort-by-filter {
+      display: none;
+    }
+  {% endif %}
+
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+{% endstyle %}
+
+{% paginate collection.products by object.settings.pagination_limit %}
+
+<div class="collection__main {{ css_class }}" data-collection-main>
+  {% if object.settings.show_promo_banner %}
+    <div class="collection-promo-banner container">
+      <div class="banner__wrapper
+                  one-whole
+                  column
+                  dark-overlay-{{ object.settings.image_darken }}
+                  is-{{ object.settings.banner_height }}
+                  has-margin-bottom">
+        {% if object.settings.image != blank %}
+          {% render 'image-element',
+                  image: object.settings.image,
+                  alt: object.settings.image.alt,
+                  stretch_width: true
+          %}
+        {% else %}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+        <div class="banner__content card-content">
+          <div class="banner__text text-align-center">
+            <h1 class="banner__heading title">{{ object.settings.promo_title }}</h1>
+            {% if object.settings.promo_text != blank %}
+              <div class="banner__subheading subtitle">{{ object.settings.promo_text }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if collection.products.size == 0 %}
+    <div class="container container--no-products-in-collection text-align-center has-padding-bottom has-padding-top">
+      <div class="one-whole column">
+        <p>{{ 'collections.general.no_matches' | t }}</p>
+      </div>
+    </div>
+  {% else %}
+    <div class="collection-matrix__wrapper">
+      <div class="collection__loading-icon button is-loading is-loading--icon-only"></div>
+      <div class="container collection-matrix has-no-side-gutter" {% if object.settings.pagination_type != 'basic_pagination' %}data-load-more--grid {% endif %}>
+        {%- assign products_per_row = object.settings.products_per_row -%}
+        {%- assign mobile_products_per_row = object.settings.mobile_products_per_row -%}
+        {% render 'product-loop',
+                products: products,
+                products_per_row: products_per_row,
+                mobile_products_per_row: mobile_products_per_row,
+                limit: object.settings.pagination_limit,
+                align_height: object.settings.align_height,
+                height: object.settings.collection_height,
+                product_card_1_bg: section.settings.product_card_1_bg,
+                product_card_1_text: section.settings.product_card_1_text,
+                product_card_1_image: section.settings.product_card_1_image,
+                product_card_2_bg: section.settings.product_card_2_bg,
+                product_card_2_text: section.settings.product_card_2_text,
+                product_card_2_image: section.settings.product_card_2_image,
+                product_card_1_url: section.settings.product_card_1_url,
+                product_card_2_url: section.settings.product_card_2_url
+        %}
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="container container--pagination">
+    <div class="one-whole column text-align-center">
+      {%- assign load_more_text = 'collections.general.pagination_button' | t -%}
+      {% render 'pagination',
+              paginate: paginate,
+              pagination_type: object.settings.pagination_type,
+              load_more_text: load_more_text
+      %}
+    </div>
+  </div>
+  <div id="collectionModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span id="modal-close" class="modal-close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14.867" height="14.867" viewBox="0 0 14.867 14.867">
+          <path id="Path_250" data-name="Path 250" d="M-885.792-50.123l6.285-6.285a.653.653,0,0,0,0-.946.653.653,0,0,0-.946,0l-6.285,6.285-6.285-6.285a.653.653,0,0,0-.946,0,.653.653,0,0,0,0,.946l6.285,6.285-6.285,6.285a.653.653,0,0,0,0,.946.614.614,0,0,0,.473.2.614.614,0,0,0,.473-.2l6.285-6.285,6.285,6.285a.73.73,0,0,0,.473.2.73.73,0,0,0,.473-.2.653.653,0,0,0,0-.946Z" transform="translate(894.172 57.557)" fill="#fff"/>
+        </svg>
+      </span>
+    </div>
+    <div class="modal-body">
+      <svg class="successful-signup has-margin-bottom" xmlns='http://www.w3.org/2000/svg' width='34.83' height='25.089' viewBox='0 0 34.83 25.089'><path id='Path_251' data-name='Path 251' d='M-5408.456,4858.192l9.741,9.741,20.847-20.847' transform='translate(5410.577 -4844.965)' fill='none' stroke='#fff' stroke-linecap='round' stroke-width='3'/></svg>
+      <h4 id="modal-body-heading" class="dare-to-discover link-color large-font ff-bebas has-margin-bottom">DARE TO DISCOVER YOURSELF?</h4>
+      <p id="modal-body-text" class="has-margin-bottom has-padding-top has-padding-bottom">Sign up to receive <span class="link-color is-font-weight-bold">15% OFF</span> your first purchase and deals on your favorite sex(y) toys.</p>
+      <div id="modal-body-form">
+      	{% render 'newsletter-form',
+          type: 'block',
+          block: block,
+          display_first_name: block.settings.display_first_name,
+          display_last_name: block.settings.display_last_name
+ 		%}
+      </div>
+      <span class="agreement">By sharing your email address, you agree to <span class="our-privacy-policy">our Privacy Policy</span>.</span>
+    </div>
+  </div>
+
+</div>
+</div>
+
+{% comment %} JavaScript {% endcomment %}
+<script
+  type="application/json"
+  data-section-id="{{ object.id }}"
+  data-section-data
+>
+  {
+    "enable_filter": {{ object.settings.collection_tags | json }},
+    "enable_sorting": {{ object.settings.collection_sort | json }},
+    "enable_breadcrumb": {{ object.settings.collection_breadcrumb | json}},
+    "pagination_type": {{ object.settings.pagination_type | json }},
+    "number_of_pages": {{ paginate.pages | json }}
+  }
+</script>
+
+{% endpaginate %}
+<script>
+
+  var modal = document.getElementById("collectionModal");
+  var span = document.getElementById("modal-close");
+
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  $(document).ready(function(){
+    $(".quick_shop").click(function(){
+      $(".fancybox-container").css("display", "block");
+    });
+    var signedup = localStorage.getItem('signedup');
+    $(".successful-signup").css("display","none");
+    const queryString = window.location.search;
+
+    const urlParams = new URLSearchParams(queryString);
+
+    var customer_posted = urlParams.get('customer_posted')
+
+    if(customer_posted != null && (customer_posted === true) || (customer_posted === "true")){
+      $("#signup_text").html("15% off your first purchase with code <span class='link-color'>VIP15</span>");
+      $("#modal-body-heading").html("ALL SET");
+      $("#modal-body-heading").removeClass("has-margin-bottom");
+      $("#modal-body-text").html("Welcome aboard the pleasure ride. Enjoy<br/>15% off your first purchase with code<br/><span class='link-color is-font-weight-bold'>VIP15</span>");
+      $("#modal-body-form").html("");
+      $("#myModal").css("display", "block");
+      $(".successful-signup").css("display","inline-block");
+    }
+
+    if(signedup){
+      $(".signup_text").each(function(){
+      	$(this).html("15% off your first purchase with code <span class='link-color'>VIP15</span>");
+      });
+    }
+   var currentdate = new Date();
+    var weekday = new Array(7);
+    weekday[0] = "Sun";
+    weekday[1] = "Mon";
+    weekday[2] = "Tue";
+    weekday[3] = "Wed";
+    weekday[4] = "Thu";
+    weekday[5] = "Fri";
+    weekday[6] = "Sat";
+
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                      ];
+    var day = currentdate.getDay(), condition, display_message;
+    if(day >= 0 && day <= 3){
+      condition = 1;
+    }else if(day == 4) {
+      var hours = currentdate.getHours();
+      if(hours < 12){
+       	 condition = 1;
+      }else{
+        condition = 2;
+      }
+    }else {
+      condition = 2;
+    }
+
+
+    Date.prototype.addDays = function(days) {
+      var date = new Date(this.valueOf());
+      date.setDate(date.getDate() + days);
+      return date;
+    }
+
+    var start_date = new Date();
+    var end_date = new Date();
+    if(condition == 1){
+      start_date = start_date.addDays(2);
+      end_date = end_date.addDays(4);
+    } else {
+      start_date = start_date.addDays(3);
+      end_date = end_date.addDays(5);
+    }
+    display_message = "<strong>" + weekday[start_date.getDay()] + ", " + monthNames[start_date.getMonth()] + " " + start_date.getDate() + "</strong> and <strong>" + weekday[end_date.getDay()] + ", " + monthNames[end_date.getMonth()] + " " + end_date.getDate() + "</strong>";
+    $(".shipping-approx").each(function(){
+     $(this).html(display_message);
+    });
+
+    $(".myBtn").each(function(){
+      	$(this).click(function(){
+			modal.style.display = "block";
+        });
+    });
+    $(".our-privacy-policy").each(function(){
+		$(this).html("<a href='https://simplipleasures.com/pages/privacy-policy'>our privacy policy</a>");
+    });
+});
+</script>
+<link rel="preload" as="script" href="{{ 'z__jsCollection.js' | asset_url }}">
+<script src="{{ 'z__jsCollection.js' | asset_url }}"></script>
+{% schema %}
+{
+  "name": "Collection",
+  "class": "collection-template-classic collection-main has-sidebar-option jsCollection",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "collection_breadcrumb",
+      "label": "Show breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "collection_tags",
+      "label": "Show product tag filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "collection_sort",
+      "label": "Show sort by filter",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Promotional banner"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_promo_banner",
+      "label": "Show promotional banner",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "1800 x 800px recommended"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_darken",
+      "label": "Darken banner image",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "promo_title",
+      "label": "Heading",
+      "default": "Special sale on now!"
+    },
+    {
+      "type": "richtext",
+      "id": "promo_text",
+      "label": "Text",
+      "default": "<p>Description of promotion with lots of details.</p>"
+    },
+    {
+      "type": "select",
+      "id": "banner_height",
+      "label": "Banner height",
+      "default": "medium",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Product thumbnails"
+    },
+    {
+      "type": "checkbox",
+      "id": "align_height",
+      "label": "Align to height",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "collection_height",
+      "label": "Product image height",
+      "min": 150,
+      "max": 400,
+      "step": 10,
+      "default": 200,
+      "unit": "px",
+      "info": "Applied when 'Align to height' is also enabled. [Learn more](#)"
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "Products per row",
+      "min": 2,
+      "max": 7,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "mobile_products_per_row",
+      "label": "Products per row on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "pagination_limit",
+      "label": "Products per page",
+      "min": 2,
+      "max": 50,
+      "step": 1,
+      "default": 48
+    },
+    {
+      "type": "select",
+      "id": "pagination_type",
+      "label": "Pagination type",
+      "options": [
+        {
+          "value": "infinite_scroll",
+          "label": "Infinite scroll"
+        },
+        {
+          "value": "infinite_load_more",
+          "label": "Infinite load more button"
+        },
+        {
+          "value": "load_more",
+          "label": "Load more button"
+        },
+        {
+          "value": "basic_pagination",
+          "label": "Page links"
+        }
+      ],
+      "default": "basic_pagination"
+    },
+    {
+      "type": "number",
+      "id": "load_more_button_spacing_top",
+      "label": "Button Spacing top",
+      "default": 10
+    },
+    {
+      "type": "number",
+      "id": "load_more_button_spacing_bottom",
+      "label": "Button Spacing bottom",
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "show_items_range",
+      "label": "Show items range",
+      "default": true,
+      "info": "Works only with \"Infinite scroll\", \"Infinite load more button\"or \"Load more button\""
+    },
+    {
+      "type": "number",
+      "id": "items_range_spacing_top",
+      "label": "Items range spacing top",
+      "default": 10
+    },
+    {
+      "type": "number",
+      "id": "items_range_spacing_bottom",
+      "label": "Items range spacing bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "standard",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 80,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 80,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Advanced",
+      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+      "type": "text",
+      "id": "css_class",
+      "label": "CSS Class"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    }
+  ]
+}
+
+{% endschema %}

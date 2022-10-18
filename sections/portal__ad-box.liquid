@@ -1,0 +1,160 @@
+{% assign id = section.id %}
+{% assign ad_box = collection.metafields.portal_sections.ad_box %}
+{% assign background_color = ad_box.background_color %}
+{% assign background_image = images[ad_box.background_image] %}
+{% assign section_title = ad_box.section_title %}
+{% assign title_spacing_top = section.settings.title_spacing_top %}
+{% assign title_spacing_bottom = section.settings.title_spacing_bottom %}
+
+{% assign title = ad_box.title %}
+{% assign title_color = ad_box.title_color %}
+{% assign title_size = ad_box.title_size %}
+{% assign title_size_mobile = ad_box.title_size_mobile %}
+{% assign image = images[ad_box.image] %}
+{% assign subtitle = ad_box.subtitle %}
+{% assign subtitle_link = ad_box.subtitle_link %}
+{% assign subtitle_color = ad_box.subtitle_color %}
+{% assign subtitle_size = ad_box.subtitle_size %}
+{% assign subtitle_size_mobile = ad_box.subtitle_size_mobile %}
+{% assign text = ad_box.text %}
+{% assign text_color = ad_box.text_color %}
+{% assign button_label = ad_box.button_label %}
+{% assign button_link = ad_box.button_link %}
+{% assign button_style = 'button--' | append: ad_box.button_style %}
+
+{% style %}
+  #shopify-section-{{ id }} .ad_box-container {
+    {% if background_color %}
+      background-color: {{ background_color }};
+    {% endif %}
+    
+    {% if background_image != blank %}
+      background-image: url('{{ background_image | img_url: 'original' }}');
+    {% endif %}
+
+    background-position: center;
+    background-size: cover;
+    overflow: hiddden;
+  }
+
+  #shopify-section-{{ id }} .section_title {
+    padding-top: {{ title_spacing_top }}px;
+    padding-bottom: {{ title_spacing_bottom }}px;
+  }
+
+  #shopify-section-{{ id }} .ad_box-subtitle {
+    color:{{ subtitle_color }};
+    font-size:{{ subtitle_size }}px;
+  }
+  #shopify-section-{{ id }} .ad_box-title h2 {
+    color:{{ title_color }};
+    font-size:{{ title_size }}px;
+  }
+  #shopify-section-{{ id }} .ad_box-text{
+    color:{{ text_color }};
+  }
+
+  #shopify-section-{{ id }} .subtitle-link {
+    display: inline-block;
+    color:{{ subtitle_color }};
+    text-decoration: underline;
+    transition: transform 0.5s ease;
+  }
+  #shopify-section-{{ id }} .subtitle-link:hover {
+    color: {{ settings.link_color }};
+  }
+
+  @media only screen and (max-width: 480px) {
+    #shopify-section-{{ id }} .ad_box-subtitle {
+      color:{{ subtitle_color_mobile }};
+      font-size:{{ subtitle_size_mobile }}px;
+    }
+    #shopify-section-{{ id }} .ad_box-title h2 {
+      color:{{ title_color_mobile }};
+      font-size:{{ title_size_mobile }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="section is-width-wide has-large-padding-top has-large-padding-bottom">
+  <div class="ad_box-container is-justify-center is-align-center">
+    <div class="ad_box-content has-large-padding-top has-large-padding-bottom">
+      
+      {% if section_title != blank %}
+        <h2 class="section_title text-align-center fw-bold">{{ section_title }}</h2>
+      {% endif %}
+
+      <div class="is-flex is-flex-column is-align-center is-justify-center text-align-center">
+        {% if title != blank %}
+          <div class="ad_box-title">
+            <h2 class="ff-bebas fw-normal">
+              {{ title }}
+            </h2>
+          </div>
+        {% endif %}
+
+        {% if image != blank %}
+          <div class="ad_box-image">
+            {% render 'image-element',
+              image: image,
+              alt: image.alt
+            %}
+          </div>
+        {% endif %}
+
+        {% if subtitle != blank %}
+          <div class="ad_box-subtitle">
+            {% if subtitle_link != blank %}
+              <a href="{{subtitle_link}}" class="subtitle-link">
+            {% endif %}
+              {{ subtitle }}
+            {% if subtitle_link != blank %}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if text != blank %}
+          <div class="ad_box-text has-margin-top">
+            {{ text }}
+          </div>
+        {% endif %}
+
+        {% if button_label != blank and button_link != blank %}
+          <div class="ad_box-button has-margin-top">
+            {% render 'button',
+              label: button_label,
+              href: button_link,
+              type: "link",
+              style: button_style
+            %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Ad box/banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Title Spacing"
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_top",
+      "label": "Spacing top",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_bottom",
+      "label": "Spacing bottom",
+      "default": 20
+    }
+  ]
+}
+{% endschema %}

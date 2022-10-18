@@ -1,0 +1,334 @@
+{
+  % assign color_background=settings.shop_bg_color %
+}
+
+  {
+  % assign border_color=settings.border_color %
+}
+
+  {
+  % liquid assign text=settings.regular_color assign text_invert='#ffffff'
+  assign lightness=text | color_extract: 'lightness'
+    if lightness > 50 assign text_invert=settings.regular_color endif %
+}
+
+  {
+  % liquid assign link=settings.link_color assign link_invert='#ffffff'
+  assign lightness=link | color_extract: 'lightness'
+    if lightness > 50 assign link_invert=settings.regular_color endif %
+}
+
+  {
+  % liquid assign sale_sticker_color=settings.banner_sale assign sale_sticker_color_text='#ffffff'
+  assign lightness=sale_sticker_color | color_extract: 'lightness'
+    if lightness > 50 assign sale_sticker_color_text=settings.regular_color endif %
+}
+
+  {
+  % liquid assign new_sticker_color=settings.banner_new assign new_sticker_color_text='#ffffff'
+  assign lightness=new_sticker_color | color_extract: 'lightness'
+    if lightness > 50 assign new_sticker_color_text=settings.regular_color endif %
+}
+
+  {
+  % liquid assign bestseller_sticker_color=settings.banner_bestseller assign bestseller_sticker_color_text='#ffffff'
+  assign lightness=bestseller_sticker_color | color_extract: 'lightness'
+    if lightness > 50 assign bestseller_sticker_color_text=settings.regular_color endif %
+}
+
+  {
+  % liquid assign comingsoon_sticker_color=settings.banner_comingsoon assign comingsoon_sticker_color_text='#ffffff'
+  assign lightness=comingsoon_sticker_color | color_extract: 'lightness'
+    if lightness > 50 assign comingsoon_sticker_color_text=settings.regular_color endif %
+}
+
+  {
+  % liquid assign staffpick_sticker_color=settings.banner_staffpick assign staffpick_sticker_color_text='#ffffff'
+  assign lightness=staffpick_sticker_color | color_extract: 'lightness'
+    if lightness > 50 assign staffpick_sticker_color_text=settings.regular_color endif %
+}
+
+  {
+  % liquid assign preorder_sticker_color=settings.banner_preorder assign preorder_sticker_color_text='#ffffff'
+  assign lightness=preorder_sticker_color | color_extract: 'lightness'
+    if lightness > 50 assign preorder_sticker_color_text=settings.regular_color endif %
+}
+
+  {
+  % assign drop_down_menu_active_color=settings.dropdown_link_color %
+}
+
+  {
+  % assign btn_primary_alpha=settings.button_primary_bg_color_transparency | divided_by: 100.00 %
+}
+
+  {
+  % assign btn_primary_hover_alpha=settings.button_primary_bg_color_transparency--highlight | divided_by: 100.00 %
+}
+
+  {
+  % assign btn_secondary_alpha=settings.button_secondary_bg_color_transparency | divided_by: 100.00 %
+}
+
+  {
+  % assign btn_secondary_hover_alpha=settings.button_secondary_bg_color_transparency--highlight | divided_by: 100.00 %
+}
+
+  {
+  % liquid if settings.button_primary_padding=='small'
+  assign btn_primary_font_size='0.75rem'
+  assign btn_primary_line_height='inherit'
+  assign btn_primary_width='auto'
+  elsif settings.button_primary_padding=='regular'
+  assign btn_primary_font_size='1rem'
+  assign btn_primary_line_height='inherit'
+  assign btn_primary_width='auto'
+  else assign btn_primary_font_size='1.25rem'
+  assign btn_primary_line_height='1.25'
+  assign btn_primary_width='100%'
+  endif %
+}
+
+  {
+  % liquid if settings.button_secondary_padding=='small'
+  assign btn_secondary_font_size='0.75rem'
+  assign btn_secondary_line_height='inherit'
+  assign btn_secondary_width='auto'
+  elsif settings.button_secondary_padding=='regular'
+  assign btn_secondary_font_size='1rem'
+  assign btn_secondary_line_height='inherit'
+  assign btn_secondary_width='auto'
+  else assign btn_secondary_font_size='1.25rem'
+  assign btn_secondary_line_height='1.25'
+  assign btn_secondary_width='100%'
+  endif %
+}
+
+  {
+  % liquid if settings.button_link_padding=='small'
+  assign btn_link_style_font_size='0.75rem'
+  assign btn_link_style_line_height='inherit'
+  elsif settings.button_link_padding=='regular'
+  assign btn_link_style_font_size='1rem'
+  assign btn_link_style_line_height='inherit'
+  else assign btn_link_style_font_size='1.25rem'
+  assign btn_link_style_line_height='1.25'
+  endif %
+}
+
+  {
+  % liquid if settings.button_cart_padding=='small'
+  assign btn_add_to_cart_font_size='0.75rem'
+  assign btn_add_to_cart_line_height='inherit'
+  assign btn_add_to_cart_width='100%'
+  elsif settings.button_cart_padding=='regular'
+  assign btn_add_to_cart_font_size='1rem'
+  assign btn_add_to_cart_line_height='inherit'
+  assign btn_add_to_cart_width='100%'
+  else assign btn_add_to_cart_font_size='1.25rem'
+  assign btn_add_to_cart_line_height='1.25'
+  assign btn_add_to_cart_width='100% !important'
+  endif %
+}
+
+  {
+  % liquid if settings.button_cart_padding=='small'
+  assign atc_button_height='35px'
+  assign atc_button_width='calc(50% - 12px)'
+  assign atc_button_margin='0 6px 0 0'
+  assign atc_button_spb_margin='0 0 0 6px'
+  elsif settings.button_cart_padding=='regular'
+  assign atc_button_height='44px'
+  assign atc_button_width='calc(50% - 12px)'
+  assign atc_button_margin='0 6px 0 0'
+  assign atc_button_spb_margin='0 0 0 6px'
+  else assign atc_button_height='60px'
+  assign atc_button_width='100%'
+  assign atc_button_margin='0 0 0 0'
+  assign atc_button_spb_margin='12px 0 0 0'
+  endif %
+}
+
+  {
+  % case settings.icon %
+}
+
+  {
+  % when 'icon_solid'%
+}
+
+  {
+  % assign icon_down_caret='"\e902"'%
+}
+
+  {
+  % assign icon_x='"\e903"'%
+}
+
+  {
+  % when 'icon_outline'%
+}
+
+  {
+  % assign icon_down_caret='"\e904"'%
+}
+
+  {
+  % assign icon_x='"\e905"'%
+}
+
+  {
+  % when 'icon_brush'%
+}
+
+  {
+  % assign icon_down_caret='"\e900"'%
+}
+
+  {
+  % assign icon_x='"\e901"'%
+}
+
+  {
+  % when 'icon_sp'%
+}
+
+  {
+  % assign icon_down_caret='"\e904"'%
+}
+
+  {
+  % assign icon_x='"\e905"'%
+}
+
+  {
+  % endcase %
+}
+
+  {
+  % liquid assign button_link_underline_thickness=settings.button_link_underline_thickness | append: 'px'
+    if settings.button_link_underline_thickness==1 assign button_link_underline_thickess='thin'
+    endif %
+}
+
+#shopify-section-portal__more-portals .subtitle {
+  font-size: 25px
+}
+
+@media only screen and (max-width:480px) {
+  #shopify-section-portal__more-portals .subtitle {
+    font-size: 16px
+  }
+}
+
+#shopify-section-portal__more-portals .button-wrapper {
+  padding: 20px 10px
+}
+
+@media only screen and (max-width:480px) {
+  #shopify-section-portal__more-portals .button-wrapper {
+    padding: 10px 5px
+  }
+}
+
+#shopify-section-portal__more-portals .button-wrapper .button {
+  width: 100%;
+  min-height: 48px
+}
+
+@media only screen and (max-width:480px) {
+  #shopify-section-portal__more-portals .button-wrapper .button {
+    min-height: 33px;
+    font-size: 10px !important
+  }
+}
+
+@media only screen and (max-width:480px) {
+  .collection-matrix__wrapper {
+    margin: 0 -2.5%
+  }
+}
+
+.collection__filters {
+  margin-bottom: 20px
+}
+
+@media only screen and (max-width:480px) {
+  .collection__filters {
+    margin: 0!important;
+  }
+}
+
+.container .collection__filters.column {
+  margin-left: auto
+}
+
+.collection__filters .select {
+  max-width: 50%
+}
+
+@media only screen and (max-width:480px) {
+  .collection__filters .select {
+    max-width: 100%
+  }
+}
+
+@media only screen and (max-width:480px) {
+  .collection__filters .select:first-child {
+    margin-bottom: 10px
+  }
+}
+
+.collection__filters .select, .collection__filters select {
+  border-radius: 20px
+}
+
+.collection__filters .is-grouped {
+  justify-content: flex-end
+}
+
+@media only screen and (max-width:798px) {
+  .collection__filters .is-grouped {
+    justify-content: flex-start
+  }
+}
+
+.collection-main .banner__text {
+  margin: 0
+}
+
+.collection-main .banner__content {
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
+@media only screen and (min-width:481px) {
+  .collection__sort-by-filter {
+    margin-left: 10px
+  }
+}
+
+.sub-collection-main main {
+  min-height: 0
+}
+
+.collection__loading-icon {
+  width: 100%;
+  display: none
+}
+
+.quick-shop__popup .product-price-container-mobile {
+  margin-top: 15px;
+  margin-bottom: 15px
+}
+
+.quick-shop__popup .image__container img {
+  height: 330px;
+  width: 100%;
+  object-fit: contain
+}
+
+#sort-by {
+  border-color: #000000;
+}

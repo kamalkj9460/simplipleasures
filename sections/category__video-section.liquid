@@ -1,0 +1,150 @@
+{% comment %}
+** Collections - Category Usps **
+{% endcomment %}
+
+{% assign id = section.id %}
+{% comment %} Layout {% endcomment %}
+{% assign width = section.settings.width %}
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+{% comment %} Advanced {% endcomment %}
+{% assign css_class = section.settings.css_class %}
+{% assign custom_css = section.settings.custom_css %}
+
+{% comment %} Section Content {% endcomment %}
+{% assign video = collection.metafields.category_sections.video %}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% style %}
+  #shopify-section-{{ id }} .section__wrapper{
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+  }
+
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+{% endstyle %}
+
+
+<section class="section section__wrapper is-width-{{ width }} {{ css_class }}">
+
+  <div class="video-element" data-video-element>
+    <video class="video-{{ id }}">
+      <source src="{{ video.video_desktop }}">
+    </video>
+  </div>
+  
+  <div class="video-text-wrapper is-flex is-justify-start is-align-center">
+    <div class="container section">
+      <div class="video-text-holder one-half small-down--one-whole">
+        {% render 'heading',
+          title: video.heading,
+          heading_tag: 'h3',
+          context: 'section',
+          text_alignment: 'left',
+          enable_divider: false,
+          font_class: 'ff-bebas'
+        %}
+  
+        <div class="video-text has-padding-bottom">
+          {{ video.text }}
+        </div>
+  
+        {% render 'button',
+          label: video.button_label,
+          href: video.button_link,
+          type: 'link',
+          style: 'button--secondary'
+        %}
+  
+      </div>
+  
+    </div>
+  </div>
+
+</section>
+
+{% comment %} JavaScript {% endcomment %}
+<script
+type="application/json"
+data-section-id="{{ id }}"
+data-section-data
+>
+{
+  "autoplay": true,
+  "autoloop": true,
+  "control": false,
+  "html5_video": {{ video.video_desktop | json }},
+  "aspect_ratio": "16:6",
+  "poster": {{ image | json }},
+  "id": {{ id | json }},
+  "mute": true
+}
+</script>
+<link rel="preload" as="script" href="{{ 'z__jsVideo.js' | asset_url }}">
+<script data-theme-editor-load-script src="{{ 'z__jsVideo.js' | asset_url }}"></script>
+
+
+{% schema %}
+{
+  "name": "Category Video",
+  "class": "icon-with-text-column jsVideo",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "wide"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 80,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 80,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Advanced",
+      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+      "type": "text",
+      "id": "css_class",
+      "label": "CSS Class"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    }
+  ]
+}
+{% endschema %}

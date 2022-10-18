@@ -1,0 +1,211 @@
+{% comment %}
+** Collections - Category Usps **
+{% endcomment %}
+
+{% assign id = section.id %}
+{% comment %} Layout {% endcomment %}
+{% assign width = section.settings.width %}
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+{% comment %} Advanced {% endcomment %}
+{% assign css_class = section.settings.css_class %}
+{% assign custom_css = section.settings.custom_css %}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% style %}
+  #shopify-section-{{ id }} {
+    background: {{ section.settings.background_color }};
+  }
+  #shopify-section-{{ id }} .section__wrapper{
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+  }
+  #shopify-section-{{ id }} .icon {
+    margin-top: 0;
+    height: {{ section.settings.icon_size }}px;
+    width: {{ section.settings.icon_size }}px;
+  }
+
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+{% endstyle %}
+
+
+<section class="section section__wrapper is-width-{{ width }} {{ css_class }}">
+
+  {% if section.settings.heading != blank %}  
+    <div class="container">
+      {% render 'heading',
+        title: section.settings.heading,
+        heading_tag: 'h3',
+        context: 'section',
+        text_alignment: 'center',
+        enable_divider: false
+      %}
+    </div>
+  {% endif %}
+
+  <div class="container is-justify-center has-no-side-gutter">
+    {% for block in section.blocks %}
+      <div class="icon-column__content one-fourth">
+        <div class="is-flex is-justify-{{ block.settings.align_text }}">
+          {% render 'icon',
+            name: block.settings.icon
+          %}
+        </div>
+
+        {% if block.settings.title  != blank or block.settings.text  != blank %}
+          <div class="icon-column__text text-align-{{ block.settings.align_text }}">
+            <h3 class="icon-column__title title">
+              {{ block.settings.title }}
+            </h3>
+            
+            {% if  block.settings.text != blank %}
+              {{ block.settings.text }}
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Category Usps",
+  "class": "icon-with-text-column jsIconWithTextColumn",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#F1F1F1"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "number",
+      "id": "icon_size",
+      "label": "Icon size",
+      "default": 60
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "number",
+      "id": "padding_top",
+      "label": "Spacing Top spacing",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "padding_bottom",
+      "label": "Spacing Bottom spacing",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Advanced",
+      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+      "type": "text",
+      "id": "css_class",
+      "label": "CSS Class"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon_colum",
+      "name": "Icon column",
+      "settings": [
+        {
+          "type": "select",
+          "id": "align_text",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icons",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "placeholder": "Enter icon name",
+          "info": "[Icon list](https://help.outofthesandbox.com/hc/en-us/articles/360021570294)",
+          "default": "truck"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Icon with text"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Describe the feature, service or product that this icon represents.</p>"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

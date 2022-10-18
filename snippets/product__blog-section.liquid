@@ -1,0 +1,104 @@
+{{ 'slick.min.js' | asset_url | script_tag }}
+{{ 'slick.css' | asset_url | stylesheet_tag }}
+{{ 'slick-theme.css' | asset_url | stylesheet_tag }}
+<style>
+  .slick-slider {
+    background-color: #E21264;
+    padding: 30px 0;
+  }
+  .slick-slider .element{
+  height:100px;
+  width:100px;
+  background-color:#E21264;
+  color:#fff;
+  border-radius:5px;
+  display:inline-block;
+  margin:0px 10px;
+  display:-webkit-box;
+  display:-ms-flexbox;
+  display:flex;
+  -webkit-box-pack:center;
+      -ms-flex-pack:center;
+          justify-content:center;
+  -webkit-box-align:center;
+      -ms-flex-align:center;
+          align-items:center;
+  font-size:20px;
+  margin:0px;
+    text-align:center;
+}
+.slick-slider .slick-disabled {
+  opacity : 0; 
+  pointer-events:none;
+}
+  .slick-list.draggable {
+   	width: calc(100% - 1000px);
+    margin: auto;
+  }
+  @media screen and (max-width: 798px){
+    .slick-list.draggable {
+      width: calc(100% - 30px);
+    }
+  }
+  @media screen and (min-width: 798px) and (max-width: 1025px){
+    .slick-list.draggable {
+      width: calc(100% - 100px);
+    }
+  }
+  @media screen and (min-width: 1025px) and (max-width: 2048px){
+    .slick-list.draggable {
+      width: calc(100% - 500px);
+    }
+  }
+  
+  .slick-prev{
+   	left:25px;
+    z-index:2;
+  }
+  .slick-next {
+    right: 25px;
+}
+  .slick-prev:before,
+    .slick-next:before {
+      color: #fff;
+      
+      z-index:2;
+    }
+</style>
+<div class="slick-slider">
+  <div class="element-1"></div>
+  <div class="element-2"></div>
+  <div class="element-3"></div>
+  <div class="element-4"></div>
+  <div class="element-5"></div>
+  <div class="element-6"></div>
+  <div class="element-7"></div>
+  <div class="element-8"></div>
+  <div class="element-9"></div>
+  <div class="element-10"></div>
+  <div class="element-11"></div>
+  <div class="element-12"></div>
+</div>
+
+<div id="div1"></div>
+<script>
+    
+  $(".slick-slider").slick({
+          slidesToShow: 2,
+          infinite:false,
+          slidesToScroll: 1,
+          autoplay: false,
+          autoplaySpeed: 2000,
+          arrows: true
+      });
+  $(document).ready(function(e){
+  	$.ajax({url: "https://simplipleasures.com/blogs/vibrator-buying-guides", success: function(result){
+      var element = "", i = 1;
+      $(result).find(".featured-article").each(function(){
+        element = $(".element-"+i).html("<div><div class='blog-image'><img src='https://cdn.shopify.com/s/files/1/0313/2781/3768/files/Mask_Group_11.png?v=1633124011' /></div><p class='blog-text has-margin-top has-margin-bottom'>" + $(this).find(".featured-article--link").html() + "</p><p class='blog-desc'>"+$(this).find(".tag a").html()+"</p></div>");
+        i++;
+      });
+      
+    }});    
+  });
+</script>

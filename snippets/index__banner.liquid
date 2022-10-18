@@ -1,0 +1,89 @@
+{% assign title = section.settings.title %}
+{% assign title_highlights = section.settings.title_highlights | split: '||' %}
+{% assign subtitle = section.settings.subtitle %}
+{% assign subtitle_highlights = section.settings.subtitle_highlights | split: '||' %}
+{% assign image = section.settings.image %}
+
+{% if title_highlights != blank %}
+  {% for highlight in title_highlights %}
+    {% assign text_replace = '<span class="highlight-text">'| append: highlight | append: '</span>' %}
+    {% assign title = title | replace: highlight, text_replace %}
+  {% endfor %}
+{% endif %}
+
+{% if subtitle_highlights != blank %}
+  {% for highlight in subtitle_highlights %}
+    {% assign text_replace = '<span class="highlight-text">'| append: highlight | append: '</span>' %}
+    {% assign subtitle = subtitle | replace: highlight, text_replace %}
+  {% endfor %}
+{% endif %}
+
+{% if section.settings.mobile_image != blank %}
+  {% assign mobile_image = section.settings.mobile_image %}
+
+  {% if section.settings.mobile_image_crop != blank %}
+    {% assign class_crop_mobile_image = 'image-crop-' | append: section.settings.mobile_image_crop %}
+  {% endif %}
+{% endif %}
+
+<section class="section
+                {{ css_class }}
+                is-width-{{ width }}">
+  <div class="container
+              {% if width == 'wide' %}
+                equal-columns--outside-trim
+              {% endif %}">
+    <div class="banner__wrapper
+                one-whole
+                column">
+
+      {% if mobile_image != blank %}
+        {%- assign hide_mobile = 'is-hidden-mobile-only' -%}
+      {% endif %}
+
+      {% if image != blank %}
+        {% render 'image-element',
+            image: image,
+            alt: image.alt,
+            stretch_width: true,
+            additional_classes: hide_mobile
+        %}
+      {% else %}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+
+      {% if mobile_image != blank %}
+        <div class="is-hidden-desktop-only {{ class_crop_mobile_image }}">
+          {% render 'image-element',
+            image: mobile_image,
+            alt: mobile_image.alt,
+            stretch_width: true
+          %}
+        </div>
+      {% endif %}
+
+      <div class="banner__content card-content is-flex is-flex-column is-align-center is-justify-center">
+        <div class="banner__text text-align-center">
+          <h1 class="banner__heading title ff-bebas fw-normal">{{ title }}</h1>
+          {% if subtitle != blank %}
+            <div class="banner__subheading subtitle has-padding-top">{{ subtitle }}</div>
+          {% endif %}
+        </div>
+
+        {% if section.blocks.size > 0 %}
+          <div class="banner__buttons has-padding-top is-flex is-align-center is-justify-center is-flex-wrap one-whole">
+            {% for block in section.blocks %}
+              {% render 'button',
+                label: block.settings.button_label,
+                href: block.settings.button_link,
+                type: "link",
+                style: block.settings.button_style
+              %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>

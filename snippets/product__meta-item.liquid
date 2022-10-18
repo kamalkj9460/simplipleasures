@@ -1,0 +1,11 @@
+<ul class="o-list has-margin-bottom">
+  <span class="product__meta-group fw-bold fc-highlight">
+    {{title}}
+  </span>
+
+  {% for field in fields %}
+    <li>
+      <span class="product__meta-label fw-bold">{{ field | first | replace: "_", " " }}:</span> {{ field | last }}
+    </li>
+  {% endfor %}
+</ul>

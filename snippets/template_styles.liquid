@@ -1,0 +1,14 @@
+{% assign file_name = template | replace: '.' , '__' | prepend: 'template__' | append: '.css' %}
+
+{% if template.directory == 'customers' %}
+  {% assign file_name = 'template__accounts.css' %}
+{% endif %}
+
+<!-- Template styles {{ type }} -->
+{% if type == 'preload' %}
+  <link rel="preload" href="{{ file_name | asset_url }}" as="style">
+
+{% else %}
+  <link rel="stylesheet" href="{{ file_name | asset_url }}">
+
+{% endif %}

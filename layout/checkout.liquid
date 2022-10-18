@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+  <head>
+   <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5CZGVKG');</script>
+<!-- End Google Tag Manager -->
+
+
+    <!-- Start VWO Async Smartcode -->
+    <script type='text/javascript'>
+    window._vwo_code = window._vwo_code || (function(){
+    var account_id=516902,
+    settings_tolerance=2000,
+    library_tolerance=2500,
+    use_existing_jquery=false,
+    is_spa=1,
+    hide_element='body',
+
+    /* DO NOT EDIT BELOW THIS LINE */
+    f=false,d=document,code={use_existing_jquery:function(){return use_existing_jquery;},library_tolerance:function(){return library_tolerance;},finish:function(){if(!f){f=true;var a=d.getElementById('_vis_opt_path_hides');if(a)a.parentNode.removeChild(a);}},finished:function(){return f;},load:function(a){var b=d.createElement('script');b.src=a;b.type='text/javascript';b.innerText;b.onerror=function(){_vwo_code.finish();};d.getElementsByTagName('head')[0].appendChild(b);},init:function(){
+    window.settings_timer=setTimeout('_vwo_code.finish()',settings_tolerance);var a=d.createElement('style'),b=hide_element?hide_element+'{opacity:0 !important;filter:alpha(opacity=0) !important;background:none !important;}':'',h=d.getElementsByTagName('head')[0];a.setAttribute('id','_vis_opt_path_hides');a.setAttribute('type','text/css');if(a.styleSheet)a.styleSheet.cssText=b;else a.appendChild(d.createTextNode(b));h.appendChild(a);this.load('https://dev.visualwebsiteoptimizer.com/j.php?a='+account_id+'&u='+encodeURIComponent(d.URL)+'&f='+(+is_spa)+'&r='+Math.random());return settings_timer; }};window._vwo_settings_timer = code.init(); return code; }());
+    </script>
+    <!-- End VWO Async Smartcode -->
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+    <meta name="referrer" content="origin">
+
+    <title>{{ page_title }}</title>
+
+    {{ content_for_header }}
+
+    {{ checkout_stylesheets }}
+    {{ checkout_scripts }}
+
+    <style>
+      .section{
+        max-width: 1200px;
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .container {
+        position: relative;
+        margin: 0 auto;
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-wrap: wrap;
+        -moz-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+      }
+      .container .column, .container .columns {
+        margin-left: calc(20px / 2);
+        margin-right: calc(20px / 2);
+        width: calc(100% - 20px);
+        display: flex;
+        justify-content: space-between;
+      }
+      .banner {
+        display: block;
+        background: #000 !important;
+      }
+      .icon {
+        height: 1.2rem;
+        width: 1.2rem;
+        fill: currentColor;
+      }
+      .icon svg {
+        height: 100%;
+        width: 100%;
+      }
+      .c-header__hello {
+        display: none;
+      }
+      .sealholder{
+        height: 40px;
+        text-align: right;
+        padding: 10px;
+      }
+      .sealholder img {
+        height: 100%;
+      }
+
+      @media only screen and (max-width: 768px) {
+        #shopify-section-header__top-bar {
+          display: none;
+        }
+        .c-header__hello {
+          display: block;
+          width: 100vw;
+          height: 31px;
+          position: relative;
+          overflow: hidden;
+          background-color: #e21264;
+          color: #ffffff;
+        }
+        .c-header__hello .c-header__message {
+          text-align: center;
+          text-transform: uppercase;
+          font-weight: 700;
+          font-size: 13px;
+          line-height: 31px;
+          width: 100%;
+          -webkit-animation: message-rotation 5s infinite alternate;
+          animation: message-rotation 5s infinite alternate;
+          position: absolute;
+        }
+        .c-header__message:last-child {
+          left: 100%;
+        }
+        .sealholder{
+          text-align: center;
+        }
+        @keyframes message-rotation {
+          0% {
+            margin-left: 0;
+          }
+          44%{
+            margin-left: 0;
+          }
+          56%{
+            margin-left: -100vw;
+          }
+          100%{
+            margin-left: -100vw;
+          }
+        }
+      }
+
+      .page--logo-main .main .logo,
+      .sidebar__header{
+        display: none;
+      }
+    </style>
+
+    <!-- Start Dynamic Yield scripts -->
+    <link rel="preconnect" href="//cdn.dynamicyield.com">
+    <link rel="preconnect" href="//st.dynamicyield.com">
+    <link rel="preconnect" href="//rcom.dynamicyield.com">
+    <link rel="dns-prefetch" href="//cdn.dynamicyield.com">
+    <link rel="dns-prefetch" href="//st.dynamicyield.com">
+    <link rel="dns-prefetch" href="//rcom.dynamicyield.com">
+
+    {% include 'dynamic_yield-page_context' %}
+    {% assign section_id = 8775749 %}
+
+    <script src="//cdn.dynamicyield.com/api/{{ section_id }}/api_dynamic.js"></script>
+    <script src="//cdn.dynamicyield.com/api/{{ section_id }}/api_static.js"></script>
+    <!-- End Dynamic Yield scripts -->
+
+    <!-- Dynamic Yield Purchase Event -->
+    <script type="text/javascript">
+      (function () {
+		    // Purchase Event
+        if (window.Shopify.checkout
+          && typeof window.Shopify.checkout !== 'undefined'
+          && typeof window.Shopify.checkout.line_items !== 'undefined'
+          && typeof window.Shopify.checkout.subtotal_price !== 'undefined'
+          && typeof window.Shopify.checkout.order_id !== 'undefined') {
+
+          var _dy_order_cart = []
+
+          for (var _index = 0; _index < window.Shopify.checkout.line_items.length; _index ++) {
+            _dy_order_cart.push({
+              productId: window.Shopify.checkout.line_items[_index].sku.toString(),
+              quantity: window.Shopify.checkout.line_items[_index].quantity,
+              itemPrice: parseFloat(window.Shopify.checkout.line_items[_index].price)
+            })
+          }
+
+          if (window.DY && window.DY.API) {
+            window.DY.API('event' , {
+              name:'Purchase',
+              properties: {
+                dyType : 'purchase-v1',
+                uniqueTransactionId: window.Shopify.checkout.order_id.toString(),
+                value: parseFloat(window.Shopify.checkout.subtotal_price),
+                currency: 'USD',
+                cart: _dy_order_cart
+              }
+            })
+          }
+        }
+      })();
+    </script>
+    <!-- End of Dynamic Yield Purchase Event -->
+
+  </head>
+  <body>
+    {{ skip_to_content_link }}
+
+    {% section 'header__top-bar' %}
+
+    <header class="banner" data-header role="banner">
+      <div class="wrap">
+        {{ content_for_logo }}
+      </div>
+    </header>
+
+    {{ order_summary_toggle }}
+    <div class="content" data-content>
+      <div class="wrap">
+        <div class="main">
+          <header class="main__header" role="banner">
+            {{ content_for_logo }}
+            {{ breadcrumb }}
+            {{ alternative_payment_methods }}
+          </header>
+          <main class="main__content" role="main">
+            {{ content_for_layout }}
+          </main>
+          <footer class="main__footer" role="contentinfo">
+            {{ content_for_footer }}
+          </footer>
+        </div>
+        <aside class="sidebar" role="complementary">
+          <div class="sidebar__header">
+            {{ content_for_logo }}
+          </div>
+          <div class="sidebar__content">
+            {{ content_for_order_summary }}
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    {{ tracking_code }}
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{%- comment -%} Rating 0 to 5 (step: 0.5) {%- endcomment -%}
+{% for i in (1..5) %}
+  {% assign diff = rating | minus: i %}
+  {% if diff >= 0 %}
+    <span class="sp-fas sp-fa-star"></span>
+
+  {% elsif diff > -1 %}
+    <span class="sp-fas sp-fa-star-half-alt"></span>
+
+  {% else %}
+    <span class="sp-far sp-fa-star"></span>
+
+  {% endif %}
+{% endfor %}

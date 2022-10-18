@@ -1,0 +1,198 @@
+{% comment %}
+** Collections - Category Review Highlights **
+{% endcomment %}
+
+{% assign id = section.id %}
+{% comment %} Layout {% endcomment %}
+{% assign title_spacing_top = section.settings.title_spacing_top %}
+{% assign title_spacing_bottom = section.settings.title_spacing_bottom %}
+{% assign width = section.settings.width %}
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+{% comment %} Advanced {% endcomment %}
+{% assign css_class = section.settings.css_class %}
+{% assign custom_css = section.settings.custom_css %}
+
+{% comment %}Content settings{% endcomment %}
+{% assign section_bg = section.settings.bg_color %}
+{% assign reviews = section.blocks %}
+{% assign section_title = section.settings.section_title %}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% style %}
+  #shopify-section-{{ id }} .section {
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+    background-color: {{ section_bg }};
+  }
+
+  #shopify-section-{{ id }} .section_title {
+    padding-top: {{ title_spacing_top }}px;
+    padding-bottom: {{ title_spacing_bottom }}px;
+  }
+
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+{% endstyle %}
+
+<section class="section has-no-side-gutter is-width-{{ width }} {{ css_class }}" data-section-type="index__review-highlights">
+  {% if section_title != blank %}
+    <h2 class="section_title text-align-center fw-bold">{{ section_title }}</h2>
+  {% endif %}
+
+  <div class="reviews__wrapper" data-index-highlight-reviews>
+    {% for review in reviews %}
+      {% assign reverse = false %}
+      {% assign loop_modulo = forloop.index | modulo: 2 %}
+      {% if loop_modulo == 0 %}
+        {% assign reverse = true %}
+      {% endif %}
+      {% render 'index__review-highlight-row', review: review, reverse: reverse %}
+    {% endfor %}
+  </div>
+</section>
+
+<script
+    type="application/json"
+    data-section-id="{{ section.id }}"
+    data-section-data
+  >
+  {
+    "image_transition": "slide",
+    "image_slideshow_speed": 4,
+    "show_arrows": false,
+    "show_nav_buttons": true,
+    "watchCSS": true,
+    "number_of_slides": {{ reviews.size | json }}
+  }
+</script>
+<link rel="preload" as="script" href="{{ 'z__jsIndexHighlightReviews.js' | asset_url }}">
+<script data-theme-editor-load-script src="{{ 'z__jsIndexHighlightReviews.js' | asset_url }}"></script>
+
+{% schema %}
+{
+  "name": "Reviews Highlights",
+  "class": "jsIndexHighlightReviews",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section title",
+      "default": "Insert title here"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#E7CDC3"
+    },
+    {
+      "type": "header",
+      "content": "Section Title Spacing"
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_top",
+      "label": "Spacing top",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_bottom",
+      "label": "Spacing bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "wide"
+    },
+    {
+      "type": "number",
+      "id": "padding_top",
+      "label": "Section Top spacing",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "padding_bottom",
+      "label": "Section Bottom spacing",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Advanced",
+      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+      "type": "text",
+      "id": "css_class",
+      "label": "CSS Class"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Review",
+      "type": "text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus dolore sed iste est commodi repellat, optio laboriosam ab odio ullam vitae aliquid quod vel magnam rerum asperiores soluta maiores sequi.</p>"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Author"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Reviews",
+      "name":"Review Highlights"
+    }
+  ]
+}
+{% endschema %}

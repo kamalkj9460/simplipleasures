@@ -1,0 +1,121 @@
+{% comment %}
+** Collections - Category Review Highlights **
+{% endcomment %}
+
+{% assign id = section.id %}
+{% comment %} Layout {% endcomment %}
+{% assign width = section.settings.width %}
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+{% comment %} Advanced {% endcomment %}
+{% assign css_class = section.settings.css_class %}
+{% assign custom_css = section.settings.custom_css %}
+
+{% comment %}Content settings{% endcomment %}
+{% assign review_section = collection.metafields.brand_sections.review_highlights %}
+{% assign section_bg = review_section.bg_color %}
+{% assign reviews = review_section.reviews %}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% style %}
+  #shopify-section-{{ id }} .section__wrapper {
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+    background-color: {{ section_bg }};
+  }
+
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+{% endstyle %}
+
+<section class="section section__wrapper has-no-side-gutter is-width-{{ width }} {{ css_class }}" data-category-reviews>
+  {% for review in reviews %}
+    {% assign reverse = false %}
+    {% assign loop_modulo = forloop.index | modulo: 2 %}
+    {% if loop_modulo == 0 %}
+      {% assign reverse = true %}
+    {% endif %}
+    {% render 'category__review-highlight-row', review: review, reverse: reverse %}
+  {% endfor %}
+</section>
+
+<script
+    type="application/json"
+    data-section-id="{{ section.id }}"
+    data-section-data
+  >
+  {
+    "image_transition": "slide",
+    "image_slideshow_speed": 4,
+    "show_arrows": false,
+    "show_nav_buttons": true,
+    "watchCSS": true,
+    "number_of_slides": {{ reviews.size | json }}
+  }
+</script>
+<link rel="preload" as="script" href="{{ 'z__jsCategoryReviews.js' | asset_url }}">
+<script data-theme-editor-load-script src="{{ 'z__jsCategoryReviews.js' | asset_url }}"></script>
+
+{% schema %}
+{
+  "name": "Category Reviews",
+  "class": "jsCategoryReviews",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "wide"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 80,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 80,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Advanced",
+      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+      "type": "text",
+      "id": "css_class",
+      "label": "CSS Class"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    }
+  ]
+}
+{% endschema %}

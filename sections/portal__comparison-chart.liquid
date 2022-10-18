@@ -1,0 +1,515 @@
+{% assign comparison = collection.metafields.portal_sections.comparison %}
+{% assign groups = comparison.groups %}
+{% assign section_title = comparison.section_title %}
+
+{% assign id = section.id %}
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+{% assign title_spacing_top = section.settings.title_spacing_top %}
+{% assign title_spacing_bottom = section.settings.title_spacing_bottom %}
+{%- comment -%} Group title font-size {%- endcomment -%}
+{% assign group_title = section.settings.group_title %}
+{% assign group_title_mobile = section.settings.group_title_mobile %}
+
+{% assign description_max_width = section.settings.description_max_width %}
+{% assign description_font_size_mobile = section.settings.description_font_size_mobile %}
+{% assign description_font_size = section.settings.description_font_size %}
+{% assign description_padding_top = section.settings.description_padding_top %}
+{% assign description_padding_top_mobile = section.settings.description_padding_top_mobile %}
+{% assign description_padding_bottom = section.settings.description_padding_bottom %}
+{% assign description_padding_bottom_mobile = section.settings.description_padding_bottom_mobile %}
+{% assign description_padding_sides = section.settings.description_padding_sides %}
+
+{% assign bg_color = section.settings.bg_color %}
+{% assign row_contrast = section.settings.row_contrast %}
+{% assign row_padding = section.settings.row_padding %}
+{% assign cell_padding = section.settings.cell_padding %}
+{% assign section_title_color = section.settings.section_title_color %}
+{% assign text_color = section.settings.text_color %}
+{% assign icon_color = section.settings.icon_color %}
+{% assign sale_price_color = section.settings.sale_price_color %}
+{% assign was_price_color = section.settings.was_price_color %}
+{% assign icon_size = section.settings.icon_size %}
+{% assign icon_size_mobile = section.settings.icon_size_mobile %}
+
+{% assign comparisons_dict = shop.metafields.global.comparisons_dict %}
+
+{% style %}
+#shopify-section-{{ id }} {
+  background: {{ bg_color }};
+  color: {{ text_color }};
+}
+
+#shopify-section-{{ id }} .section {
+  padding-top: {{ padding_top }}px;
+  padding-bottom: {{ padding_bottom }}px;
+}
+
+#shopify-section-{{ id }} a {
+  color: {{ text_color }};
+}
+#shopify-section-{{ id }} .section_title {
+  color: {{ section_title_color }};
+  padding-top: {{ title_spacing_top }}px;
+  padding-bottom: {{ title_spacing_bottom }}px;
+}
+#shopify-section-{{ id }} .comparison_group {
+  font-size: clamp({{ group_title_mobile }}px, calc({{ group_title_mobile }}px + ({{ group_title | minus: group_title_mobile }} * (100vw - {{ 1024 | minus:  480 }}px) / 480)), {{ group_title }}px);
+}
+#shopify-section-{{ id }} .comparison_group-options {
+  background: {{ row_contrast }};
+}
+
+
+#shopify-section-{{ id }} .group-description {
+  max-width: {{ description_max_width }}px ;
+  padding-top: {{ description_padding_top }}px;
+  padding-bottom: {{ description_padding_bottom }}px;
+  font-size: {{ description_font_size }}px;
+}
+
+#shopify-section-{{ id }} .table-cell {
+  background: {{ bg_color }};
+  padding: {{ cell_padding }}px;
+}
+#shopify-section-{{ id }} .table-cell.even {
+  background: {{ row_contrast }};
+}
+#shopify-section-{{ id }} .icon-cell,
+#shopify-section-{{ id }} .body-cell-label {
+  color: {{ icon_color }};
+}
+#shopify-section-{{ id }} .table-cell .icon {
+  height: {{ icon_size }}px;
+  width: {{ icon_size }}px;
+}
+#shopify-section-{{ id }} .sale{
+  color: {{ sale_price_color }};
+}
+#shopify-section-{{ id }} .was-price {
+  color: {{ was_price_color }};
+}
+
+@media only screen and (max-width:480px) {
+  #shopify-section-{{ id }} .table-cell.even,
+  #shopify-section-{{ id }} .table-cell.odd {
+    background: {{ bg_color }};
+  }
+
+  #shopify-section-{{ id }} .group-description {
+    padding-top: {{ description_padding_top_mobile }}px;
+    padding-bottom: {{ description_padding_bottom_mobile }}px;
+    padding-left: {{ description_padding_sides }}px;
+    padding-right: {{ description_padding_sides }}px;
+    font-size: {{ description_font_size_mobile }}px;
+  }
+
+  #shopify-section-{{ id }} .table-cell .icon {
+    height: {{ icon_size_mobile }}px;
+    width: {{ icon_size_mobile }}px;
+  }
+}
+
+{% endstyle %}
+
+<div class="section is-width-wide">
+  <div class="container has-no-side-gutter">
+    <div class="section_title one-whole is-flex is-align-center is-justify-center has-padding-top has-padding-bottom">
+      {{ section_title }}
+    </div>
+
+    <div class="group-title one-whole is-flex is-align-center is-justify-center">
+      {% if groups.size > 1 %}
+        <div class="comparison_group is_dd ff-bebas text-align-center is-flex is-align-center is-justify-center">
+          <div class="comparison_group-selected">
+            {{ groups[0].name }}
+          </div>
+          <span class="arrow-down"></span>
+
+          <div class="comparison_group-options">
+            {% for group in groups %}
+              <div data-comparison-option="{{group.name}}" data-index="{{ forloop.index }}">{{ group.name }}</div>
+            {% endfor %}
+          </div>
+        </div>
+  
+      {% else %}
+        <div class="comparison_group ff-bebas text-align-center">
+          {{ groups | map: 'name' | first }}
+        </div>
+  
+      {% endif %}
+    </div>
+
+
+    {% for group in groups %}
+
+      {% assign group_forloop = forloop %}
+      {% assign products_size = group.products.size %}
+      
+      {% assign complementary_devider = products_size | plus: 1 %}
+      {% assign complementary_width = 100 | divided_by: complementary_devider %}
+
+      <div class="group-content one-whole {% unless group_forloop.first %}hide{% endunless %}" data-group-index="{{ group_forloop.index }}">
+        <div class="one-whole is-flex is-align-cente is-justify-center">
+          <div class="group-description text-align-center">
+            {{ group.description | truncate: 160, '...'}}
+          </div>
+        </div>
+        <div class="table one-whole  {% if products_size < 4 %}has-complementary-cells{% endif %}" data-products-size="{{ products_size }}">
+
+          {% if products_size < 4 %}
+            {% assign loop_limit = group.comparisons.size | plus: 1 %}
+
+            {% for i in (1..loop_limit) %}
+              <div class="table-cell complementary-cell {% cycle 'odd', 'even' %}"></div>
+            {% endfor %}
+          {% endif %}
+
+          <div class="table-cell empty odd"></div>
+          {% for compare in group.comparisons %}
+            {% assign this_compare = comparisons_dict | where: 'handle', compare | first %}
+            {%- comment -%}We start the cycle as even because the empty cell is considered part of this group{%- endcomment -%}
+            {% assign modulo = forloop.index | plus: 1 | modulo: 2 %}
+        
+            {% assign label_cell_cycle = 'odd' %}
+            {% if modulo == 0 %}
+              {% assign label_cell_cycle = 'even' %}
+            {% endif %}
+            <div class="table-cell icon-cell label-cell {{ label_cell_cycle }}" data-label-group="{{ forloop.index }}">
+              <div class="is-flex is-flex-column is-align-center is-justify-center one-whole">
+                {% render 'icon',
+                  name: this_compare.icon
+                %}
+                <div class="text-align-center">
+                  {{ this_compare.name }}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+
+          {% for product_handle in group.products %}
+            {% assign prod_obj = all_products[product_handle] %}
+            {% assign image = prod_obj.featured_image %}
+            {% assign product_comparisons = prod_obj.metafields.global.comparisons %}
+            {% assign reviews_average = prod_obj.metafields.stamped.reviews_average | times: 1.0 %}
+            {% assign reviews_count = prod_obj.metafields.stamped.reviews_count | times: 1 %}
+            {% assign product_loop = forloop %}
+            <div class="table-cell heading-cell is-flex is-flex-column is-justify-center is-align-center odd" data-product-index="{{ product_loop.index }}">
+              <a href="{{ prod_obj.url }}" class="product-image">
+                {% render 'image-element',
+                  image: image,
+                  alt: image.alt,
+                  stretch_width: true
+                %}
+              </a>
+              <span class="comparison-reviews is-hidden-small-down">
+                <span class="reviews-stars">
+                  {% render 'include-stars', rating: reviews_average %}
+                </span>
+                <span class="reviews-average fw-semibold">
+                  {{reviews_average | round: 1}}
+                </span>
+                <span class="reviews-count">
+                  ({{ reviews_count }})
+                </span>
+              </span>
+              <a href="{{ prod_obj.url }}" class="product-name text-align-center is-hidden-small-down">
+                <span>{{ prod_obj.title }}</span>
+              </a>
+              <div class="product-price">
+                {% if prod_obj.available %}
+                  {% if prod_obj.price_varies and prod_obj.price_min > 0 %}
+                    <small><em>{{ 'products.general.from' | t }}</em></small>
+                  {% endif %}
+                  {%- assign variant = prod_obj.first_available_variant -%}
+                  {% if variant.price < variant.compare_at_price %}
+                    <span class="was-price">
+                      <span>
+                        {% render 'price-element', price: variant.compare_at_price %}
+                      </span>
+                    </span>
+                  {% endif %}
+                  {% if prod_obj.price_min > 0 %}
+                    <span class="money fw-bold {% if variant.price < variant.compare_at_price %}sale{% endif %}">
+                      {% render 'price-element', price: prod_obj.price_min %}
+                    </span>
+                  {% else %}
+                    {{ settings.free_price_text }}
+                  {% endif %}
+        
+                {% else %}
+                  <span class="sold-out">{{ 'products.product.sold_out' | t }}</span>
+                {% endif %}
+              </div>
+        
+              {% if prod_obj.available %}
+        
+                <div class="product-form"
+                  id="product-form-{{ prod_obj.id }}"
+                  data-product-form
+                  data-money-format="{{ shop.money_format | strip_html }}"
+                  data-shop-currency="{{ shop.currency }}"
+                  data-select-id="product-select-{{ prod_obj.id }}{{ product-form }}{{ object.id }}{{ block.id }}"
+                  data-enable-state="{% if template contains 'product' %}true{% else %}false{% endif %}"
+                  data-product="{{ prod_obj | json | escape }}"
+                  {% if settings.limit_quantity or settings.display_inventory_left %}
+                    data-variant-inventory='[{%- for v in prod_obj.variants -%}{"id":{{v.id}},"inventory_quantity":{{v.inventory_quantity}},"inventory_management":"{{v.inventory_management}}","inventory_policy":"{{v.inventory_policy}}"}{% if forloop.last == false %},{% endif %}{%- endfor -%}]'
+                  {% endif %}
+                  data-product-id="{{ prod_obj.id }}"
+                >
+                  {% form "product", prod_obj %}
+                    <input type="hidden" name="id" value="{{ prod_obj.first_available_variant.id }}">
+                    {% render 'button' |
+                      type: 'submit',
+                      label: 'Add to cart',
+                      style: 'button--add-to-cart',
+                      class: 'ajax-submit action_button'
+                    %}
+                  {% endform %}
+                </div>
+              {% endif %}
+            </div>
+            <div class="table-cell product_name-cell text-align-left fw-bold is-flex is-flex-column is-align-start is-justify-end is-hidden-small-up" data-product-index="{{ product_loop.index }}">
+              <span class="comparison-reviews">
+                <span class="reviews-stars">
+                  {% render 'include-stars', rating: reviews_average %}
+                </span>
+                <span class="reviews-average fw-semibold">
+                  {{reviews_average | round: 1}}
+                </span>
+                <span class="reviews-count">
+                  ({{ reviews_count }})
+                </span>
+              </span>
+              <div class="name-wrapper">
+                {{ prod_obj.title }}
+              </div>
+            </div>
+            {% for compare in group.comparisons %}
+              {%- comment -%} We add 1 to the index to include the heading in the counting {%- endcomment -%}
+              {% assign modulo = forloop.index | plus: 1 | modulo: 2 %}
+              {% assign this_compare = comparisons_dict | where: 'handle', compare | first %}
+        
+              {% assign body_cell_cycle = 'odd' %}
+              {% if modulo == 0 %}
+                {% assign body_cell_cycle = 'even' %}
+              {% endif %}
+              {% assign compare_value = product_comparisons | where: 'handle_ref', compare | map: 'value' %}
+        
+              {% unless compare_value != blank %}
+                {% assign compare_value = compare_value | default: 'N/A' %}
+              {% endunless %}
+              <div class="table-cell body-cell is-flex is-justify-center is-align-center is-flex-column {{ body_cell_cycle }}" data-product-index="{{ product_loop.index }}">
+                <div class="body-cell-label is-flex is-flex-column is-align-start is-justify-center one-whole is-hidden-small-up">
+                  {% render 'icon',
+                    name: this_compare.icon
+                  %}
+                  <div class="text-align-left fw-bold">
+                    {{ this_compare.name }}
+                  </div>
+                </div>
+                <div>
+                  {{ compare_value }}
+                </div>
+              </div>
+            {% endfor %}
+        
+          {% endfor %}
+
+          {% if products_size < 4 %}
+            {% for i in (1..loop_limit) %}
+              <div class="table-cell complementary-cell {% cycle 'odd', 'even' %}"></div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+
+
+    {% endfor %}
+
+  </div>
+</div>
+
+<link rel="preload" as="script" href="{{ 'z__jsPortalComparisonChart.js' | asset_url }}">
+<script data-theme-editor-load-script src="{{ 'z__jsPortalComparisonChart.js' | asset_url }}"></script>
+
+{% schema %}
+{
+  "name": "Comparison chart",
+  "class": "jsPortalComparisonChart",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Group Description"
+    },
+    {
+      "type": "number",
+      "id": "description_font_size",
+      "label": "Description Font Size",
+      "default": 15
+    },
+    {
+      "type": "number",
+      "id": "description_font_size_mobile",
+      "label": "Description Font Size (mobile)",
+      "default": 10
+    },
+    {
+      "type": "number",
+      "id": "description_max_width",
+      "label": "Description Max Width",
+      "default": 400
+    },
+    {
+      "type": "number",
+      "id": "description_padding_top",
+      "label": "Description Padding Top",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "description_padding_top_mobile",
+      "label": "Description Padding Top (mobile)",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "description_padding_bottom",
+      "label": "Description Padding Bottom",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "description_padding_bottom_mobile",
+      "label": "Description Padding Bottom (mobile)",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "description_padding_sides",
+      "label": "Description Padding Sides (Left and Right)",
+      "default": 10,
+      "info": "Works only for mobile"
+    },
+    {
+      "type": "header",
+      "content": "Backgrounds"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "row_contrast",
+      "label": "Row contrast color",
+      "default": "#101010"
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "color",
+      "id": "section_title_color",
+      "label": "Section title color",
+      "default": "#ff0065"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "sale_price_color",
+      "label": "Sale price color",
+      "default": "#ff0065"
+    },
+    {
+      "type": "color",
+      "id": "was_price_color",
+      "label": "Previous price color",
+      "default": "#ff0065"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#ff0065"
+    },
+    {
+      "type": "number",
+      "id": "group_title",
+      "label": "Group title Size",
+      "default": 40
+    },
+    {
+      "type": "number",
+      "id": "group_title_mobile",
+      "label": "Group title Size (mobile)",
+      "default": 40
+    },
+    {
+      "type": "number",
+      "id": "icon_size",
+      "label": "Icon Size",
+      "default": 40
+    },
+    {
+      "type": "number",
+      "id": "icon_size_mobile",
+      "label": "Icon Size (mobile)",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Section Title Spacing"
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_top",
+      "label": "Spacing top",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_bottom",
+      "label": "Spacing bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "number",
+      "id": "padding_top",
+      "label": "Section Top spacing",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "padding_bottom",
+      "label": "Section Bottom spacing",
+      "default": 0
+    },
+    {
+      "type": "number",
+      "id": "row_padding",
+      "label": "Row padding (top and bottom)",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "cell_padding",
+      "label": "Cells Padding (all around)",
+      "default": 10
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,216 @@
+{% if related_products == true %}
+  {% assign hover_enabled = block.settings.show_related_products_title_on_hover %}
+{% else %}
+  {% assign hover_enabled = settings.thumbnail_hover_enabled %}
+{% endif %}
+
+{% if type == 'block' %}
+  {% assign object = block %}
+{% else %}
+  {% assign object = section %}
+{% endif %}
+
+{% assign secondaryImage = product.media[1] %}
+
+{% assign collection_handles = product.collections | map: 'handle' %}
+{% if product.featured_media.preview_image.alt contains 'youtube' or image.alt contains 'vimeo' %}
+  {% assign alt_text = product.title %}
+{% else %}
+  {% assign alt_text = product.featured_media.preview_image.alt %}
+{% endif %}
+
+{% if type == 'block' %}
+  {% assign image_crop = block.settings.image_crop %}
+{% else %}
+  {% assign image_crop = section.settings.image_crop %}
+{% endif %}
+{% assign sca_product = product %}{% assign sca_product_id_text = "," | append : sca_product.id | append : "," %}{% assign sca_price = sca_product.price %}{% assign sca_price_min = sca_product.price_min %}{% assign sca_price_max = sca_product.price_max %}{% assign sca_compare_at_price = sca_product.compare_at_price %}{% assign sca_compare_at_price_min = sca_product.compare_at_price_min %}{% assign sca_compare_at_price_max = sca_product.compare_at_price_max %}{% assign sca_product_available = sca_product.available %}{% assign sca_product_variantCount = sca_product.variants.size %}{% assign sca_compare_at_price_varies = sca_product.compare_at_price_varies %}{% assign sca_price_varies = sca_product.price_varies %}{% assign sca_has_only_default_variant = false %}{% capture sca_product_variants_json %}{{sca_product.variants | json }}{% endcapture %} {% capture sca_product_json %}{ {% if sca_all_gift_products_ids == null or sca_all_gift_products_ids contains sca_product_id_text %}{% assign sca_product_available = false %}{% assign sca_product_variantCount = 0 %}{% assign sca_has_only_default_variant = true %}{% assign sca_is_first_variant = true %}{% capture sca_variants_json %} [{% for variant in sca_product.variants %}{% unless variant.metafields.secomapp.freegifts %}{% unless variant.title contains '(Freegifts)' %}{% unless variant.title contains '% Off' %}{% unless variant.metafields.shappify_qb.qb_hide == "1" %}{% unless variant.metafields.shappify_bundle.is_bundle == "true" %}{% unless variant.metafields.brodev_scn.hide == "true" %}{% unless variant.metafields.wholesaler2.wholesale %}{% unless variant.metafields.Wholesaler.level %}{% unless variant.title contains '(Wholesale' %}{% if sca_is_first_variant%} {{ variant | json }}{% assign sca_price = variant.price %} {% assign sca_price_min = variant.price %} {% assign sca_price_max = variant.price %} {% assign sca_compare_at_price = variant.compare_at_price %} {% assign sca_compare_at_price_min = variant.compare_at_price %} {% assign sca_compare_at_price_max = variant.compare_at_price %} {% assign sca_product_available = variant.available %} {% assign sca_product_variantCount = 1 %} {% assign sca_is_first_variant = false%}{% else %},{{variant | json }} {% if sca_price_min >= variant.price %} {% assign sca_price_min = variant.price %} {% assign sca_price = variant.price %}{% endif %} {% if sca_price_max <= variant.price %} {% assign sca_price_max = variant.price %} {% endif %} {% if variant.compare_at_price %} {% if sca_compare_at_price_min==null or sca_compare_at_price_min >= variant.compare_at_price %} {% assign sca_compare_at_price_min = variant.compare_at_price %} {% assign sca_compare_at_price = variant.compare_at_price %} {% endif %} {% if sca_compare_at_price_max==null or sca_compare_at_price_max < variant.compare_at_price %} {% assign sca_compare_at_price_max = variant.compare_at_price %} {% endif %} {% endif %} {% if variant.available == true %} {% assign sca_product_available = true %} {% endif %} {% assign sca_product_variantCount = sca_product_variantCount | plus: 1 %}{% endif %}{% endunless %}{% endunless %}{% endunless %}{% endunless %}{% endunless %}{% endunless %}{% endunless %}{% endunless %}{% endunless %}{%endfor%} ]{% endcapture %}{% if sca_price_min < sca_price_max %}{% assign sca_price_varies = true %}{% else %}{% assign sca_price_varies = false %}{% endif %}{% if sca_compare_at_price_min < sca_compare_at_price_max %}{% assign sca_compare_at_price_varies = true %}{% else %}{% assign sca_compare_at_price_varies = false %}{% endif %}{% if sca_product_variantCount > 1 %}{% assign sca_has_only_default_variant = false %}{% endif %}{% if sca_product_variantCount == sca_product.variants.size %} "variants":{{ sca_product.variants }},{% else %}{%assign sca_product_variants_json = sca_variants_json %} "variants":{{ sca_variants_json }},{% endif %}{% else %} "variants":{{ sca_product_variants_json }},{% endif %} "id": {{sca_product.id}}, "title": {{sca_product.title | json}}, "handle": {{sca_product.handle | json}}, "description": {{sca_product.description | json}}, "published_at": "{{sca_product.published_at | date: "%Y-%m-%dT%H-%M-%S%:z" }}", "created_at": "{{sca_product.created_at | date: "%Y-%m-%dT%H-%M-%S%:z" }}", "vendor": {{sca_product.vendor | json}}, "type": {{sca_product.type | json}}, "tags": {{sca_product.tags | json}}, "price": {{sca_price}}, "price_min": {{sca_price_min}}, "price_max": {{sca_price_max}}, "available": {{sca_product.available}}, "price_varies": {{sca_price_varies}}, "compare_at_price": {{sca_compare_at_price}}, "compare_at_price_min": {{sca_compare_at_price_min}}, "compare_at_price_max": {{sca_compare_at_price_max}}, "compare_at_price_varies": {{sca_compare_at_price_varies}}, "images": {{sca_product.images | json}}, "featured_image": {{sca_product.featured_image | json }}, "options": {{sca_product.options | json}}, "media": {{sca_product.media | json }}, "content": {{sca_product.content | json }}} {% endcapture sca_product_json %}
+
+{% assign productCardOnePosition = collection.metafields.product_card.product_card_one_position %}
+{% assign productCardTwoPosition = collection.metafields.product_card.product_card_two_position %}
+{% assign productCardOneImage = collection.metafields.product_card.product_card_one_image.value %}
+{% assign productCardTwoImage = collection.metafields.product_card.product_card_two_image.value %}
+
+{% if forloop_index == productCardOnePosition %}
+  {% render 'product-card-one', product_card_1_image: productCardOneImage %}
+{% elsif forloop_index == productCardTwoPosition %}
+  {% render 'product-card-two', product_card_2_image: productCardTwoImage %}
+{% endif %}
+
+<div class="
+  {% render 'column-width', value: products_per_row %}
+  medium-down--one-half
+  {% if mobile_products_per_row == '1' %}
+    small-down--one-whole
+  {% else %}
+    small-down--one-half
+  {% endif %}
+  column
+  {% if settings.enable_quickshop %}
+    quick-shop--true
+    quick-shop--closed
+    product-{{ product.id }} js-product_section
+  {% endif %}
+  {% if settings.stickers_enabled %}
+    has-thumbnail-sticker
+  {% endif %}
+  {% if product.media[1] != blank and settings.show_secondary_image == true %}
+    has-secondary-image-swap
+  {% endif %}
+  thumbnail
+  product__thumbnail
+  product__grid-item
+  thumbnail__hover-overlay--{{ hover_enabled }}"
+  {% if section.settings.pagination_type != 'basic_pagination' %}
+    data-load-more--grid-item
+  {% endif %}>
+  <div class="product-wrap is-flex is-flex-wrap is-flex-column">
+
+    <div class="product-thumbnail-labels">
+      {% if settings.stickers_enabled %}
+        {% render 'product-thumbnail__sticker',
+          product: product,
+          context: 'product',
+          collection_handles: collection_handles
+        %}
+      {% endif %}
+    </div>
+
+    <div class="product-thumbnail-image__wrapper wdith">
+      <div class="image__container product__imageContainer">
+        <a href="{{ product.url | within: collection }}">
+          {% comment %} Primary image {% endcomment %}
+          {% render 'image-element',
+                  image: product.featured_media.preview_image,
+                  alt: alt_text,
+                  object_fit: align_height,
+                  max_height: height
+          %}
+
+          {% comment %} Secondary image {% endcomment %}
+          {% if product.media[1] != blank and settings.show_secondary_image == true %}
+            {% if product.media[1].media_type == 'external_video' %}
+              <div class="product-thumbnail__video secondary swap--visible video-on-hover">
+                <div data-youtube-video>
+                  {{ product.media[1] | external_video_tag }}
+                </div>
+              </div>
+            {% elsif product.media[1].media_type == 'video' %}
+              <div class="product-thumbnail__video secondary swap--visible video-on-hover" data-html5-video>
+                {{ product.media[1] | video_tag: controls: false }}
+              </div>
+            {% else %}
+              {% render 'image-element',
+                      image: product.media[1],
+                      alt: alt_text,
+                      object_fit: align_height,
+                      max_height: height,
+                      additional_classes: 'secondary swap--visible'
+              %}
+            {% endif %}
+          {% endif %}
+        </a>
+      </div>
+
+      {% if hover_enabled or settings.enable_quickshop %}
+        <div class="thumbnail-overlay__container">
+          <a class="hidden-product-link" href="{{ product.url | within: collection }}">{{ product.title }}</a>
+
+          {% if hover_enabled %}
+            <div class="quick-shop__info animated fadeInDown">
+              <div class="thumbnail-overlay">
+                <div class="info text-align-center">
+                  {% if settings.display_vendor %}
+                    <span class="product-thumbnail__vendor">{{ product.vendor }}</span>
+                  {% endif %}
+
+                  <p class="product-thumbnail__title">{{ product.title }}</p>
+
+                  {% if collection_handles contains 'coming-soon' %}
+                    <span>{{ 'collections.general.coming_soon' | t }}</span>
+                  {% else %}
+                    <span class="product-thumbnail__price price {% if sca_compare_at_price > sca_price %}sale{% endif %}">
+                      {% if product.available %}
+                        {% if sca_price_varies and sca_price_min > 0 %}
+                          <small><em>{{ 'products.general.from' | t }}</em></small>
+                        {% endif %}
+                        {% if sca_price_min > 0 %}
+                          <span class="money">
+                            {% render 'price-element', price: sca_price_min %}
+                          </span>
+                        {% else %}
+                          {{ settings.free_price_text }}
+                        {% endif %}
+                        {% if sca_compare_at_price > sca_price %}
+                          <span class="product-thumbnail__was-price was-price">
+                            <span class="money">
+                              {% render 'price-element', price: sca_compare_at_price %}
+                            </span>
+                          </span>
+                        {% endif %}
+                      {% else %}
+                        <span class="product-thumbnail__sold-out sold-out">{{ 'products.product.sold_out' | t }}</span>
+                      {% endif %}
+                    </span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if settings.enable_quickshop %}
+            {% render 'product-thumbnail__quick-shop-button', product: product %}
+          {% endif %}
+
+          {% if hover_enabled %}
+            {% if settings.enable_shopify_collection_badges and settings.enable_shopify_review_comments %}
+              <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+            {% endif %}
+          {% endif %}
+
+        </div>
+      {% endif %}
+
+    </div>
+
+      <div class="product-thumbnail__swatch-wrapper">
+        {% render 'product-thumbnail__swatch', product: product %}
+      </div>
+
+      <hr class="product-thumbnail-hr">
+
+      {% if hover_enabled == false %}
+
+        {%- comment -%} Commented out in favor of Stamped.io reviews {%- endcomment -%}
+        {%- comment -%}
+        {% if settings.enable_shopify_collection_badges and settings.enable_shopify_review_comments %}
+        <div class="product-thumbnail__review-stars is-flex is-justify-{{ settings.thumbnail_text_alignment }}">
+          <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+        </div>
+        {% endif %}
+        {%- endcomment -%}
+
+
+        {%- comment -%}Stamped Star Rating Badge{%- endcomment -%}
+        <div class="product-thumbnail__review-stars is-flex is-justify-{{ settings.thumbnail_text_alignment }}">
+          {% assign reviews_average = product.metafields.stamped.reviews_average | times: 1.0 %}
+          {% assign reviews_count = product.metafields.stamped.reviews_count | times: 1 %}
+          {% render 'include-stars', rating: reviews_average %}
+          <span class="product-thumbnail__review-stars-number"> ({{ reviews_count }})</span>
+        </div>
+
+      {% endif %}
+
+
+
+    <div class="thumbnail__caption text-align-{{ settings.thumbnail_text_alignment }}">
+      {% render 'product-thumbnail__product-info',
+              product: product,
+              collection_handles: collection_handles
+      %}
+    </div>
+
+  </div>
+
+
+</div>

@@ -1,0 +1,71 @@
+{% assign education_section_background = education_section.background_color %}
+{% assign education_heading_color = education_section.heading_color %}
+{% assign education_icons_color = education_section.icons_color %}
+{% assign education_heading = education_section.heading %}
+
+{% assign education_desktop_image_name = education_section.desktop_image %}
+{% assign education_mobile_image_name = education_section.mobile_image | default: education_desktop_image_name %}
+{% assign education_desktop_image = images[education_desktop_image_name] %}
+{% assign education_mobile_image = images[education_mobile_image_name] %}
+
+{% assign education_icons = education_section.icons %}
+
+{% style %}
+  .product__education-section--section {
+    background-color: {{ education_section_background }};
+  }
+  .product__education-section--heading h3{
+    color: {{ education_heading_color }};
+  }
+  .product__education-section--icons-holder .icon,
+  .product__education-section--icons-holder .text-body,
+  .product__education-section--icons-holder .text-heading {
+    color: {{ education_icons_color }};
+  }
+{% endstyle %}
+
+<section class="section product__education-section--section is-width-wide has-padding-bottom has-padding-top">
+
+  <div class="product__education-section--holder container has-limit">
+
+    <div class="column one-half small-down--one-whole">
+      {% render 'image-element',
+              image: education_desktop_image,
+              alt: education_desktop_image.alt,
+              stretch_width: true
+      %}
+    </div>
+
+    <div class="column one-half small-down--one-whole is-flex is-flex-wrap">
+
+      <div class='product__education-section--heading one-whole has-margin-bottom'>
+        <h3 class="ff-bebas">
+          {{ education_heading }}
+        </h3>
+      </div>
+  
+      <div class="product__education-section--icons-holder is-flex is-flex-wrap is-align-stretch one-whole has-no-side-gutter">
+        {% for icon_block in education_icons %}
+          {% assign education_icon = icon_block.icon %}
+          {% assign education_icon_heading = icon_block.text %}
+          {% assign education_icon_text = icon_block.text %}
+    
+          <div class="one-half is-flex has-padding-bottom">
+            <div class="icon-holder">
+              {% render 'icon', name: education_icon %}
+            </div>
+            <div class="text-holder has-margin-left">
+              <h4 class="text-heading">{{ education_icon_heading }}</h4>
+              <p class="text-body">
+                {{ education_icon_text }}
+              </p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

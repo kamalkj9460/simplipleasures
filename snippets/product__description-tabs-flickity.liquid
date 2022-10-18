@@ -1,0 +1,198 @@
+{%- comment -%} Content {%- endcomment -%}
+{% assign tab_section = product.metafields.salsify_sections.tabs_section %}
+{% assign tab_section_blocks = tab_section.blocks %}
+
+{% if tab_section_blocks.size > 0 %}
+  {% assign is_first = true %}
+
+  {% for block in tab_section_blocks %}
+    {% if block != blank %}
+      {% assign tab_title = block.title %}
+      {% assign tab_type = block.type %}
+      {% assign tab_content_items = block.items %}
+      {% assign active_class = '' %}
+
+      {% assign tabs_size = tabs_size | plus: 1 %}
+      {% assign loop_count = forloop.index %}
+      
+      {% if is_first == true %}
+        {% assign active_class = 'is-active' %}
+        {% assign is_first = false %}
+      {% endif %}
+
+
+      {% capture tab_label %}
+        <div class="tab-label {{ active_class }}">
+          {{ tab_title }}
+        </div>
+      {% endcapture %}
+      
+      {% capture tab_content %}
+        <div id="tab{{loop_count}}" class="tab-content">
+          <div class="tab-content--holder content">
+
+            {% if tab_type == 'bullet' %}
+              <ul class="o-list o-list--circle">
+            {% endif %}
+
+            {% for item in tab_content_items %}
+              {% if tab_type == 'bullet' and item.value != blank %}
+                <li>
+                  {{ item.value }}
+                </li>
+
+              {% elsif tab_type == 'q_and_a' and item.question != blank and item.answer != blank  %}
+                
+                <div class="faq__item">
+                  <p class="faq__question fw-bold">
+                    {{ item.question }}
+                  </p>
+                  
+                  <p class="faq__answer">
+                    {{ item.answer }}
+                  </p>
+                </div>
+              {% endif %}
+            {% endfor %}
+
+            {% if tab_type == 'bullet' %}
+              </ul>
+            {% endif %}
+
+          </div>
+        </div>
+      {% endcapture %}
+      
+      
+      {% assign tab_labels = tab_labels | append: tab_label %}
+      {% assign tab_contents = tab_contents | append: tab_content %}
+    {% endif %}
+  {% endfor %}
+
+  {% comment %} Description Tabs {% endcomment %}
+  <div class="product__description-tabs-flickity">
+    <!--Start tab labels-->
+    <div class="tabs-flickity tabs-labels is-fullwidth" data-tabs-size="{{tabs_size}}">
+      {{ tab_labels }}
+    </div>
+    <div class="tabs-flickity-content tabs-content">
+      {{ tab_contents }}
+    </div>
+  </div>
+
+{% else %}
+  {% assign measurements = product.metafields.Measurements %}
+  {% assign feel = product.metafields.Feel %}
+  {% assign power = product.metafields.Power %}
+  {% assign essentials = product.metafields.Essentials %}
+  {% assign benefits = product.metafields.product-benefits %}
+  {% assign has_specs = product.metafields.LOC.real_specs %}
+  {% assign what_it_does = product.metafields.What_it_does %}
+  {% assign features = product.metafields.PDP_features %}
+  {% assign has_benefits = product.metafields.PDP.has_benefits %}
+  {% assign has_features = product.metafields.PDP.has_features %}
+  {% assign ingredients = product.metafields.PDP.ingredients %}
+  {% assign has_ingredients = product.metafields.PDP.has_ingredients %}
+  {% assign old_specs = product.metafields.PDP.old_specs %}
+  {% assign has_old_specs = product.metafields.PDP.has_old_specs %}
+  {% assign old_benefits = product.metafields.PDP.old_benefits %}
+  {% assign has_old_benefits = product.metafields.PDP.has_old_benefits %}
+  {% assign disclaimer = product.metafields.PDP.ingredients_disclaimer %}
+  {% assign description = product.metafields.PDP.description %}
+
+
+
+  {% comment %} Description Tabs {% endcomment %}
+  <div class="product__description-tabs-flickity">
+    <!--Start tab labels-->
+    <div class="tabs-flickity tabs-labels is-fullwidth" data-tabs-size="4">
+      <div class="tab-label is-active">
+        Description
+      </div>
+      <div class="tab-label">
+        Specifications
+      </div>
+      <div class="tab-label">
+        Key Benefits
+      </div>
+      <div class="tab-label">
+        Additional Features
+      </div>
+    </div>
+
+    <!--Start tab content-->
+    <div class="tabs-flickity-content tabs-content">
+      <div id="tab1" class="tab-content">
+        <div class="tab-content--holder content">
+          {{ product.description }}        
+    
+          {% if has_ingredients == "yes" %}
+            <b>Ingredients:</b> {{ ingredients }}
+            <br>
+            {{ disclaimer }}
+          {% endif %}
+        </div>
+      </div>
+      <div id="tab2" class="tab-content">
+        <div class="tab-content--holder content">
+          {% if has_specs == "yes" %}
+            {% include 'product__meta-data', type: 'real-specs' %}
+          {% endif %}
+
+          {% if has_old_specs == "yes" %}
+            {{ old_specs }}
+          {% endif %}
+
+          {% if has_specs != "yes" and has_old_specs != "yes" %}
+            N/A
+          {% endif %}
+        </div>
+      </div>
+      <div id="tab3" class="tab-content">
+        <div class="tab-content--holder content">
+          {% if has_benefits == "yes" %} 
+            {% include 'product__meta-data', type: 'key-benefits' %}
+          {% endif %}
+
+          {% if has_old_benefits == "yes" %}
+            {{ old_benefits }}
+          {% endif %}
+
+          {% if has_benefits != "yes" and has_old_benefits != "yes" %}
+            N/A
+          {% endif %}
+        </div>
+      </div>
+      <div id="tab4" class="tab-content">
+        <div class="tab-content--holder content">
+          {% if has_features == 'yes' %}
+            {% include 'product__meta-data', type: 'features' %}
+          {% endif %}
+
+          {% if has_features != 'yes' %}
+            N/A
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endif %}
+<script>
+    $(document).ready(function(){
+      waitForElement(".quick-shop__buttons",function(){
+         $(".quick_shop").click(function(){
+          $(".fancybox-container").css("display", "block");                 
+        });
+      });
+    });
+    function waitForElement(elementPath, callBack){
+      window.setTimeout(function(){
+        if($(elementPath).length){
+          callBack(elementPath, $(elementPath));
+        }else{
+          waitForElement(elementPath, callBack);
+        }
+      },500)
+    }
+</script>

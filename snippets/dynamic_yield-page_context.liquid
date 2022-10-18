@@ -1,0 +1,32 @@
+{% liquid
+  case template.name
+    when 'index'
+      assign page_type = 'HOMEPAGE'
+
+    when 'collection'
+      assign page_type = 'CATEGORY'
+      assign data = collection.handle | json | prepend: '[' | append: ']'
+
+    when 'product'
+      assign page_type = 'PRODUCT'
+      assign data = product.first_available_variant.sku | json | prepend: '[' | append: ']'
+
+    when 'cart'
+      assign page_type = 'CART'
+      assign data = cart.items | map: 'sku' | json
+
+    else
+      assign page_type = 'OTHER'
+      
+  endcase
+%}
+
+<script type="text/javascript">
+  window.DY = window.DY || {}; 
+  DY.recommendationContext = {
+    type: {{ page_type | json }}
+    {%- unless 'HOMEPAGE, OTHER' contains page_type -%}
+    , data: {{ data }}
+    {%- endunless %}
+  };
+</script>

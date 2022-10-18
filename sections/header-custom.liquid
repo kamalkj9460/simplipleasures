@@ -1,0 +1,407 @@
+{% comment %}
+** Header 1 Custom - static **
+- Static section
+{% endcomment %}
+
+{% assign id = section.id %}
+{% assign logo = section.settings.logo %}
+{% assign sitcky_logo = section.settings.sitcky_logo %}
+{% assign mobile_logo = section.settings.mobile_logo %}
+{% assign mobile_sticky_logo = section.settings.mobile_sticky_logo %}
+{% comment %} Advanced {% endcomment %}
+{% assign width = section.settings.width %}
+{% assign css_class = section.settings.css_class %}
+{% assign custom_css = section.settings.custom_css %}
+
+{% comment %} Is the color set to transparent? {% endcomment %}
+{% assign header_alpha = settings.header_background | color_extract: 'alpha' %}
+
+{% comment %} Opacity level {% endcomment %}
+{% if header_alpha != 0 %}
+  {% assign sticky_background_alpha = section.settings.sticky_background_opacity | divided_by: 100.00 %}
+{% endif %}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% capture section_css -%}
+  .header__logo,
+  .logo__content {
+    width: {{ section.settings.logo_width }}px;
+  }
+
+  .is-sticky .header__logo {
+    width: {{ section.settings.scroll_logo_width }}px;
+  }
+
+  {%- if section.settings.enable_sticky -%}
+    .header-sticky-wrapper.is-sticky .header {
+      background-color: {{ settings.header_background | color_modify: 'alpha', sticky_background_alpha }};
+    }
+
+    #mobile-header-sticky-wrapper.is-sticky .mobile-header {
+      background-color: {{ settings.header_background | color_modify: 'alpha', sticky_background_alpha }};
+    }
+
+    .mobile-menu--opened #mobile-header-sticky-wrapper.is-sticky .mobile-header {
+      background-color: {{ settings.header_background }};
+    }
+  {%- endif -%}
+{%- endcapture -%}
+
+{% style %}
+  #shopify-section-{{ id }} {
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+    {% if width == 'wide' %}
+      width: 100%;
+    {% endif %}
+  }
+  {% render 'css-loop',
+          css: section_css,
+          id: id
+  %}
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+{% endstyle %}
+
+{% render 'header__structured-data' %}
+
+{% comment %} HTML markup {% endcomment %}
+<div class="is-relative {{ css_class }}" data-enable_sticky="{{ section.settings.enable_sticky }}">
+  <header id="header" class="header dropdown-style-{{ settings.dropdown_style }} box-shadow-{{ settings.show_dropdown_shadow }}">
+    <section class="section
+                    is-width-{{ width }}">
+      <div class="container">
+        <div class="navbar dropdown-click--{{ section.settings.dropdown_click }} is-align-center is-justify-space-between vertical-alignment-{{ section.settings.vertical_alignment }} one-whole column">
+          <div class="header__brand">
+            
+            {% if sitcky_logo != blank %}
+              <a class="header__logo header__link sticky-logo" href="{{ shop.url }}" title="{{ shop.name }}">
+                {% render 'image-element',
+                        image: sitcky_logo,
+                        alt: sitcky_logo.alt
+                %}
+              </a>
+            {% endif %}
+
+            {% if logob64 != blank %}
+              <a class="header__logo header__link primary-logo" href="{{ shop.url }}" title="{{ shop.name }}">
+                <img alt="" class="transition--fade-in primary-logo" src="{{ section.settings.logob64 }}">
+              </a>
+
+            {% elsif logo != blank %}
+              <a class="header__logo header__link primary-logo" href="{{ shop.url }}" title="{{ shop.name }}">
+                {% render 'image-element',
+                  image: logo,
+                  alt: logo.alt
+                %}
+              </a>
+
+              {% if template contains 'index' %}
+                <h1 class="visuallyhidden">{{ shop.name }}</h1>
+              {% endif %}
+
+            {% else %}
+              {% if template contains 'index' %}
+                <h1 class="header__logo-text">
+                  <a href="{{ shop.url }}" class="header__link primary-brand">
+                    {{ shop.name }}
+                  </a>
+                </h1>
+              {% else %}
+                <a href="{{ shop.url }}" class="header__logo-text header__link primary-brand">
+                  {{ shop.name }}
+                </a>
+              {% endif %}
+            {% endif %}
+          </div>
+          <div class="header__menu is-justify-{{ section.settings.menu_alignment }}">
+            <nav class="header__menu-items is-flex is-flex-wrap is-justify-{{ section.settings.menu_alignment }} header__dropdown--{{ settings.dropdown_position }}" role="navigation" aria-label="main navigation">
+              {% assign main_menu = linklists[section.settings.main_linklist] %}
+              {% for link in main_menu.links %}
+                {% if link.links == blank %}
+                  <div class="navbar-item header__item {% if link.active or link.child_active %}is-active{% endif %}" data-navlink-handle="{{ link.title | handleize }}">
+                    <a href="{{ link.url }}" class="navbar-link header__link {% if link.active %}is-active{% endif %} is-arrowless">
+                      {{ link.title }}
+                    </a>
+                  </div>
+                {% else %}
+                  <div class="navbar-item header__item has-dropdown has-dropdown--{{ settings.dropdown_style }} is-hoverable {% if link.active or link.child_active %}is-active{% endif %}" aria-haspopup="true" aria-expanded="false" data-navlink-handle="{{ link.title | handleize }}">
+                    <a href="{{ link.url }}" class="navbar-link header__link {% if link.active or link.child_active %}is-active{% endif %}  is-arrowless">
+                      {{ link.title }}
+                    </a>
+                    {% render 'header__dropdown-menu',
+                            link: link,
+                            index: forloop.index
+                    %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </nav>
+          </div>
+
+          {% comment %} Search bar {% endcomment %}
+          <div class="header__search is-flex is-justify-center is-align-center" data-autocomplete-{{ settings.enable_autocomplete }}>
+            <form class="header__search-form search-form" action="{{ routes.search_url }}">
+              <input type="hidden" name="type" value="{{ settings.search_option }}" />
+              <div class="field has-addons">
+                <div class="control">
+                  <button class="button header__search-button">
+                    {% render 'icon', name: 'search' %}
+                  </button>
+                </div>
+                <div class="control header__search-bar is-relative">
+                  <input class="input" type="text" name="q" placeholder="{{ settings.search_placeholder }}" value="{{ search.terms }}" x-webkit-speech autocapitalize="off" autocomplete="off" autocorrect="off" />
+                </div>
+              </div>
+            </form>
+          </div>
+
+          {% render 'header__action-icons',
+            icon_style: section.settings.icon_style
+          %}
+        </div>
+      </div>
+    </section>
+  </header>
+
+  {% render 'mobile-header-custom', mobile_sticky_logo: mobile_sticky_logo %}
+
+</div>
+
+{% comment %}JavaScript{% endcomment %}
+<script
+  type="application/json"
+  data-section-id="{{ section.id }}"
+  data-section-data
+>
+  {
+    "enable_sticky": {{ section.settings.enable_sticky | json }},
+    "header_layout": {{ settings.header_layout | json }},
+    "dropdown_click": {{ section.settings.dropdown_click | json }}
+  }
+</script>
+<link rel="preload" as="script" href="{{ 'z__jsHeader.js' | asset_url }}">
+<script src="{{ 'z__jsHeader.js' | asset_url }}"></script>
+
+{% comment %}Schema{% endcomment %}
+{% schema %}
+
+{
+  "name": "Header",
+  "class": "header--custom jsHeader header-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo",
+      "info": "600 x 200px recommended"
+    },
+    {
+      "type": "textarea",
+      "id": "logob64",
+      "label": "Base 64 Logo",
+      "info": "600 x 200px recommended"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Width",
+      "step": 5,
+      "min": 80,
+      "max": 300,
+      "default": 200,
+      "unit": "px"
+    },
+
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "main_linklist",
+      "label": "Main menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "select",
+      "id": "menu_alignment",
+      "label": "Menu alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "Right"
+        }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "checkbox",
+      "id": "dropdown_click",
+      "label": "Open dropdowns on click instead of hover",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Icons"
+    },
+    {
+      "type": "select",
+      "id": "icon_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "icons",
+          "label": "Icons only"
+        },
+        {
+          "value": "text",
+          "label": "Text only"
+        },
+        {
+          "value": "icons_text",
+          "label": "Icons and text"
+        }
+      ],
+      "default": "icons"
+    },
+    {
+      "type": "header",
+      "content": "Sticky header"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky",
+      "label": "Enable sticky on scroll"
+    },
+	{
+      "type": "text",
+      "id": "banner_mobile_navigation_text",
+      "label": "Mobile Navigation Banner Text"
+    },
+	{
+        "type": "color",
+        "id": "banner_mobile_navigation_background_color",
+        "label": "Mobile Navigation Banner Background Color",
+        "default": "#e21264"
+	},
+	{
+        "type": "color",
+        "id": "banner_mobile_navigation_text_color",
+        "label": "Mobile Navigation Banner Text Color",
+        "default": "#ffffff"
+	},
+	{
+        "type": "number",
+        "id": "banner_mobile_navigation_border_radius",
+        "label": "Mobile Navigation Banner Border Radius(px)",
+        "default": 25
+	},
+	{
+        "type": "url",
+        "id": "banner_mobile_navigation_link",
+        "label": "Mobile Navigation Link"
+	},
+    {
+      "type": "range",
+      "id": "sticky_background_opacity",
+      "label": "Background opacity",
+      "min": 10,
+      "max": 100,
+      "step": 10,
+      "default": 50,
+      "unit": "%"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticky_logo",
+      "label": "Scroll Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_sticky_logo",
+      "label": "Mobile Scroll Logo"
+    },
+    {
+      "type": "range",
+      "id": "scroll_logo_width",
+      "label": "Scroll Logo width",
+      "step": 5,
+      "min": 30,
+      "max": 300,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "standard",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Vertical alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Advanced",
+      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+      "type": "text",
+      "id": "css_class",
+      "label": "CSS Class"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    }
+  ]
+}
+
+{% endschema %}

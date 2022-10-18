@@ -1,0 +1,149 @@
+{% comment %}
+** Icon with text column - dynamic **
+- Draggable section
+- Uses blocks
+{% endcomment %}
+
+{% comment %} Content setttings {% endcomment %}
+{%- assign blocks = section.blocks -%}
+{%- assign object = section -%}
+
+{% if type == 'block' %}
+  {%- assign object = block -%}
+{% endif %}
+
+{% comment %} End content settings {% endcomment %}
+
+{% comment %} Is the color set to transparent? {% endcomment %}
+{%- assign text_alpha = object.settings.text_color | color_extract: 'alpha' -%}
+{%- assign icon_alpha = object.settings.icon_color | color_extract: 'alpha' -%}
+{%- assign background_alpha = object.settings.background | color_extract: 'alpha' -%}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% capture section_css -%}
+
+  .icon-column__title {
+    color: {%- if text_alpha != 0 -%}{{ object.settings.text_color }}{%- endif -%};
+  }
+  
+  .icon {
+    color: {%- if icon_alpha != 0 -%}{{ object.settings.icon_color }}{%- endif -%};
+    fill: {%- if icon_alpha != 0 -%}{{ object.settings.icon_color }}{%- endif -%};
+  }
+
+  .icon-column__text {
+    color: {%- if text_alpha != 0 -%}{{ object.settings.text_color }}{%- endif -%};
+  }
+
+{%- endcapture -%}
+
+{% style %}
+  .block--{{ object.id }} {
+    padding-top: {{ object.settings.padding_top }}px;
+    padding-bottom: {{ object.settings.padding_bottom }}px;
+    background-color: {%- if background_alpha != 0 -%}{{ object.settings.background }}{%- endif -%};
+    width: 100%;
+  }
+  {% render 'css-loop',
+          css: section_css,
+          id: object.id
+  %}
+  {% render 'css-loop',
+          css: object.settings.custom_css,
+          id: object.id
+  %}
+{% endstyle %}
+
+<section class="block__icon-with-text-column
+                block--{{object.id}}
+                {{ object.settings.css_class }}
+                {% if object.settings.show_gutter == false %}
+                  has-no-side-gutter
+                  has-background
+                {% else %}
+                  has-gutter-enabled
+                {% endif %}">
+  <div class="icon-with-text-column__slider container is-justify-center">
+
+    {% for i in (1..3) %}
+      {%- assign variable_prefix = 'icon_' | append: i -%}
+      {%- assign show_variable_name = 'show_' | append: variable_prefix -%}
+      {% if object.settings[show_variable_name] == true %}
+        {%- assign total_columns = total_columns | plus: 1 -%}
+      {% endif %}
+    {% endfor %}
+
+    {% for i in (1..3) %}
+      {%- assign variable_prefix = 'icon_' | append: i -%}
+      {%- assign show_variable_name = 'show_' | append: variable_prefix -%}
+
+      {% if object.settings[show_variable_name] == true %}
+
+        {% comment %} Content settings {% endcomment %}
+        {%- assign column_count = column_count | plus: 1 -%}
+        {%- assign title_variable_name = variable_prefix | append: '_title' -%}
+        {%- assign text_variable_name = variable_prefix | append: '_text' -%}
+        {%- assign icon_name_variable_name = variable_prefix | append: '_label' -%}
+        {%- assign button_label_variable_name = variable_prefix | append: '_button_label' -%}
+        {%- assign link_variable_name = variable_prefix | append: '_link' -%}
+
+        {%- assign title = object.settings[title_variable_name] | replace: '{{free_shipping_cutoff}}', settings.free_shipping_cutoff -%}
+        {%- assign text = object.settings[text_variable_name] | replace: '{{free_shipping_cutoff}}', settings.free_shipping_cutoff -%}
+        {%- assign icon_name = object.settings[icon_name_variable_name] -%}
+        {%- assign button_label = object.settings[button_label_variable_name] -%}
+        {%- assign button_link = object.settings[link_variable_name] -%}
+        {% comment %} End content settings {% endcomment %}
+
+        <div
+          id="shopify-section-{{ block.id }}" 
+          class="icon-with-text-column__column
+            {% if object.settings.show_gutter %}
+              has-gutter
+            {% endif %}
+            column
+            has-padding
+            {% render 'column-width', value: total_columns %}
+            text-align-{{ object.settings.align_text }}"
+          data-icon-index={{ column_count }}
+          {{ block.shopify_attributes }}
+        >
+
+          {%- capture icon_size -%}
+            is-{{ object.settings.icon_size }}
+          {%- endcapture -%}
+
+          {%- assign icon = icon_name | downcase -%}
+
+          <div class="{{ icon_size }}">
+            {% render 'icon',
+                    name: icon
+            %}
+          </div>
+
+          {% if title != blank or text != blank %}
+            <div class="icon-column__text ">
+              <h3 class="icon-column__title title">
+                {{ title }}
+              </h3>
+              
+              {{ text }}
+            </div>
+          {% endif %}
+
+          {% if button_label != blank %}
+            <div class="icon-column__action has-padding-top">
+              {% render 'button',
+                      label: button_label,
+                      href: button_link,
+                      style: 'button--secondary',
+                      type: "link"
+              %}
+            </div>
+          {% endif %}
+
+        </div>
+      
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>

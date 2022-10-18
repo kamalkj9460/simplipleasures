@@ -1,0 +1,96 @@
+{% assign category_metas = collection.metafields.portal_sections.category_metas %}
+{% assign blocks = category_metas.blocks %}
+{% assign section_title = category_metas.section_title %}
+
+{% assign id = section.id %}
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+{% assign title_spacing_top = section.settings.title_spacing_top %}
+{% assign title_spacing_bottom = section.settings.title_spacing_bottom %}
+
+{% style %}
+  #shopify-section-{{ id }} .section {
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+  }
+  #shopify-section-{{ id }} .section_title {
+    padding-top: {{ title_spacing_top }}px;
+    padding-bottom: {{ title_spacing_bottom }}px;
+  }
+{% endstyle %}
+
+<div class="shopify-section section__wrapper">
+  <div class="section">
+    {% if section_title != blank %}
+      <h2 class="section_title text-align-center fw-bold">{{ section_title }}</h2>
+    {% endif %}
+    <div class="container has-no-side-gutter is-justify-center">
+      {% for block in blocks %}
+        {% liquid
+          assign block_image = images[block.image_name]
+          assign block_link = block.link
+          assign block_title = block.title
+        %}
+
+        <div class="portal-meta one-sixth medium-down--one-fourth small-down--one-fourth">
+          <div>
+            <a href="{{ block_link }}">
+              <div class="item_image">
+                {% render 'image-element',
+                  image: block_image,
+                  alt: block_image.alt
+                %}
+              </div>
+
+              <div class="item_text text-align-center">
+                <div class="text">
+                  {{ block_title }}
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Portal Metas",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Title Spacing"
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_top",
+      "label": "Spacing top",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_bottom",
+      "label": "Spacing bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "number",
+      "id": "padding_top",
+      "label": "Section Top spacing",
+      "default": 40
+    },
+    {
+      "type": "number",
+      "id": "padding_bottom",
+      "label": "Section Bottom spacing",
+      "default": 40
+    }
+  ]
+}
+{% endschema %}

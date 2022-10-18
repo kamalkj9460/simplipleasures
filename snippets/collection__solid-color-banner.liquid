@@ -1,0 +1,53 @@
+{% assign bannerBackground = section.settings.solid_color_banner_color %}
+
+<div class="solid-color-banner">
+  <h1>{{ collection.title }}</h1>
+  {{ collection.description }}
+  <div class="curve"></div>
+</div>
+
+<style media="screen">
+  .solid-color-banner {
+    text-align: center;
+    padding: 170px 20px 0px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: -150px 0 40px;
+    z-index: 1;
+    background: {{ bannerBackground }};
+  }
+
+  .curve {
+    position: absolute;
+    height: 225px;
+    width: 130%;
+    bottom: 50px;
+    text-align: center;
+    left: -90px;
+  }
+
+  .curve::after {
+    content: '';
+    display: block;
+    position: absolute;
+    border-radius: 60% 50%;
+    width: 135%;
+    height: 100%;
+    transform: translate(-6%, 40%);
+    z-index: -1;
+    background-color: {{ bannerBackground }};
+  }
+
+  .solid-color-banner h1 {
+    font-size: 25px;
+    font-weight: 600;
+  }
+
+  @media (min-width: 767px) {
+    .curve::after {
+      width: 105%;
+    }
+  }
+</style>

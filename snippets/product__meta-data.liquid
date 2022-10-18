@@ -1,0 +1,38 @@
+<!-- snippets/product__meta-data -->
+
+{% if type == 'key-benefits' %}
+    <ul class="o-list o-list--circle">
+      {% for field in benefits %}
+        <li> {{ field | last }}</li>
+      {% endfor %}
+    </ul>
+
+{% elsif type == 'features' %}
+    <ul class="o-list o-list--circle">
+      {% for field in features %}
+        <li> {{ field | last }}</li>
+      {% endfor %}
+    </ul>
+
+{% elsif type == 'real-specs' %}
+  {% unless measurements == empty %}
+    {% include 'product__meta-item', title: 'Measurements', fields: measurements %}
+  {% endunless %}
+  {% unless feel == empty %}
+    {% include 'product__meta-item', title: 'Feeling', fields: feel %}
+  {% endunless %}
+  {% unless power == empty %}
+    {% include 'product__meta-item', title: 'Power &amp; Speeds', fields: power %}
+  {% endunless %}
+  {% unless essentials == empty %}
+    {% include 'product__meta-item', title: 'Extra Info', fields: essentials %}
+  {% endunless %}
+  {% unless what_it_does == empty %}
+    {% include 'product__meta-item', title: 'What It Does', fields: what_it_does %}
+  {% endunless %}
+
+{% elsif type == 'ingredients' %}
+  <span class="h4 u-color--pink">Ingredients:</span>
+  <p> {{ ingredients }} </p>
+{% endif %}
+

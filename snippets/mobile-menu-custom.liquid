@@ -1,0 +1,224 @@
+{%- assign locale_selector = false -%}
+{%- assign currency_selector = false -%}
+
+{%- if settings.show_currency_selector == true and shop.enabled_currencies.size > 1 -%}
+  {%- assign currency_selector = true -%}
+{%- endif -%}
+
+{%- if settings.show_locale_selector == true and shop.published_locales.size > 1 -%}
+  {%- assign locale_selector = true -%}
+{%- endif -%}
+
+<div class="mobile-menu" style="height:100vh !important;min-height: 100vh!important;top:-40%">
+  <div class="mobile-header-holder" style="position:sticky;top:0;z-index:200;background-color:#FFFFFF;border-bottom:1px solid #bbb;padding: 15px 0">
+       <div class="mobile-icons">
+         <div class="logo-holder">
+           	{%- if settings.favicon != nil -%}
+           		<img style="width:40px;" src="{{  settings.favicon  | img_url: '180x180' }}">
+            {%- else -%}
+           		<img style="width:40px;" src="{{ 'favicon.png' | asset_url }}">
+            {%- endif -%}
+
+         </div>
+         <div style="margin-left: auto;display: flex">
+      {% if shop.customer_accounts_enabled %}
+        {% comment %} Accounts {% endcomment %}
+        {% if customer %}
+          {% comment %} Logout {% endcomment %}
+         <div>
+          <a class="header__link action-area__link" href="{{ routes.account_url }}" >
+            {% if settings.icon_style != 'text' %}
+              {% render 'icon', name: 'avatar' %}
+            {% endif %}
+            <span class="icon-caption">
+              {{ 'layout.customer.my_account' | t | escape }}
+            </span>
+            <p style="font-size:8px"> My account</p>
+          </a>
+            </div>
+        {% else %}
+          {% comment %} Login {% endcomment %}
+         <div>
+          <a class="header__link action-area__link" href="{{ routes.account_login_url }}" >
+            {% if settings.icon_style != 'text' %}
+              {% render 'icon', name: 'avatar' %}
+            {% endif %}
+            <p style="font-size:8px"> My account</p>
+            <span class="icon-caption">
+              {{ 'layout.customer.log_in' | t | escape }}
+            </span>
+          </a>
+            </div>
+        {% endif %}
+
+      {% endif %}
+
+      {% comment %} Cart icon {% endcomment %}
+         <div style="text-align:center">
+      <div  style="background-color:white !important;" class="action-area__link {% if cart.item_count != 0 %}has-cart-count{% endif %}" data-ajax-cart-trigger>
+        <a class="header__link" {% if settings.cart_action != 'mini_cart' or settings.cart_action != 'drawer' %}href="{{ routes.cart_url }}"{% endif %} >
+          <span class="header-cart__icon" style="background-color:white !important;">
+            {% render 'icon',
+              name: settings.cart_icon,
+              icon_class: 'header__icon'
+            %}
+            <span class="header-cart__count header-cart__count--badge badge" data-bind="itemCount">
+              {{ cart.item_count }}
+            </span>
+          </span>
+          <span class="header-cart__caption icon-caption">
+            {{ 'layout.general.cart' | t | escape }}
+            {%- if object.settings.icon_style == 'text' -%}
+              <span class="header-cart__count cart__count--text" data-bind="itemCount">{{ cart.item_count }}</span>
+            {%- endif -%}
+          </span>
+        </a>
+        {% if settings.cart_action == 'mini_cart' %}
+          {% render 'ajax-cart', context: 'mobile-header' %}
+        {% endif %}
+        <p style="font-size:8px"> Cart</p>
+         </div>
+      </div>
+         </div>
+    </div>
+
+    </div>
+  <div class="mobile-menu__content" style="padding-bottom:0px !important;">
+    <a href="{{ section.settings.banner_mobile_navigation_link }}">
+     <div style="background-color:{{ section.settings.banner_mobile_navigation_background_color }};border-radius:{{ section.settings.banner_mobile_navigation_border_radius }}px;margin:10px;padding:20px;color:{{ section.settings.banner_mobile_navigation_text_color }}">
+      <div class="announcement-bar__content is-justify-center show-close-icon-false"> <span class="announcement-bar__icon is-small">
+        {% comment %}
+        {% render 'icon',
+                name: settings.announcement_icon,
+                icon_class: 'header__icon'
+              %}
+        {% endcomment %}
+        {% render 'custom-icon' %}
+      </span> <div class="announcement-bar__text text-align-center"> <p>{{ section.settings.banner_mobile_navigation_text }}</p> <p class="buttons"></p></div></div>
+      </div>
+    </a>
+
+    <ul class="mobile-menu__list has-margin-bottom" data-sub-menu-open>
+
+      {% if settings.header_layout == 'vertical' %}
+        {% for block in nav_blocks %}
+          {% if block.type == 'navigation' %}
+            {% assign main_menu = linklists.mobile-menu %}
+            {% render 'mobile-menu-loop', main_menu: main_menu %}
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        {% assign main_menu = linklists.mobile-menu %}
+        {% render 'mobile-menu-loop', main_menu: main_menu %}
+      {% endif %}
+
+      {% if shop.customer_accounts_enabled and settings.header_layout != "custom" %}
+        {% comment %} Accounts {% endcomment %}
+        <li>
+          {% if customer %}
+            {% comment %} Logout {% endcomment %}
+            <a class="mobile-menu__item item-with-icon" href="{{ routes.account_url }}" >
+              {% if settings.icon_style != 'text' %}
+                {% render 'icon', name: 'avatar' %}
+              {% endif %}
+              <span class="icon-caption">
+                {{ 'layout.customer.my_account' | t | escape }}
+              </span>
+            </a>
+          {% else %}
+            {% comment %} Login {% endcomment %}
+            <a class="mobile-menu__item item-with-icon" href="{{ routes.account_login_url }}" >
+              {% if settings.icon_style != 'text' %}
+                {% render 'icon', name: 'avatar' %}
+              {% endif %}
+              <span class="icon-caption">
+                {{ 'layout.customer.log_in' | t | escape }}
+              </span>
+            </a>
+          {% endif %}
+        </li>
+      {% endif %}
+
+      <li>
+        {% render 'localization-switcher-mobile',
+          additional_classes: 'selectors-form--mobile',
+          currency_selector: currency_selector,
+          locale_selector: locale_selector,
+          show_currency: settings.show_currency_selector
+        %}
+      </li>
+    </ul>
+
+  </div>
+     <div style="background-color:#F1F1F1;padding: 30px;">
+      {% if shop.customer_accounts_enabled and settings.header_layout != "custom" %}
+       <a style="text-decoration: underline" href=" {{ routes.account_url }}">My Account</a><br>
+       {% else %}
+      <a style="text-decoration: underline" href="{{ routes.account_login_url }}">Login</a><br>
+      <a style="text-decoration: underline" href="{{ routes.account_login_url }}">Sign Up</a><br>
+       {% endif %}
+      <a style="text-decoration: underline" href="https://simplipleasures.com/policies/shipping-policy">Shipping</a><br>
+      <a style="text-decoration: underline" href="https://simplipleasures.com/policies/refund-policy">Returns & Refunds</a><br>
+      <a style="text-decoration: underline" href="https://simplipleasures.com/pages/contact-us">Contact Us</a><br>
+
+       <div style="margin-top:20px">
+           {% assign main_menu = linklists.mobile-menu %}
+         {% for link in main_menu.links %}
+          {% if link.title == 'facebook' %}
+         <a href="{{link.url}}"><img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-facebook.svg?v=1651000563" style="width:25px;heigth:25px"></a>
+          {% endif %}
+          {% if link.title == 'instagram' %}
+          <a href="{{link.url}}"> <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-instagram.svg?v=1651000563" style="width:25px;heigth:25px"></a>
+          {% endif %}
+          {% if link.title == 'tiktok' %}
+          <a href="{{link.url}}">  <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-tiktok.svg?v=1651000563" style="width:25px;heigth:25px"></a>
+          {% endif %}
+          {% if link.title == 'twitter' %}
+           <a href="{{link.url}}">  <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-twitter.svg?v=1651000563" style="width:25px;heigth:25px"></a>
+         {% endif %}
+          {% if link.title == 'linkedin' %}
+           <a href="{{link.url}}">  <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-linkedin.svg?v=1651000563" style="width:25px;heigth:25px"></a>
+         {% endif %}
+         {% if link.title == 'snapchat' %}
+           <a href="{{link.url}}">  <img src="https://cdn2.iconfinder.com/data/icons/social-media-2198/64/snapchat_social_media_network-1024.png" style="width:25px;heigth:25px"></a>
+         {% endif %}
+       {% if link.title == 'whatsapp' %}
+           <a href="{{link.url}}">  <img src="https://cdn2.iconfinder.com/data/icons/social-media-2198/64/whatsapp_social_media_network-1024.png" style="width:25px;heigth:25px"></a>
+         {% endif %}
+          {% if link.title == 'viber'  %}
+           <a href="{{link.url}}">  <img src="https://cdn1.iconfinder.com/data/icons/social-media-vol-4/24/_viber-1024.png" style="width:25px;heigth:25px"></a>
+         {% endif %}
+          {% if link.title == 'telegram'  %}
+           <a href="{{link.url}}">  <img src="https://cdn4.iconfinder.com/data/icons/social-media-and-logos-12/32/Logo_telegram_Airplane_Air_plane_paper_airplane-22-1024.png" style="width:25px;heigth:25px"></a>
+         {% endif %}
+          {% if link.title == 'youtube'  %}
+           <a href="{{link.url}}">  <img src="https://cdn0.iconfinder.com/data/icons/brands-outlined-3/196/youtube-social-network-brand-logo-1024.png" style="width:25px;heigth:25px"></a>
+         {% endif %}
+          {% if link.title == 'pinterest'  %}
+           <a href="{{link.url}}">  <img src="https://cdn2.iconfinder.com/data/icons/social-media-2198/64/pinterest_social_media_network-1024.png" style="width:25px;heigth:25px"></a>
+         {% endif %}
+          {% if link.title == 'skype'  %}
+           <a href="{{link.url}}">  <img src="https://cdn4.iconfinder.com/data/icons/social-media-and-logos-12/32/Logo_skype-1024.png" style="width:25px;heigth:25px"></a>
+         {% endif %}
+          {% if link.title == 'reddit'  %}
+           <a href="{{link.url}}">  <img src="https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/reddit-1024.png" style="width:25px;heigth:25px"></a>
+         {% endif %}
+         {% endfor %}
+       </div>
+    </div>
+</div>
+
+<div class="mobile-menu-overlay" data-show-mobile-menu="false" style="z-index:1;top:-35%;min-height:100vh">
+  <div class="mobile-header__close-menu" style="color:white;position:absolute;right:5%;z-index:1;top:1%">
+    {% render 'icon', name: 'x' %}
+  </div>
+</div>
+
+
+<style>
+  @media(max-width:375px) {
+    .mobile-icons .logo-holder img {
+      width:50px !important;
+    }
+  }
+</style>

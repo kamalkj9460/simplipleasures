@@ -1,0 +1,29 @@
+{% comment %}
+Required values
+label: <string>
+______________
+Optional values
+href: <string>
+type: <string>
+style: <string>
+class: <string>
+attribute: <string>
+{% endcomment %}
+
+{% if label != blank %}
+  {% if type == "link" %}
+    <a {% if href != blank %}href="{{ href }}"{% endif %} class="button {{ style }} {{ class }}" {{ attribute }}>
+      {% if icon != blank %}
+        {% render 'icon', name: icon %}
+      {% endif %}
+      {{ label }}
+    </a>
+  {% else %}
+    <button type="{{ type }}" class="button {{ style }} {{ class }}" {{ attribute }}>
+      {% if icon != blank %}
+        {% render 'icon', name: icon %}
+      {% endif %}
+      {{ label }}
+    </button>
+  {% endif %}
+{% endif %}

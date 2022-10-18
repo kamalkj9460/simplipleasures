@@ -1,0 +1,173 @@
+{% assign education = collection.metafields.portal_sections.education %}
+{% assign heading = education.heading %}
+{% assign heading_size = education.heading_size %}
+{% assign heading_size_mobile = education.heading_size_mobile %}
+{% assign blocks = education.blocks %}
+
+{% assign font_differece = heading_size | minus: heading_size_mobile %}
+
+{% assign id = section.id %}
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+{% assign title_spacing_top = section.settings.title_spacing_top %}
+{% assign title_spacing_bottom = section.settings.title_spacing_bottom %}
+{% assign icon_size = section.settings.icon_size %}
+{% assign icon_size_mobile = section.settings.icon_size_mobile %}
+{% assign icon_label = section.settings.icon_label %}
+{% assign icon_label_mobile = section.settings.icon_label_mobile %}
+{% assign icon_text = section.settings.icon_text %}
+{% assign icon_text_mobile = section.settings.icon_text_mobile %}
+
+{% style %}
+  #shopify-section-{{ section.id }} .education-heading {
+    font-size: clamp({{ heading_size_mobile }}px, calc({{ heading_size_mobile }}px + ({{ font_differece }} * (100vw - {{ 1024 | minus:  480 }}px) / 480)), {{ heading_size }}px);
+  }
+
+  #shopify-section-{{ id }} .section {
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+  }
+  #shopify-section-{{ id }} .section_title {
+    padding-top: {{ title_spacing_top }}px;
+    padding-bottom: {{ title_spacing_bottom }}px;
+  }
+  #shopify-section-{{ id }} .icon {
+    width: {{ icon_size }}px;
+    height: {{ icon_size }}px;
+  }
+  #shopify-section-{{ id }} .icon_label {
+    font-size: {{ icon_label }}px;
+  }
+  #shopify-section-{{ id }} .icon_text {
+    font-size: {{ icon_text }}px;
+  }
+  
+  @media only screen and (max-width: 480px) {
+    #shopify-section-{{ id }} .icon {
+      width: {{ icon_size_mobile }}px;
+      height: {{ icon_size_mobile }}px;
+    }
+    #shopify-section-{{ id }} .icon_label {
+      font-size: {{ icon_label_mobile }}px;
+    }
+    #shopify-section-{{ id }} .icon_text {
+      font-size: {{ icon_text_mobile }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="section is-width-standard">
+  <div class="container is-align-cente has-no-side-gutter">
+    <div class="education-heading two-fifths small-down--one-whole">
+      {{ heading }}
+    </div>
+
+    <div class="education-box-container three-fifths small-down--one-whole">
+      <div class="education-box-wrapper is-flex is-justify-space-between has-no-side-gutter">
+        {% for block in blocks %}
+          {% assign block_icon = block.icon %}
+          {% assign block_title = block.title %}
+          {% assign block_subtitle = block.subtitle %}
+          <div class="education-box one-third small-down--three-sevenths is-flex is-justify-center">
+            <div class="is-flex is-flex-column is-justify-start">
+              <div class="education-icon">
+                {% render 'icon',
+                  name: block_icon
+                %}
+              </div>
+              <div class="education-text">
+                <div class="icon_label fw-bold">
+                  {{ block_title }}
+                </div>
+                <div class="icon_text">
+                  {{ block_subtitle }}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Education",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Title Spacing"
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_top",
+      "label": "Spacing top",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "title_spacing_bottom",
+      "label": "Spacing bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Icons and Text"
+    },
+    {
+      "type": "number",
+      "id": "icon_size",
+      "label": "Icon Size",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "icon_size_mobile",
+      "label": "Icon Size Mobile",
+      "default": 40
+    },
+    {
+      "type": "number",
+      "id": "icon_label",
+      "label": "Icon Size Mobile",
+      "default": 16
+    },
+    {
+      "type": "number",
+      "id": "icon_label_mobile",
+      "label": "Icon Size Mobile",
+      "default": 16
+    },
+    {
+      "type": "number",
+      "id": "icon_text",
+      "label": "Icon Size Mobile",
+      "default": 14
+    },
+    {
+      "type": "number",
+      "id": "icon_text_mobile",
+      "label": "Icon Size Mobile",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "number",
+      "id": "padding_top",
+      "label": "Section Top spacing",
+      "default": 20
+    },
+    {
+      "type": "number",
+      "id": "padding_bottom",
+      "label": "Section Bottom spacing",
+      "default": 20
+    }
+  ]
+}
+{% endschema %}

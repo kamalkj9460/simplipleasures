@@ -1,0 +1,41 @@
+<section
+  class="block__icon-with-text-column has-no-side-gutter has-margin-top">
+  <div class="icon-with-text-column__slider container is-justify-center">
+    <div
+      class="icon-with-text-column__column column one-third text-align-center"
+      data-icon-index="1"
+    >
+      <div>
+        {% render 'icon', name: 'truck' %}
+      </div>
+      <div class="icon-column__text">
+        <h3 class="icon-column__title title">Free Shipping</h3>
+        <p>On orders over ${{ settings.free_shipping_cutoff }}<br />Express shipping available</p>
+      </div>
+    </div>
+    <div
+      class="icon-with-text-column__column column one-third text-align-center"
+      data-icon-index="2"
+    >
+      <div>
+        {% render 'icon', name: 'box' %}
+      </div>
+      <div class="icon-column__text">
+        <h3 class="icon-column__title title">Discreet Packaging</h3>
+        <p>All billing information and packaging is 100% discreet</p>
+      </div>
+    </div>
+    <div
+      class="icon-with-text-column__column column one-third text-align-center"
+      data-icon-index="3"
+    >
+      <div>
+        {% render 'icon', name: 'promise' %}
+      </div>
+      <div class="icon-column__text">
+        <h3 class="icon-column__title title">Pleasure Promise</h3>
+        <p>With our 60 day return policy you can shop worry free</p>
+      </div>
+    </div>
+  </div>
+</section>

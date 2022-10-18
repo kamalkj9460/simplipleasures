@@ -1,0 +1,56 @@
+{%- comment -%} snippets/sezzle-config-vars.liquid {%- endcomment -%}
+{% assign sezzle_merchantID = '030dc7b8-6d74-4400-a635-27ff7c129613' %}
+
+
+{%- comment -%} DEFAULT VARS {%- endcomment -%}
+
+{% assign sezzle_targetXPath = "['.current_price','.sale-price', '.sezzle']" %}
+{% assign sezzle_renderToPath = '[".."]' %}
+{% assign sezzle_widgetType = 'product-page' %}
+{% assign sezzle_marginTop = -5 %}
+{% assign sezzle_alignment = 'left' %}
+
+
+{%- comment -%} CONDITIONS AND OVERRRIDES {%- endcomment -%}
+
+{% if page_title contains 'Cart' %}
+    {% assign sezzle_targetXPath = "'.sezzle'" %}
+    {% assign sezzle_widgetType = 'cart' %}
+    {% assign sezzle_alignment = 'right' %}
+    
+{% elsif template.name == 'product' %}
+    {% assign sezzle_renderToPath = '["../../"]' %}
+
+
+{% elsif page_title contains 'Checkout' %}
+    {%- comment -%}
+    For some reason Sezzle on Checkout do not allow us to use render
+    to path as array, or other quotation order reather then '""'
+    {%- endcomment -%}
+    {% assign sezzle_targetXPath = "'.payment-due__price'" %}
+    {% assign sezzle_renderToPath = '"../../../../../"' %}
+    {% assign sezzle_alignment = 'right' %}
+
+
+{% endif %}
+
+<script>
+  document.sezzleConfig =
+  {
+    targetXPath: {{sezzle_targetXPath}},
+    renderToPath: {{sezzle_renderToPath}},
+    merchantID: '{{sezzle_merchantID}}',
+    minPrice: 5000,
+    maxPrice: 100000,
+    marginTop: {{sezzle_marginTop}},
+    theme: 'light',
+    widthType: 'thin',
+    widgetType: '{{sezzle_widgetType}}',
+    alignment: '{{sezzle_alignment}}',
+    forcedShow: false,
+    hidePrice: false,
+  }
+</script>
+
+<script src="https://widget.sezzle.com/v1/javascript/price-widget?uuid={{sezzle_merchantID}}" defer></script>
+<!-- End Sezzle Scripts -->

@@ -1,0 +1,488 @@
+{% if show_payment_button == true %}
+  {% assign show_payment_button = true %}
+{% else %}
+  {% assign show_payment_button = false %}
+{% endif %}
+
+{% assign variant = product.selected_or_first_available_variant %}
+{% assign sca_product = product %}{% assign sca_product_id_text = "," | append : sca_product.id | append : "," %}{% assign sca_price = sca_product.price %}{% assign sca_price_min = sca_product.price_min %}{% assign sca_price_max = sca_product.price_max %}{% assign sca_compare_at_price = sca_product.compare_at_price %}{% assign sca_compare_at_price_min = sca_product.compare_at_price_min %}{% assign sca_compare_at_price_max = sca_product.compare_at_price_max %}{% assign sca_product_available = sca_product.available %}{% assign sca_product_variantCount = sca_product.variants.size %}{% assign sca_compare_at_price_varies = sca_product.compare_at_price_varies %}{% assign sca_price_varies = sca_product.price_varies %}{% assign sca_has_only_default_variant = false %}{% capture sca_product_variants_json %}{{sca_product.variants | json }}{% endcapture %} {% capture sca_product_json %}{ {% if sca_all_gift_products_ids == null or sca_all_gift_products_ids contains sca_product_id_text %}{% assign sca_product_available = false %}{% assign sca_product_variantCount = 0 %}{% assign sca_has_only_default_variant = true %}{% assign sca_is_first_variant = true %}{% capture sca_variants_json %} [{% for variant in sca_product.variants %}{% unless variant.metafields.secomapp.freegifts %}{% unless variant.title contains '(Freegifts)' %}{% unless variant.title contains '% Off' %}{% unless variant.metafields.shappify_qb.qb_hide == "1" %}{% unless variant.metafields.shappify_bundle.is_bundle == "true" %}{% unless variant.metafields.brodev_scn.hide == "true" %}{% unless variant.metafields.wholesaler2.wholesale %}{% unless variant.metafields.Wholesaler.level %}{% unless variant.title contains '(Wholesale' %}{% if sca_is_first_variant%} {{ variant | json }}{% assign sca_price = variant.price %} {% assign sca_price_min = variant.price %} {% assign sca_price_max = variant.price %} {% assign sca_compare_at_price = variant.compare_at_price %} {% assign sca_compare_at_price_min = variant.compare_at_price %} {% assign sca_compare_at_price_max = variant.compare_at_price %} {% assign sca_product_available = variant.available %} {% assign sca_product_variantCount = 1 %} {% assign sca_is_first_variant = false%}{% else %},{{variant | json }} {% if sca_price_min >= variant.price %} {% assign sca_price_min = variant.price %} {% assign sca_price = variant.price %}{% endif %} {% if sca_price_max <= variant.price %} {% assign sca_price_max = variant.price %} {% endif %} {% if variant.compare_at_price %} {% if sca_compare_at_price_min==null or sca_compare_at_price_min >= variant.compare_at_price %} {% assign sca_compare_at_price_min = variant.compare_at_price %} {% assign sca_compare_at_price = variant.compare_at_price %} {% endif %} {% if sca_compare_at_price_max==null or sca_compare_at_price_max < variant.compare_at_price %} {% assign sca_compare_at_price_max = variant.compare_at_price %} {% endif %} {% endif %} {% if variant.available == true %} {% assign sca_product_available = true %} {% endif %} {% assign sca_product_variantCount = sca_product_variantCount | plus: 1 %}{% endif %}{% endunless %}{% endunless %}{% endunless %}{% endunless %}{% endunless %}{% endunless %}{% endunless %}{% endunless %}{% endunless %}{%endfor%} ]{% endcapture %}{% if sca_price_min < sca_price_max %}{% assign sca_price_varies = true %}{% else %}{% assign sca_price_varies = false %}{% endif %}{% if sca_compare_at_price_min < sca_compare_at_price_max %}{% assign sca_compare_at_price_varies = true %}{% else %}{% assign sca_compare_at_price_varies = false %}{% endif %}{% if sca_product_variantCount > 1 %}{% assign sca_has_only_default_variant = false %}{% endif %}{% if sca_product_variantCount == sca_product.variants.size %} "variants":{{ sca_product.variants }},{% else %}{%assign sca_product_variants_json = sca_variants_json %} "variants":{{ sca_variants_json }},{% endif %}{% else %} "variants":{{ sca_product_variants_json }},{% endif %} "id": {{sca_product.id}}, "title": {{sca_product.title | json}}, "handle": {{sca_product.handle | json}}, "description": {{sca_product.description | json}}, "published_at": "{{sca_product.published_at | date: "%Y-%m-%dT%H-%M-%S%:z" }}", "created_at": "{{sca_product.created_at | date: "%Y-%m-%dT%H-%M-%S%:z" }}", "vendor": {{sca_product.vendor | json}}, "type": {{sca_product.type | json}}, "tags": {{sca_product.tags | json}}, "price": {{sca_price}}, "price_min": {{sca_price_min}}, "price_max": {{sca_price_max}}, "available": {{sca_product.available}}, "price_varies": {{sca_price_varies}}, "compare_at_price": {{sca_compare_at_price}}, "compare_at_price_min": {{sca_compare_at_price_min}}, "compare_at_price_max": {{sca_compare_at_price_max}}, "compare_at_price_varies": {{sca_compare_at_price_varies}}, "images": {{sca_product.images | json}}, "featured_image": {{sca_product.featured_image | json }}, "options": {{sca_product.options | json}}, "media": {{sca_product.media | json }}, "content": {{sca_product.content | json }}} {% endcapture sca_product_json %}
+{% assign refresh_stimulation_scrotum = false %}
+{% assign refresh_stimulation_nipples = false %}
+{% assign refresh_stimulation_penis = false %}
+{% assign refresh_stimulation_g_spot = false %}
+{% assign refresh_stimulation_vagina = false %}
+{% assign refresh_stimulation_butt = false %}
+{% assign refresh_stimulation_clitoris = false %}
+{% assign refresh_stimulation_prostate = false %}
+{% assign refresh_stimulation_perineum = false %}
+{% assign refresh_stimulation_body = false %}
+
+      {% for tag in product.tags %}
+          {% if tag contains 'refresh_stimulation_scrotum' %}
+              {% assign refresh_stimulation_scrotum = true %}
+          {% endif %}
+          {% if tag contains 'refresh_stimulation_nipples' %}
+              {% assign refresh_stimulation_nipples = true %}
+          {% endif %}
+          {% if tag contains 'refresh_stimulation_penis' %}
+              {% assign refresh_stimulation_penis = true %}
+          {% endif %}
+          {% if tag contains 'refresh_stimulation_g-spot' %}
+              {% assign refresh_stimulation_g_spot = true %}
+          {% endif %}
+          {% if tag contains 'refresh_stimulation_vagina' %}
+              {% assign refresh_stimulation_vagina = true %}
+          {% endif %}
+          {% if tag contains 'refresh_stimulation_butt' %}
+              {% assign refresh_stimulation_butt = true %}
+          {% endif %}
+          {% if tag contains 'refresh_stimulation_clitoris' %}
+              {% assign refresh_stimulation_clitoris = true %}
+          {% endif %}
+          {% if tag contains 'refresh_stimulation_prostate' %}
+              {% assign refresh_stimulation_prostate = true %}
+          {% endif %}
+          {% if tag contains 'refresh_stimulation_perineum' %}
+              {% assign refresh_stimulation_perineum = true %}
+          {% endif %}
+          {% if tag contains 'refresh_stimulation_body' %}
+              {% assign refresh_stimulation_body = true %}
+          {% endif %}
+      {% endfor %}
+<div class="clearfix product_form init smart-payment-button--{{ show_payment_button }} {% if sca_product_variantCount > 1 or product.options.size > 1 %}product_form_options{% endif %} product_form--{{ settings.product_form_style }}"
+      id="product-form-{{ product.id }}"
+      data-product-form
+      data-money-format="{{ shop.money_format | strip_html }}"
+      data-shop-currency="{{ shop.currency }}"
+      data-select-id="product-select-{{ product.id }}{{ product-form }}{{ object.id }}{{ block.id }}"
+      data-enable-state="{% if template contains 'product' %}true{% else %}false{% endif %}"
+      data-product="{{ product | json | escape }}"
+      {% if settings.limit_quantity or settings.display_inventory_left %}
+        data-variant-inventory='[{%- for v in product.variants -%}
+{"id":{{v.id}},"inventory_quantity":{{v.inventory_quantity}},"inventory_management":"{{v.inventory_management}}","inventory_policy":"{{v.inventory_policy}}"}
+{% if forloop.last == false %},{% endif %}{%- endfor -%}]'
+      {% endif %}
+      data-product-id="{{ product.id }}"
+      >
+  <div class="is-hidden-mobile-only">
+      <div class="product-type is-flex">
+        {% if refresh_stimulation_scrotum %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-scrotum.svg?v=1631133369" alt="scrotum" width="40px" height="auto" />
+                <span>Scrotum</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_nipples %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-nipples.svg?v=1631133369" alt="nipples" width="40px" height="auto" />
+                <span>Nipples</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_penis %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-penis.svg?v=1631133369" alt="penis" width="40px" height="auto" />
+                <span>Penis</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_g_spot %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-gspot.svg?v=1631133369" alt="gspot" width="40px" height="auto" />
+                <span>G-Spot</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_vagina %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-vagina.svg?v=1631133369" alt="vagina" width="40px" height="auto" />
+                <span>Vagina</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_butt %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-butt.svg?v=1631133369" alt="butt" width="40px" height="auto" />
+                <span>Butt</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_clitoris %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-clitoris.svg?v=1631133370" alt="clitorial" width="40px" height="auto" />
+                <span>Clitoral</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_prostate %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="" alt="" width="40px" height="auto" />
+                <span></span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_perineum %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-perineum.svg?v=1631133369" alt="perineum" width="40px" height="auto" />
+                <span>Perineum</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_body %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-body.svg?v=1631133369" alt="body" width="40px" height="auto" />
+                <span>Body</span>
+            </span>
+        {% endif %}
+      </div>
+    {% comment %} Description - top {% endcomment %}
+          {% if section.settings.product_description_position == "top" %}
+            {% if product.description != blank %}
+              <div class="description content">
+                {{ product.description | split: '<!-- split -->' | first | truncate: 320 }}
+                <br/>
+                <a href="#description-tabs">Learn More</a>
+              </div>
+            {% endif %}
+          {% endif %}
+  </div>
+  {% form 'product', product %}
+
+
+    <div class="product-price-container-mobile is-flex is-justify-content-space-between">
+      <div>
+        {% render 'product__price',
+            variant: variant,
+            section: section
+        %}
+      </div>
+      <div>
+      	<svg class="js-clipboard" xmlns="http://www.w3.org/2000/svg" width="15.213" height="16.696" viewBox="0 0 15.213 16.696">
+            <path id="Path_128" data-name="Path 128" d="M1203.808,644.129a1.392,1.392,0,1,0-.509-1.9,1.392,1.392,0,0,0,.509,1.9ZM1205.235,633a1.392,1.392,0,1,0-1.9-.509A1.392,1.392,0,0,0,1205.235,633Zm-8.36,6.32a2.784,2.784,0,1,1,.007-3.909l4.974-2.871a2.785,2.785,0,1,1,.7,1.205l-4.974,2.872a2.78,2.78,0,0,1,0,1.5l4.943,2.854a2.784,2.784,0,1,1-.7,1.206Zm-1.284-.752a1.392,1.392,0,1,0-1.9-.509,1.392,1.392,0,0,0,1.9.509Z" transform="translate(-1192.11 -629.012)"/>
+          </svg>
+      </div>
+    </div>
+
+    {% if product.variants.size > 1 %}
+      {% if product.options.size > 1 %}
+        <div class="select-container">
+            {% if context == 'quickshop' %}
+              <div class="select">
+            {% endif %}
+            <select id="product-select-{{ product.id }}{{ product-form }}{{ object.id }}{{ block.id }}" name="id" class="multi_select" data-variant-selector>
+              {% for v in product.variants %}
+                <option {% if v == variant %}selected="selected"{% endif %} value="{{ v.id }}" data-image-id="{{ v.featured_media.id }}" data-sku="{{ v.sku }}">{{ v.title }}</option>
+              {% endfor %}
+            </select>
+            {% if context == 'quickshop' %}
+              </div>
+            {% endif %}
+        </div>
+      {% elsif product.options.size == 1 and product.variants.size > 1 or product.options.size == 1 and product.options[0] != "Title" %}
+        <div class="select-container">
+          <label class="label">{{ product.options[0] }}</label>
+          <div>
+            {% if context == 'quickshop' %}
+              <div class="select">
+            {% endif %}
+            <select id="product-select-{{ product.id }}{{ product-form }}{{ object.id }}{{ block.id }}" name="id" data-variant-selector>
+              {% for v in product.variants %}
+                <option {% if v == variant %}selected="selected"{% endif %} value="{{ v.id }}" data-image-id="{{ v.featured_media.id }}" data-sku="{{ v.sku }}">{{ v.title }}</option>
+              {% endfor %}
+            </select>
+            {% if context == 'quickshop' %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    {% else %}
+      <input type="hidden" name="id" value="{{ variant.id }}" />
+    {% endif %}
+
+    {% if product.variants.size > 1 %}
+      {% if settings.product_form_style == "swatches" and product.variants.size > 1 or settings.product_form_style == "swatches" and product.options[0] != "Title" %}
+        <div class="swatch_options collection_swatches">
+          {% for option in product.options %}
+            {% render 'product__swatch',
+              product: product,
+              option: option
+            %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endif %}
+  
+  	<div class="is-hidden-desktop-only">
+      <div class="product-type is-flex">
+        {% if refresh_stimulation_scrotum %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-scrotum.svg?v=1631133369" alt="scrotum" width="40px" height="auto" />
+                <span>Scrotum</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_nipples %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-nipples.svg?v=1631133369" alt="nipples" width="40px" height="auto" />
+                <span>Nipples</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_penis %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-penis.svg?v=1631133369" alt="penis" width="40px" height="auto" />
+                <span>Penis</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_g_spot %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-gspot.svg?v=1631133369" alt="gspot" width="40px" height="auto" />
+                <span>G-Spot</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_vagina %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-vagina.svg?v=1631133369" alt="vagina" width="40px" height="auto" />
+                <span>Vagina</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_butt %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-butt.svg?v=1631133369" alt="butt" width="40px" height="auto" />
+                <span>Butt</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_clitoris %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-clitoris.svg?v=1631133370" alt="clitorial" width="40px" height="auto" />
+                <span>Clitoral</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_prostate %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="" alt="" width="40px" height="auto" />
+                <span></span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_perineum %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-perineum.svg?v=1631133369" alt="perineum" width="40px" height="auto" />
+                <span>Perineum</span>
+            </span>
+        {% endif %}
+        {% if refresh_stimulation_body %}
+            <span class="product-type-image is-flex is-align-center is-justify-center is-flex-column">
+                <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/sp-icon-body.svg?v=1631133369" alt="body" width="40px" height="auto" />
+                <span>Body</span>
+            </span>
+        {% endif %}
+      </div>
+      {% comment %} Description - top {% endcomment %}
+          {% if section.settings.product_description_position == "top" %}
+            {% if product.description != blank %}
+              <div class="description content has-margin-top">
+                {{ product.description | split: '<!-- split -->' | first | truncate: 320 }}
+                <br/>
+                <a href="#description-tabs">Learn More</a>
+              </div>
+            {% endif %}
+          {% endif %}
+  	</div>
+  
+  	<div class="shipping-details is-flex is-align-center is-hidden-desktop-only">
+      <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/fast-shipping.svg?v=1630537141" alt="fast-delivery" width="30px" height="auto" /><p>Arrives between <span id="shipping-approx-desktop"class="shipping-approx"></span><br><span>Want it sooner? Select express shipping at checkout.</span></p>
+    </div>
+  	<div class="join-mailing-list is-flex is-align-center is-hidden-desktop-only">
+      {% render 'icon', name: 'arrowdown' %} <span id="signup_text" class="signup_text"><span id="myBtn" class="myBtn">Sign up</span> and get<strong>&nbsp;15% OFF&nbsp;</strong>your first purchase</span>
+  	</div>
+
+    {% if product.available %}
+      {% if settings.display_inventory_left %}
+        <p class="items_left">
+          {% if variant.inventory_management != blank and variant.inventory_quantity > 0 %}
+            {% capture items_left_text %}
+              {% if variant.inventory_quantity == 1 %}
+                {{ 'products.product.items_left_count.one' | t }}
+              {% else %}
+                {{ 'products.product.items_left_count.other' | t }}
+              {% endif %}
+            {% endcapture %}
+            {% if variant.inventory_quantity <= settings.inventory_threshold %}
+              {{ variant.inventory_quantity }} {{ items_left_text }}
+            {% endif %}
+          {% endif %}
+        </p>
+      {% endif %}
+
+      <div class="purchase-details {% if settings.display_product_quantity %}has-quantity-box{% endif %}">
+        {% if settings.display_product_quantity %}
+          <div class="purchase-details__quantity product-quantity-box quantity-box--{{ settings.qty_box_style }}">
+            {% render 'quantity-box' %}
+          </div>
+        {% endif %}
+        {% comment %} Error message for add to cart action {% endcomment %}
+        <div class="product_form-cart-warning"></div>
+        <div class="purchase-details__buttons purchase-details__spb--{{ show_payment_button }}">
+          {% if settings.cart_action == 'reload_page' %}
+            <input type="hidden" name="return_to" value="back" />
+          {% elsif settings.cart_action == 'redirect_cart' %}
+            <input type="hidden" name="return_to" value="{{ routes.cart_url }}" />
+          {% endif %}
+
+          {% capture add_to_cart_label %}{% if collection_handles contains 'pre-order' %}{{ 'collections.general.pre_order' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif %}{% endcapture %}
+          <button type="{% if settings.cart_action == 'mini_cart' or settings.cart_action == 'drawer' %}button{% else %}submit{% endif %}" name="add" class="button {% if settings.cart_action == 'mini_cart' or settings.cart_action == 'drawer' %} ajax-submit {% endif %}action_button button--add-to-cart {% if show_payment_button %} action_button--secondary {% endif %}" data-label={{ add_to_cart_label | json }} data-add-to-cart-trigger>
+            {% if  settings.button_cart_icon != blank and settings.button_cart_icon_position == 'left' %}
+              {% render 'icon',
+                      name: settings.button_cart_icon,
+                      icon_class: 'icon--cart'
+              %}
+            {% endif %}
+            <span class="text">{{ add_to_cart_label }}</span>
+            {% if  settings.button_cart_icon != blank and settings.button_cart_icon_position == 'right' %}
+              {% render 'icon',
+                      name: settings.button_cart_icon,
+                      icon_class: 'icon--cart icon--right'
+              %}
+            {% endif %}
+            <svg x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" class="checkmark">
+              <path fill="none" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" d="M9,17l3.9,3.9c0.1,0.1,0.2,0.1,0.3,0L23,11"/>
+            </svg>
+          </button>
+          {% if show_payment_button %}
+            {{ form | payment_button }}
+          {% endif %}
+        </div>
+      </div>
+    	<div class="shipping-details is-flex is-align-center is-hidden-mobile-only">
+        <img src="https://cdn.shopify.com/s/files/1/0313/2781/3768/files/fast-shipping.svg?v=1630537141" alt="fast-delivery" width="30px" height="auto" /><p>Arrives between <span id="shipping-approx-mobile" class="shipping-approx"></span><br><span>Want it sooner? Select express shipping at checkout.</span></p>
+      </div>
+      <div class="join-mailing-list is-flex is-align-center is-hidden-mobile-only">
+        {% render 'icon', name: 'arrowdown' %} <span id="signup_text" class="signup_text"><span id="myBtn" class="myBtn">Sign up</span> and get<strong>&nbsp;15% OFF&nbsp;</strong>your first purchase</span>
+      </div>
+    {% endif %}
+  {% endform %}
+</div>
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="modal-close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14.867" height="14.867" viewBox="0 0 14.867 14.867">
+          <path id="Path_250" data-name="Path 250" d="M-885.792-50.123l6.285-6.285a.653.653,0,0,0,0-.946.653.653,0,0,0-.946,0l-6.285,6.285-6.285-6.285a.653.653,0,0,0-.946,0,.653.653,0,0,0,0,.946l6.285,6.285-6.285,6.285a.653.653,0,0,0,0,.946.614.614,0,0,0,.473.2.614.614,0,0,0,.473-.2l6.285-6.285,6.285,6.285a.73.73,0,0,0,.473.2.73.73,0,0,0,.473-.2.653.653,0,0,0,0-.946Z" transform="translate(894.172 57.557)" fill="#fff"/>
+        </svg>
+      </span>
+    </div>
+    <div class="modal-body">
+      <svg class="successful-signup has-margin-bottom" xmlns='http://www.w3.org/2000/svg' width='34.83' height='25.089' viewBox='0 0 34.83 25.089'><path id='Path_251' data-name='Path 251' d='M-5408.456,4858.192l9.741,9.741,20.847-20.847' transform='translate(5410.577 -4844.965)' fill='none' stroke='#fff' stroke-linecap='round' stroke-width='3'/></svg>
+      <h4 id="modal-body-heading" class="dare-to-discover link-color large-font ff-bebas has-margin-bottom">DARE TO DISCOVER YOURSELF?</h4>
+      <p id="modal-body-text" class="has-margin-bottom has-padding-top has-padding-bottom">Sign up to receive <span class="link-color is-font-weight-bold">15% OFF</span> your first purchase and deals on your favorite sex(y) toys.</p>
+      <div id="modal-body-form">
+      	{% render 'newsletter-form',
+          type: 'block',
+          block: block,
+          display_first_name: block.settings.display_first_name,
+          display_last_name: block.settings.display_last_name
+ 		%}
+      </div>
+      <span class="agreement">By sharing your email address, you agree to <span class="our-privacy-policy">our Privacy Policy</span>.</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var modal = document.getElementById("myModal");
+
+var btn0 = document.getElementsByClassName("myBtn")[0];
+var btn1 = document.getElementsByClassName("myBtn")[1];
+
+var span = document.getElementsByClassName("modal-close")[0];
+
+btn0.onclick = function() {
+  modal.style.display = "block";
+}
+btn1.onclick = function() {
+  modal.style.display = "block";
+}
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+$(document).ready(function(){
+  	var signedup = localStorage.getItem('signedup');
+    $(".successful-signup").css("display","none");
+    const queryString = window.location.search;
+
+    const urlParams = new URLSearchParams(queryString);
+
+    var customer_posted = urlParams.get('customer_posted')
+
+    if(customer_posted != null && (customer_posted === true) || (customer_posted === "true")){
+      $("#signup_text").html("15% off your first purchase with code <span class='link-color'>VIP15</span>");
+      $("#modal-body-heading").html("ALL SET");
+      $("#modal-body-heading").removeClass("has-margin-bottom");
+      $("#modal-body-text").html("Welcome aboard the pleasure ride. Enjoy<br/>15% off your first purchase with code<br/><span class='link-color is-font-weight-bold'>VIP15</span>");
+      $("#modal-body-form").html("");
+      $("#myModal").css("display", "block");
+      $(".successful-signup").css("display","inline-block");
+    }
+    
+    if(signedup){
+      $(".signup_text").each(function(){
+      	$(this).html("15% off your first purchase with code <span class='link-color'>VIP15</span>");  
+      });
+    }
+   var currentdate = new Date(); 
+    var weekday = new Array(7);
+    weekday[0] = "Sun";
+    weekday[1] = "Mon";
+    weekday[2] = "Tue";
+    weekday[3] = "Wed";
+    weekday[4] = "Thu";
+    weekday[5] = "Fri";
+    weekday[6] = "Sat";
+    
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                      ];
+    var day = currentdate.getDay(), condition, display_message;
+    if(day >= 0 && day <= 3){
+      condition = 1;
+    }else if(day == 4) {
+      var hours = currentdate.getHours();
+      if(hours < 12){
+       	 condition = 1;
+      }else{
+        condition = 2;
+      }
+    }else {
+      condition = 2;
+    }
+
+    
+    Date.prototype.addDays = function(days) {
+      var date = new Date(this.valueOf());
+      date.setDate(date.getDate() + days);
+      return date;
+    }
+
+    var start_date = new Date();
+    var end_date = new Date();
+    if(condition == 1){
+      start_date = start_date.addDays(2);
+      end_date = end_date.addDays(4);
+    } else {
+      start_date = start_date.addDays(3);
+      end_date = end_date.addDays(5);
+    }
+    display_message = "<strong>" + weekday[start_date.getDay()] + ", " + monthNames[start_date.getMonth()] + " " + start_date.getDate() + "</strong> and <strong>" + weekday[end_date.getDay()] + ", " + monthNames[end_date.getMonth()] + " " + end_date.getDate() + "</strong>";
+    $(".shipping-approx").each(function(){
+     $(this).html(display_message); 
+    });
+  
+    $(".myBtn").each(function(){
+      	$(this).click(function(){
+			modal.style.display = "block";
+        });
+    });
+    $(".our-privacy-policy").each(function(){
+		$(this).html("<a href='https://simplipleasures.com/pages/privacy-policy'>our privacy policy</a>");
+    });
+});
+</script>

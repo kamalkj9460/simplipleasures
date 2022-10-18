@@ -1,0 +1,168 @@
+{% assign id = section.id %}
+
+{% assign title = section.settings.title %}
+{% assign title_highlights = section.settings.title_highlights | split: '||' %}
+{% assign title_size = section.settings.title_size %}
+{% assign title_size_mobile = section.settings.title_size_mobile %}
+{% assign icon = section.settings.icon %}
+{% assign icon_size = section.settings.icon_size %}
+{% assign icon_size_mobile = section.settings.icon_size_mobile %}
+{% assign text = section.settings.text %}
+{% assign text_max_width = section.settings.text_max_width %}
+{% assign padding_top = section.settings.padding_top %}
+{% assign padding_bottom = section.settings.padding_bottom %}
+
+{% if title_highlights != blank %}
+  {% for highlight in title_highlights %}
+    {% assign text_replace = '<span class="highlight-text">'| append: highlight | append: '</span>' %}
+    {% assign title = title | replace: highlight, text_replace %}
+  {% endfor %}
+{% endif %}
+
+{% style %}
+  #shopify-section-{{ id }} {
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+  }
+  #shopify-section-{{ id }} .heading {
+    line-height: 1em;
+    margin-bottom: 20px;
+    font-size: clamp({{ title_size_mobile }}px, calc({{ title_size_mobile }}px + ({{ title_size | minus: title_size_mobile }} * (100vw - {{ 1024 | minus:  480 }}px) / 480)), {{ title_size }}px);
+  }
+  #shopify-section-{{ id }} .heading .highlight-text {
+    color: {{ section.settings.title_highlights_color }} ;
+  }
+  #shopify-section-{{ id }} .icon {
+    margin-bottom: 20px;
+    height: {{ icon_size }}px ;
+    width: {{ icon_size }}px ;
+  }
+  #shopify-section-{{ id }} p {
+    max-width: {{ text_max_width }}px ;
+  }
+
+  @media only screen and (max-width: 480px) {
+    #shopify-section-{{ id }} .icon {
+      height: {{ icon_size_mobile }}px ;
+      width: {{ icon_size_mobile }}px ;
+    }
+  }
+{% endstyle %}
+
+
+<div class="section">
+  <div class="container is-justify-center is-align-center">
+    <div class="text-wrapper is-flex is-flex-column is-justify-center is-align-center text-align-center">
+      <h3 class="heading ff-bebas fw-normal">{{ title }}</h3>
+
+      {% render 'icon',
+        name: icon
+      %}
+
+      <p>{{ text }}</p>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Statement with icon",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Title highlighted goes here"
+    },
+    {
+      "type": "number",
+      "id": "title_size",
+      "label": "Title font-size",
+      "default": 100
+    },
+    {
+      "type": "number",
+      "id": "title_size_mobile",
+      "label": "Title font-size (mobile)",
+      "default": 60
+    },
+    {
+      "type": "text",
+      "id": "title_highlights",
+      "label": "Title Highlights",
+      "default": "Title highlighted||here",
+      "info": "Add the text to be highlighted in the subtitle for one or more words. It must be an exact match and separated by || if you want to add more then one group of words."
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_highlights_color",
+      "label": "Title Highlights color",
+      "default": "#e21264"
+    },
+    {
+      "type": "text",
+      "id": "icon",
+      "label": "Icon",
+      "default": "pleasure"
+    },
+    {
+      "type": "number",
+      "id": "icon_size",
+      "label": "Icon size",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "icon_size_mobile",
+      "label": "Icon Size (mobile)",
+      "default": 60
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Embrace pleasure as part of your self care journey. Explore our wide assortment of products curated with you in mind."
+    },
+    {
+      "type": "number",
+      "id": "text_max_width",
+      "label": "Text max-width",
+      "default": 300
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 80,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 80,
+      "default": 0,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "category": "Text",
+      "name":"Statement w/ icon"
+    }
+  ]
+}
+{% endschema %}

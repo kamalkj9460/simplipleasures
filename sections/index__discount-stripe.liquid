@@ -1,0 +1,15 @@
+{% if settings.show_discount_on_home_page %}
+  {% render 'general-discount-stripe' %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Discount Stripe",
+  "presets": [
+    {
+      "category": "General",
+      "name":"Discount Stripe"
+    }
+  ]
+}
+{% endschema %}
